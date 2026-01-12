@@ -1,0 +1,37 @@
+# =====================
+# IntelliJ IDEA
+# =====================
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# =====================
+# Maven (SVI target folderi, bilo gde)
+# =====================
+**/target/
+*.log
+
+# =====================
+# Gradle
+# =====================
+.gradle/
+build/
+
+# =====================
+# OS junk
+# =====================
+.DS_Store
+Thumbs.db
+
+# =====================
+# Environment / secrets
+# =====================
+.env
+application-local.yml
+application-dev.yml
+
+# =====================
+# Generated files
+# =====================
+out/
