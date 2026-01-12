@@ -1,4 +1,4 @@
-package com.example.sluzba.model;
+package com.example.sluzba;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

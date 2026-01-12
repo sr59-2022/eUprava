@@ -9,6 +9,8 @@ services:
       - SERVER_PORT=8081
     networks:
       - euprava-net
+    depends_on:
+      - sluzba-service
 
   sluzba-service:
     build:
