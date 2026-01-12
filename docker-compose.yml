@@ -1,0 +1,26 @@
+services:
+  fakultet-service:
+    build:
+      context: ./fakultet-service
+    container_name: fakultet-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SERVER_PORT=8081
+    networks:
+      - euprava-net
+
+  sluzba-service:
+    build:
+      context: ./sluzbaZaZaposljavanje-service
+    container_name: sluzba-service
+    ports:
+      - "8082:8082"
+    environment:
+      - SERVER_PORT=8082
+    networks:
+      - euprava-net
+
+networks:
+  euprava-net:
+    driver: bridge
