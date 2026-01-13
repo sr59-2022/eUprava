@@ -5,15 +5,23 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@Table(name = "oglasi")
 public class Oglas {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idOglasa;
 
+    @Column(nullable = false)
     private String nazivPozicije;
+
+    @Column(nullable = false, length = 1000)
     private String opis;
+
+    @Column(nullable = false)
     private LocalDate datumObjave;
+
+    @Column(nullable = false)
     private LocalDate rokPrijave;
 
     @ManyToOne
@@ -23,11 +31,21 @@ public class Oglas {
     @OneToMany(mappedBy = "oglas", cascade = CascadeType.ALL)
     private List<Prijava> prijave;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipOglasa tipOglasa;
+
+
     public Oglas() {}
-    public Oglas(Long idOglasa, String nazivPozicije, String opis) {
-        this.idOglasa = idOglasa;
+
+    public Oglas(String nazivPozicije, String opis, LocalDate datumObjave,
+                 LocalDate rokPrijave, TipOglasa tipOglasa, Poslodavac poslodavac) {
         this.nazivPozicije = nazivPozicije;
         this.opis = opis;
+        this.datumObjave = datumObjave;
+        this.rokPrijave = rokPrijave;
+        this.tipOglasa = tipOglasa;
+        this.poslodavac = poslodavac;
     }
 
 
@@ -45,4 +63,12 @@ public class Oglas {
     public void setPoslodavac(Poslodavac poslodavac) { this.poslodavac = poslodavac; }
     public List<Prijava> getPrijave() { return prijave; }
     public void setPrijave(List<Prijava> prijave) { this.prijave = prijave; }
+
+    public TipOglasa getTipOglasa() {
+        return tipOglasa;
+    }
+
+    public void setTipOglasa(TipOglasa tipOglasa) {
+        this.tipOglasa = tipOglasa;
+    }
 }
