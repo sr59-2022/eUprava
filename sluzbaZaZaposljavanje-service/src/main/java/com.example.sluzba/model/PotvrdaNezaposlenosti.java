@@ -4,17 +4,21 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "potvrdeNezaposlenosti")
 public class PotvrdaNezaposlenosti {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPotvrde;
 
+    @Column(nullable = false)
     private LocalDate datumIzdavanja;
+
+    @Column(nullable = false)
     private LocalDate validnaDo;
 
     @OneToOne
-    @JoinColumn(name = "gradjanin_id", unique = true)
+    @JoinColumn(name = "gradjanin_id", unique = true, nullable = false)
     private Gradjanin gradjanin;
 
     public PotvrdaNezaposlenosti() {}

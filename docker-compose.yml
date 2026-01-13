@@ -1,4 +1,49 @@
 services:
+  mysql-auth:
+    image: mysql:8.4
+    container_name: mysql-auth
+    environment:
+      MYSQL_DATABASE: auth_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: app
+      MYSQL_PASSWORD: apppass
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_auth_data:/var/lib/mysql
+    networks:
+      - euprava-net
+
+  mysql-fakultet:
+    image: mysql:8.4
+    container_name: mysql-fakultet
+    environment:
+      MYSQL_DATABASE: fakultet_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: app
+      MYSQL_PASSWORD: apppass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_fakultet_data:/var/lib/mysql
+    networks:
+      - euprava-net
+
+  mysql-sluzba:
+    image: mysql:8.4
+    container_name: mysql-sluzba
+    environment:
+      MYSQL_DATABASE: sluzba_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: app
+      MYSQL_PASSWORD: apppass
+    ports:
+      - "3309:3306"
+    volumes:
+      - mysql_sluzba_data:/var/lib/mysql
+    networks:
+      - euprava-net
+
   auth-service:
     build:
       context: ./auth-service
@@ -7,9 +52,14 @@ services:
       - "8080:8080"
     environment:
       - SERVER_PORT=8080
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-auth:3306/auth_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=app
+      - SPRING_DATASOURCE_PASSWORD=apppass
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     networks:
       - euprava-net
-
+    depends_on:
+      - mysql-auth
 
   fakultet-service:
     build:
@@ -19,9 +69,14 @@ services:
       - "8081:8081"
     environment:
       - SERVER_PORT=8081
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-fakultet:3306/fakultet_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=app
+      - SPRING_DATASOURCE_PASSWORD=apppass
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     networks:
       - euprava-net
     depends_on:
+      - mysql-fakultet
       - sluzba-service
 
   sluzba-service:
@@ -32,9 +87,20 @@ services:
       - "8082:8082"
     environment:
       - SERVER_PORT=8082
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-sluzba:3306/sluzba_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=app
+      - SPRING_DATASOURCE_PASSWORD=apppass
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     networks:
       - euprava-net
+    depends_on:
+      - mysql-sluzba
 
 networks:
   euprava-net:
     driver: bridge
+
+volumes:
+  mysql_auth_data:
+  mysql_fakultet_data:
+  mysql_sluzba_data:

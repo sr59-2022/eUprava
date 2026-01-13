@@ -4,16 +4,26 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "gradjani")
 public class Gradjanin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String ime;
+
+    @Column(nullable = false)
     private String prezime;
+
+    @Column(unique = true, nullable = false, length = 13)
     private String jmbg;
-    private String statusNezaposlenosti;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusNezaposlenosti statusNezaposlenosti;
+
 
     @OneToMany(mappedBy = "gradjanin", cascade = CascadeType.ALL)
     private List<Prijava> prijave;
@@ -23,7 +33,7 @@ public class Gradjanin {
 
     public Gradjanin() {}
 
-    public Gradjanin(Long id, String ime, String prezime, String jmbg, String statusNezaposlenosti) {
+    public Gradjanin(Long id, String ime, String prezime, String jmbg, StatusNezaposlenosti statusNezaposlenosti) {
         this.id = id;
         this.ime = ime;
         this.prezime = prezime;
@@ -40,10 +50,16 @@ public class Gradjanin {
     public void setPrezime(String prezime) { this.prezime = prezime; }
     public String getJmbg() { return jmbg; }
     public void setJmbg(String jmbg) { this.jmbg = jmbg; }
-    public String getStatusNezaposlenosti() { return statusNezaposlenosti; }
-    public void setStatusNezaposlenosti(String statusNezaposlenosti) { this.statusNezaposlenosti = statusNezaposlenosti; }
     public List<Prijava> getPrijave() { return prijave; }
     public void setPrijave(List<Prijava> prijave) { this.prijave = prijave; }
     public PotvrdaNezaposlenosti getPotvrda() { return potvrda; }
     public void setPotvrda(PotvrdaNezaposlenosti potvrda) { this.potvrda = potvrda; }
+
+    public StatusNezaposlenosti getStatusNezaposlenosti() {
+        return statusNezaposlenosti;
+    }
+
+    public void setStatusNezaposlenosti(StatusNezaposlenosti statusNezaposlenosti) {
+        this.statusNezaposlenosti = statusNezaposlenosti;
+    }
 }
