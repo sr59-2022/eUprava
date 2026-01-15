@@ -2,7 +2,9 @@ package com.example.auth.service;
 
 import com.example.auth.dto.LoginRequest;
 import com.example.auth.dto.LoginResponse;
+import com.example.auth.dto.RegistracijaRequest;
 import com.example.auth.model.Korisnik;
+import com.example.auth.model.Uloga;
 import com.example.auth.repository.KorisnikRepository;
 import com.example.auth.security.JwtService;
 import org.springframework.stereotype.Service;
@@ -41,4 +43,33 @@ public class AuthService {
 
 
     }
+
+    public void registracija(RegistracijaRequest request) {
+
+        if (request.getUloga() == Uloga.ROLE_ADMIN) {
+            throw new RuntimeException("ADMIN se ne može registrovati");
+        }
+
+        if (korisnikRepository.existsByKorisnickoIme(request.getKorisnickoIme())) {
+            throw new RuntimeException("Korisničko ime već postoji");
+        }
+
+        if (korisnikRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("Email već postoji");
+        }
+
+        Korisnik korisnik = new Korisnik();
+        korisnik.setIme(request.getIme());
+        korisnik.setPrezime(request.getPrezime());
+        korisnik.setKorisnickoIme(request.getKorisnickoIme());
+        korisnik.setEmail(request.getEmail());
+
+        // plain text
+        korisnik.setLozinka(request.getLozinka());
+
+        korisnik.setUloge(Set.of(request.getUloga()));
+
+        korisnikRepository.save(korisnik);
+    }
+
 }

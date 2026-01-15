@@ -7,4 +7,7 @@ import java.util.Optional;
 
 public interface KorisnikRepository extends JpaRepository<Korisnik, Long> {
     Optional<Korisnik> findByKorisnickoIme(String korisnickoIme);
+
+    boolean existsByKorisnickoIme(String korisnickoIme);
+    boolean existsByEmail(String email);
 }

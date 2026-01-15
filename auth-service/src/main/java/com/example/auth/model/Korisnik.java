@@ -12,6 +12,13 @@ public class Korisnik {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String ime;
+
+    @Column(nullable = false)
+    private String prezime;
+
+
     @Column(nullable = false, unique = true)
     private String korisnickoIme;
 
@@ -78,5 +85,19 @@ public class Korisnik {
     }
 
 
+    public String getIme() {
+        return ime;
+    }
 
+    public void setIme(String ime) {
+        this.ime = ime;
+    }
+
+    public String getPrezime() {
+        return prezime;
+    }
+
+    public void setPrezime(String prezime) {
+        this.prezime = prezime;
+    }
 }
