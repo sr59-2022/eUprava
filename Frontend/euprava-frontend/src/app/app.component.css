@@ -1,9 +1,9 @@
-/* Navbar styling */
+
 .custom-navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #009870;
+  background-color: #7fb2cc;
   padding: 10px 20px;
   color: white;
   font-family: Arial, sans-serif;

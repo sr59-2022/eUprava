@@ -1,0 +1,23 @@
+
+<div class="login-container">
+  <h2>Prijava</h2>
+
+  <form (ngSubmit)="login()">
+    <div class="form-group">
+      <label>Korisničko ime</label>
+      <input type="text" [(ngModel)]="korisnickoIme" name="korisnickoIme" required>
+    </div>
+
+    <div class="form-group">
+      <label>Lozinka</label>
+      <input type="password" [(ngModel)]="lozinka" name="lozinka" required>
+    </div>
+
+    <button type="submit">Prijavi se</button>
+    <p>Nemas nalog?
+      <a (click)="navigateToRegister()" class="fw-bold text-white" style="cursor: pointer;">REGISTRUJ SE</a>.
+    </p>
+
+    <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+  </form>
+</div>

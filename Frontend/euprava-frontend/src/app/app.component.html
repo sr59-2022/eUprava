@@ -1,11 +1,8 @@
 <nav *ngIf="isLoggedIn()" class="custom-navbar">
-  <div class="navbar-brand" (click)="goToHome()">Sitpass</div>
+  <div class="navbar-brand" (click)="goToHome()">eUprava</div>
   <ul class="navbar-nav">
-    <li class="nav-item" *ngIf="isAdmin()">
-      <a (click)="goToHome()">Requests</a>
-    </li>
     <li class="nav-item">
-      <a (click)="goToHome()">User Profile</a>
+      <a (click)="goToHome()">Profil</a>
     </li>
     <li class="nav-item">
       <a (click)="logout()">Logout</a>

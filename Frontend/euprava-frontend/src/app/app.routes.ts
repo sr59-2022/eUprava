@@ -6,6 +6,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/registracija/registracija.component')
       .then(m => m.RegistracijaComponent)
   },
-  { path: '', redirectTo: '/registracija', pathMatch: 'full' }
-
+  {
+    path: 'login',
+    loadComponent: () => import('./pages/login/login.component')
+      .then(m => m.LoginComponent)
+  },
+  { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];

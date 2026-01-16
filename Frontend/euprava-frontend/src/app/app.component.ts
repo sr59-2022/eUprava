@@ -15,7 +15,7 @@ export class AppComponent {
   title = 'euprava-frontend';
   // za sada simulacija "ulogovanog korisnika"
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token'); // setuj token kad registracija prođe
+    return !!localStorage.getItem('token');
   }
 
   isAdmin(): boolean {
