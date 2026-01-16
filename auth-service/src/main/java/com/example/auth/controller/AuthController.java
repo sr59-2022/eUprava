@@ -7,9 +7,12 @@ import com.example.auth.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final AuthService authService;
@@ -24,8 +27,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegistracijaRequest request) {
+    public ResponseEntity<Map<String, String>> register(@RequestBody RegistracijaRequest request) {
         authService.registracija(request);
-        return ResponseEntity.ok("Registracija uspesna");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Registracija uspesna");
+        return ResponseEntity.ok(response);
     }
+
+
 }
