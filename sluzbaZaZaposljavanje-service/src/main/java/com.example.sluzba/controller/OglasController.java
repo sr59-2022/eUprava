@@ -2,34 +2,37 @@ package com.example.sluzba.controller;
 
 import com.example.sluzba.dto.OglasRequest;
 import com.example.sluzba.model.Oglas;
-import com.example.sluzba.security.JwtUtil;
 import com.example.sluzba.service.OglasService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/oglasi")
 public class OglasController {
 
     private final OglasService oglasService;
-    private final JwtUtil jwtUtil;
 
-    public OglasController(OglasService oglasService, JwtUtil jwtUtil) {
+    public OglasController(OglasService oglasService) {
         this.oglasService = oglasService;
-        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/dodaj")
+    @PreAuthorize("hasRole('POSLODAVAC')")
     public Oglas dodajOglas(
-            @RequestHeader("Authorization") String authHeader,
-            @RequestBody OglasRequest req) {
+            @RequestBody OglasRequest req,
+            @AuthenticationPrincipal Jwt jwt) {
 
-        String token = authHeader.replace("Bearer ", "");
+        Long uid = ((Number) jwt.getClaims().get("uid")).longValue();
 
-        if (!jwtUtil.isPoslodavac(token)) {
-            throw new RuntimeException("Nemate dozvolu da postavite oglas.");
-        }
-
-        Long uid = jwtUtil.getUid(token);
         return oglasService.dodajOglas(req, uid);
+    }
+
+    @GetMapping
+    public List<Oglas> getAllOglasi() {
+        return oglasService.getAllOglasi();
     }
 }

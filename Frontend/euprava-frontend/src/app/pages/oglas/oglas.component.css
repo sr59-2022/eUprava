@@ -1,0 +1,32 @@
+.oglas-card {
+  border: 1px solid #7fb2cc;
+  border-radius: 5px;
+  padding: 15px;
+  margin: 10px 0;
+  background-color: #f5f5e4;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.oglas-header h3 {
+  margin: 0;
+}
+
+.kompanija {
+  color: #555;
+  font-style: italic;
+}
+
+.opis {
+  margin: 10px 0;
+}
+
+.oglas-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.tip {
+  font-weight: bold;
+}

@@ -1,0 +1,12 @@
+<div class="oglas-card">
+  <div class="oglas-header">
+    <h3>{{ oglas.nazivPozicije }}</h3>
+    <p class="kompanija">Kompanija: {{ oglas.nazivKompanije }}</p>
+  </div>
+  <p class="opis">{{ oglas.opis }}</p>
+  <div class="oglas-footer">
+    <span class="tip">{{ oglas.tipOglasa }}</span>
+    <span class="datum">Objavljeno: {{ oglas.datumObjave | date:'dd.MM.yyyy' }}</span>
+    <span class="rok">Rok prijave: {{ oglas.rokPrijave | date:'dd.MM.yyyy' }}</span>
+  </div>
+</div>

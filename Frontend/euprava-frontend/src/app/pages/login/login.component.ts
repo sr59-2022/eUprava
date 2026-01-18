@@ -24,7 +24,7 @@ export class LoginComponent {
     this.authService.login(this.korisnickoIme, this.lozinka).subscribe({
       next: (res) => {
         this.authService.saveToken(res.token, Array.from(res.uloge));
-        this.router.navigate(['/']);
+        this.router.navigate(['/home-sluzba']);
       },
       error: (err) => {
         console.error(err);

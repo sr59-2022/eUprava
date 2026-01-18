@@ -13,7 +13,7 @@ export class AppComponent {
 
   constructor(private router: Router) {}
   title = 'euprava-frontend';
-  // za sada simulacija "ulogovanog korisnika"
+
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
@@ -24,13 +24,12 @@ export class AppComponent {
   }
 
   goToHome() {
-    // trenutno samo redirect na registraciju, dok nema home
-    this.router.navigate(['/registracija']);
+    this.router.navigate(['/home-sluzba']);
   }
 
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
-    this.router.navigate(['/registracija']);
+    this.router.navigate(['/login']);
   }
 }

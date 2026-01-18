@@ -1,0 +1,15 @@
+<h2>OGLASI</h2>
+<div class="oglasi-list">
+  <div class="oglas-card" *ngFor="let oglas of oglasi">
+    <div class="oglas-header">
+      <h3>{{ oglas.nazivPozicije }}</h3>
+      <p class="tip">Tip oglasa: {{ oglas.tipOglasa }}</p>
+      <p class="kompanija">Kompanija: {{ oglas.nazivKompanije }}</p>
+      <p class="opis">Opis: {{ oglas.opis }}</p>
+      <div class="oglas-footer">
+      <span class="datum">Objavljeno: {{ oglas.datumObjave | date:'dd.MM.yyyy' }}</span>
+      <span class="rok">Rok prijave: {{ oglas.rokPrijave | date:'dd.MM.yyyy' }}</span>
+    </div>
+  </div>
+</div>
+</div>

@@ -11,5 +11,13 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/login/login.component')
       .then(m => m.LoginComponent)
   },
-  { path: '', redirectTo: '/login', pathMatch: 'full' }
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+
+  {
+    path: 'home-sluzba',
+    loadComponent: () => import('./pages/home-sluzba/home-sluzba.component')
+      .then(m => m.HomeSluzbaComponent)
+  }
+
+
 ];

@@ -8,6 +8,7 @@ import com.example.sluzba.repository.PoslodavacRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class OglasService {
@@ -39,6 +40,10 @@ public class OglasService {
         o.setPoslodavac(poslodavac);
 
         return oglasRepo.save(o);
+    }
+
+    public List<Oglas> getAllOglasi() {
+        return oglasRepo.findAll();
     }
 
 }
