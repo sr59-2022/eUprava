@@ -24,6 +24,9 @@ public class Oglas {
     @Column(nullable = false)
     private LocalDate rokPrijave;
 
+    @Column(nullable = false)
+    private String nazivKompanije;
+
     @ManyToOne
     @JoinColumn(name = "poslodavac_id")
     private Poslodavac poslodavac;
@@ -39,11 +42,12 @@ public class Oglas {
     public Oglas() {}
 
     public Oglas(String nazivPozicije, String opis, LocalDate datumObjave,
-                 LocalDate rokPrijave, TipOglasa tipOglasa, Poslodavac poslodavac) {
+                 LocalDate rokPrijave, String nazivKompanije,TipOglasa tipOglasa, Poslodavac poslodavac) {
         this.nazivPozicije = nazivPozicije;
         this.opis = opis;
         this.datumObjave = datumObjave;
         this.rokPrijave = rokPrijave;
+        this.nazivKompanije = nazivKompanije;
         this.tipOglasa = tipOglasa;
         this.poslodavac = poslodavac;
     }
@@ -70,5 +74,13 @@ public class Oglas {
 
     public void setTipOglasa(TipOglasa tipOglasa) {
         this.tipOglasa = tipOglasa;
+    }
+
+    public String getNazivKompanije() {
+        return nazivKompanije;
+    }
+
+    public void setNazivKompanije(String nazivKompanije) {
+        this.nazivKompanije = nazivKompanije;
     }
 }
