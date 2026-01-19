@@ -3,8 +3,10 @@ package com.example.sluzba.service;
 import com.example.sluzba.dto.OglasRequest;
 import com.example.sluzba.model.Oglas;
 import com.example.sluzba.model.Poslodavac;
+import com.example.sluzba.model.TipOglasa;
 import com.example.sluzba.repository.OglasRepository;
 import com.example.sluzba.repository.PoslodavacRepository;
+import com.example.sluzba.search.OglasPretraga;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -44,6 +46,15 @@ public class OglasService {
 
     public List<Oglas> getAllOglasi() {
         return oglasRepo.findAll();
+    }
+
+    public List<Oglas> pretragaOglasa(
+            String nazivPozicije,
+            TipOglasa tipOglasa) {
+
+        return oglasRepo.findAll(
+                OglasPretraga.aktivniOglasi(nazivPozicije, tipOglasa)
+        );
     }
 
 }

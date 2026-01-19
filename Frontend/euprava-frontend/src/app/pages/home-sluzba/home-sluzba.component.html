@@ -1,4 +1,25 @@
+
+<div class="search-box">
+  <input
+    type="text"
+    placeholder="Naziv pozicije"
+    [(ngModel)]="nazivPozicije"
+  />
+
+  <select [(ngModel)]="tipOglasa">
+    <option [ngValue]="undefined">Tip oglasa</option>
+    <option *ngFor="let t of tipoviOglasa" [ngValue]="t">
+      {{ t }}
+    </option>
+  </select>
+
+  <button (click)="pretrazi()">Pretraži</button>
+  <button (click)="reset()">Reset</button>
+</div>
+<hr />
+
 <h2>OGLASI</h2>
+
 <div class="oglasi-list">
   <div class="oglas-card" *ngFor="let oglas of oglasi">
     <div class="oglas-header">
@@ -9,7 +30,7 @@
       <div class="oglas-footer">
       <span class="datum">Objavljeno: {{ oglas.datumObjave | date:'dd.MM.yyyy' }}</span>
       <span class="rok">Rok prijave: {{ oglas.rokPrijave | date:'dd.MM.yyyy' }}</span>
+      </div>
     </div>
   </div>
-</div>
 </div>

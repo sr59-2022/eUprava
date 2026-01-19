@@ -2,6 +2,7 @@ package com.example.sluzba.controller;
 
 import com.example.sluzba.dto.OglasRequest;
 import com.example.sluzba.model.Oglas;
+import com.example.sluzba.model.TipOglasa;
 import com.example.sluzba.service.OglasService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,5 +35,13 @@ public class OglasController {
     @GetMapping
     public List<Oglas> getAllOglasi() {
         return oglasService.getAllOglasi();
+    }
+
+    @GetMapping("/pretraga")
+    public List<Oglas> pretraga(
+            @RequestParam(required = false) String naziv,
+            @RequestParam(required = false) TipOglasa tip) {
+
+        return oglasService.pretragaOglasa(naziv, tip);
     }
 }

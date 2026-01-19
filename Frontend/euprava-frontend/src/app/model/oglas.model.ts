@@ -7,3 +7,8 @@ export interface Oglas {
   tipOglasa: string;
   nazivKompanije: string;
 }
+
+export enum TipOglasa {
+  PRAKSA = 'PRAKSA',
+  POSAO = 'POSAO'
+}
