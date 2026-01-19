@@ -4,6 +4,8 @@ import {Oglas, TipOglasa} from '../../model/oglas.model';
 import {DatePipe} from '@angular/common';
 import { CommonModule } from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {AuthService} from '../../services/auth.service';
+import {Gradjanin, GradjaninService} from '../../services/gradjanin.service';
 
 @Component({
   selector: 'app-home-sluzba',
@@ -16,15 +18,26 @@ import {FormsModule} from '@angular/forms';
 })
 export class HomeSluzbaComponent implements OnInit {
   oglasi: Oglas[] = [];
+  gradjanin?: Gradjanin;
 
   nazivPozicije = '';
   tipOglasa?: TipOglasa;
   tipoviOglasa = Object.values(TipOglasa);
 
-  constructor(private oglasService: OglasService) { }
+  constructor(private oglasService: OglasService, private authService: AuthService,private gradjaninService: GradjaninService) { }
 
   ngOnInit(): void {
-    this.getAllOglasi();
+    if (this.authService.isLoggedIn()) {
+      this.gradjaninService.getMe().subscribe({
+        next: (g) => {
+          this.gradjanin = g;
+          console.log('Gradjanin kreiran / učitan:', g);
+        },
+        error: (err) => console.error('Greška prilikom kreiranja gradjanina:', err)
+      });
+
+      this.getAllOglasi();
+    }
   }
 
   getAllOglasi() {

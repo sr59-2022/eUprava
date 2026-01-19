@@ -32,6 +32,8 @@ public class JwtService {
         return Jwts.builder()
                 .claim("roles", roles)
                 .claim("uid", korisnik.getId())
+                .claim("ime", korisnik.getIme())
+                .claim("prezime", korisnik.getPrezime())
                 .setIssuedAt(now)
                 .setExpiration(exp)
                 .signWith(

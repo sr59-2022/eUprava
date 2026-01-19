@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 
 export interface LoginResponse {
@@ -14,6 +14,9 @@ export interface LoginResponse {
 export class AuthService {
 
   private apiUrl = 'http://localhost:8080/api/auth';
+
+  private loggedIn = new BehaviorSubject<boolean>(!!localStorage.getItem('token'));
+  loggedIn$ = this.loggedIn.asObservable();
 
 
   constructor(private http: HttpClient) { }
@@ -33,6 +36,7 @@ export class AuthService {
   saveToken(token: string, uloge: string[]) {
     localStorage.setItem('token', token);
     localStorage.setItem('role', uloge.join(','));
+    this.loggedIn.next(true);
   }
 
   logout() {

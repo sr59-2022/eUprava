@@ -17,12 +17,15 @@ public class Gradjanin {
     @Column(nullable = false)
     private String prezime;
 
-    @Column(unique = true, nullable = false, length = 13)
+    @Column(unique = true, nullable = true, length = 13)
     private String jmbg;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusNezaposlenosti statusNezaposlenosti;
+
+    @Column(name = "auth_gradjanin_id",nullable = false, unique = true)
+    private Long authGradjaninId;
 
 
     @OneToMany(mappedBy = "gradjanin", cascade = CascadeType.ALL)
@@ -54,12 +57,16 @@ public class Gradjanin {
     public void setPrijave(List<Prijava> prijave) { this.prijave = prijave; }
     public PotvrdaNezaposlenosti getPotvrda() { return potvrda; }
     public void setPotvrda(PotvrdaNezaposlenosti potvrda) { this.potvrda = potvrda; }
-
     public StatusNezaposlenosti getStatusNezaposlenosti() {
         return statusNezaposlenosti;
     }
-
     public void setStatusNezaposlenosti(StatusNezaposlenosti statusNezaposlenosti) {
         this.statusNezaposlenosti = statusNezaposlenosti;
+    }
+    public Long getAuthGradjaninId() {
+        return authGradjaninId;
+    }
+    public void setAuthGradjaninId(Long authGradjaninId) {
+        this.authGradjaninId = authGradjaninId;
     }
 }
