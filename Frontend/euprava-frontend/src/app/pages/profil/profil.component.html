@@ -1,0 +1,24 @@
+<h2 class="profil-title">Profil građanina</h2>
+
+<table class="profil-table" *ngIf="gradjanin && !loading">
+  <tr>
+    <th>Ime</th>
+    <td>{{ gradjanin.ime }}</td>
+  </tr>
+  <tr>
+    <th>Prezime</th>
+    <td>{{ gradjanin.prezime }}</td>
+  </tr>
+  <tr>
+    <th>JMBG</th>
+    <td>{{ gradjanin.jmbg || 'Nije unesen' }}</td>
+  </tr>
+  <tr>
+    <th>Status</th>
+    <td>{{ gradjanin.statusNezaposlenosti }}</td>
+  </tr>
+</table>
+<div class="profil-actions" *ngIf="!loading">
+  <button (click)="onEdit()" class="btn-edit">Dopuni profil</button>
+</div>
+<div *ngIf="loading">Učitavanje...</div>

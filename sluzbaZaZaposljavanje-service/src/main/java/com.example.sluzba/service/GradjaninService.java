@@ -4,7 +4,10 @@ import com.example.sluzba.model.Gradjanin;
 import com.example.sluzba.model.StatusNezaposlenosti;
 import com.example.sluzba.repository.GradjaninRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 @Service
 public class GradjaninService {
@@ -16,7 +19,14 @@ public class GradjaninService {
     }
 
     @Transactional
-    public Gradjanin createGradjanin(Long authGradjaninId, String ime, String prezime) {
+    public Gradjanin createGradjanin(Long authGradjaninId, String ime, String prezime, Collection<String> roles) {
+        boolean isGradjanin = roles != null && roles.stream()
+                .anyMatch(r -> r.equalsIgnoreCase("GRADJANIN") || r.equalsIgnoreCase("ROLE_GRADJANIN"));
+
+        if (!isGradjanin) {
+            return null;
+        }
+
         return gradjaninRepository.findByAuthGradjaninId(authGradjaninId)
                 .orElseGet(() -> {
                     Gradjanin g = new Gradjanin();

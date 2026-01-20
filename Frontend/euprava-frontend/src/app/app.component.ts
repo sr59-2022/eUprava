@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import {CommonModule} from '@angular/common';
+import {AuthService} from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ import {CommonModule} from '@angular/common';
 })
 export class AppComponent {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, public authService: AuthService) {}
   title = 'euprava-frontend';
 
   isLoggedIn(): boolean {
@@ -32,4 +33,6 @@ export class AppComponent {
     localStorage.removeItem('role');
     this.router.navigate(['/login']);
   }
+
+
 }
