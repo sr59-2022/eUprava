@@ -37,6 +37,24 @@ public class GradjaninService {
                     return gradjaninRepository.save(g);
                 });
     }
+
+    public Gradjanin updateGradjanin(Long authId, Gradjanin updated) {
+        Gradjanin g = gradjaninRepository
+                .findByAuthGradjaninId(authId)
+                .orElseThrow(() -> new RuntimeException("Gradjanin ne postoji"));
+
+        g.setIme(updated.getIme());
+        g.setPrezime(updated.getPrezime());
+
+        if (g.getJmbg() == null) {
+            g.setJmbg(updated.getJmbg());
+        }
+
+        g.setStatusNezaposlenosti(updated.getStatusNezaposlenosti());
+
+        return gradjaninRepository.save(g);
+    }
+
 }
 
 

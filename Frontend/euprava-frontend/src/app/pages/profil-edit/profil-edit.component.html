@@ -1,0 +1,37 @@
+<h2>Uredi profil</h2>
+
+<form *ngIf="!loading" (ngSubmit)="save()">
+
+  <label>Ime</label>
+  <input type="text" [(ngModel)]="gradjanin.ime" name="ime" />
+
+  <label>Prezime</label>
+  <input type="text" [(ngModel)]="gradjanin.prezime" name="prezime" />
+
+  <label>JMBG</label>
+  <input type="text" [(ngModel)]="gradjanin.jmbg" name="jmbg" />
+
+  <label>Status nezaposlenosti</label>
+  <select
+    [(ngModel)]="gradjanin.statusNezaposlenosti"
+    name="status">
+
+    <option [ngValue]="StatusNezaposlenosti.ZAPOSLEN">
+      Zaposlen
+    </option>
+
+    <option [ngValue]="StatusNezaposlenosti.NEZAPOSLEN">
+      Nezaposlen
+    </option>
+
+    <option [ngValue]="StatusNezaposlenosti.STUDENT">
+      Student
+    </option>
+
+  </select>
+
+
+  <button type="submit">Sačuvaj</button>
+</form>
+
+<div *ngIf="loading">Učitavanje...</div>

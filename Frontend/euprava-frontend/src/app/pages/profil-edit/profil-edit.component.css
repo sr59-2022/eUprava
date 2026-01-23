@@ -1,0 +1,73 @@
+
+form {
+  max-width: 600px;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f5f5e4;
+  border: 1px solid #7fb2cc;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+
+h2 {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  font-weight: 600;
+  color: #2f4f4f;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #333;
+}
+
+input[type="text"],
+select {
+  width: 95%;
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border: 1px solid #7fb2cc;
+  border-radius: 5px;
+  font-size: 0.95em;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+select:focus {
+  border-color: #6699b3;
+  box-shadow: 0 0 5px rgba(102, 153, 179, 0.5);
+  outline: none;
+}
+
+button[type="submit"] {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #7fb2cc;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #6699b3;
+  transform: translateY(-2px);
+}
+
+
+div[ng-reflect-ng-if="true"] {
+  margin-top: 10px;
+  font-style: italic;
+  color: #555;
+}
+
+@media (max-width: 650px) {
+  form {
+    padding: 15px;
+  }
+}

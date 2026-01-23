@@ -23,7 +23,14 @@ export const routes: Routes = [
     path: 'profil',
     loadComponent: () => import('./pages/profil/profil.component')
         .then(m => m.ProfilComponent)
+  },
+
+  {
+    path: 'profil/uredi',
+    loadComponent: () => import('./pages/profil-edit/profil-edit.component')
+        .then(m => m.ProfilEditComponent)
   }
+
 
 
 ];

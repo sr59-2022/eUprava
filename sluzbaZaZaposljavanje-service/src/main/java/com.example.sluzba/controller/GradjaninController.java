@@ -35,4 +35,15 @@ public class GradjaninController {
         return gradjaninService.createGradjanin(authId, ime, prezime, roles);
     }
 
+    @PutMapping("/me")
+    public Gradjanin updateMe(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestBody Gradjanin updated
+    ) {
+        Map<String, Object> claims = jwt.getClaims();
+        Long authId = Long.valueOf(claims.get("uid").toString());
+
+        return gradjaninService.updateGradjanin(authId, updated);
+    }
+
 }
