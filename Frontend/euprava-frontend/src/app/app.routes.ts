@@ -29,8 +29,13 @@ export const routes: Routes = [
     path: 'profil/uredi',
     loadComponent: () => import('./pages/profil-edit/profil-edit.component')
         .then(m => m.ProfilEditComponent)
-  }
+  },
 
+  {
+    path: 'admin/potvrde',
+    loadComponent: () => import('./pages/admin-potvrde/admin-potvrde.component')
+      .then(m => m.AdminPotvrdeComponent)
+  }
 
 
 ];

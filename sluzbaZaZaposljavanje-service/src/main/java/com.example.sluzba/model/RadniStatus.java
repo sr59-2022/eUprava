@@ -1,6 +1,6 @@
 package com.example.sluzba.model;
 
-public enum StatusNezaposlenosti {
+public enum RadniStatus {
     NEZAPOSLEN,
     ZAPOSLEN,
     STUDENT

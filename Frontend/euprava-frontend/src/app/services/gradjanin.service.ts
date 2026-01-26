@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export enum StatusNezaposlenosti {
+export enum RadniStatus {
   ZAPOSLEN = 'ZAPOSLEN',
   NEZAPOSLEN = 'NEZAPOSLEN',
   STUDENT = 'STUDENT'
@@ -13,7 +13,7 @@ export interface Gradjanin {
   ime: string;
   prezime: string;
   jmbg: string | null;
-  statusNezaposlenosti: StatusNezaposlenosti;
+  radniStatus: RadniStatus;
   authGradjaninId: number;
 }
 

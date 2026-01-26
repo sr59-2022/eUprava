@@ -1,13 +1,16 @@
 <nav *ngIf="isLoggedIn()" class="custom-navbar">
   <div class="navbar-brand" (click)="goToHome()">eUprava</div>
   <ul class="navbar-nav">
-    <li class="nav-item">
+    <li class="nav-item" *ngIf="authService.isGradjanin()">
       <a routerLink="/profil">Profil</a>
     </li>
+    <li class="nav-item" *ngIf="authService.isAdmin()">
+      <a routerLink="/admin/potvrde">Zahtevi</a>
+    </li>
+
     <li class="nav-item">
       <a (click)="logout()">Logout</a>
     </li>
   </ul>
 </nav>
-
 <router-outlet></router-outlet>

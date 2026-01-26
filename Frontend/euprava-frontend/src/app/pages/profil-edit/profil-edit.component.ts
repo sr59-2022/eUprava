@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Gradjanin, GradjaninService, StatusNezaposlenosti } from '../../services/gradjanin.service';
+import { Gradjanin, GradjaninService, RadniStatus } from '../../services/gradjanin.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -16,7 +16,7 @@ export class ProfilEditComponent implements OnInit {
   gradjanin: Gradjanin = {} as Gradjanin;
   loading = true;
 
-  StatusNezaposlenosti = StatusNezaposlenosti;
+  RadniStatus = RadniStatus;
 
   constructor(
     private gradjaninService: GradjaninService,

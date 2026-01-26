@@ -15,10 +15,14 @@
   </tr>
   <tr>
     <th>Status</th>
-    <td>{{ gradjanin.statusNezaposlenosti }}</td>
+    <td>{{ gradjanin.radniStatus }}</td>
   </tr>
 </table>
 <div class="profil-actions" *ngIf="!loading">
   <button (click)="onEdit()" class="btn-edit">Dopuni profil</button>
+
+  <button (click)="onZatraziPotvrdu()" class="btn-primary">
+    Zatraži potvrdu o nezaposlenosti
+  </button>
 </div>
 <div *ngIf="loading">Učitavanje...</div>

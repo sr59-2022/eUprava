@@ -1,0 +1,26 @@
+<h2>Lista zahteva za potvrdu</h2>
+
+<table class="admin-table" *ngIf="gradjani && !loading">
+  <tr>
+    <th>Ime</th>
+    <th>Prezime</th>
+    <th>Status</th>
+    <th>Akcija</th>
+  </tr>
+
+  <tr *ngFor="let g of gradjani">
+    <td>{{ g.ime }}</td>
+    <td>{{ g.prezime }}</td>
+    <td>{{ g.radniStatus }}</td>
+    <td>
+
+      <button class="button-primary"
+        (click)="izdajPotvrdu(g.id)"
+        [disabled]="g.radniStatus !== 'NEZAPOSLEN' || g.imaPotvrdu">
+        Izdaj potvrdu
+      </button>
+    </td>
+  </tr>
+</table>
+
+<div *ngIf="loading">Učitavanje...</div>

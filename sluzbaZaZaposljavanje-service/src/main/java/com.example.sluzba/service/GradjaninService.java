@@ -1,10 +1,9 @@
 package com.example.sluzba.service;
 
 import com.example.sluzba.model.Gradjanin;
-import com.example.sluzba.model.StatusNezaposlenosti;
+import com.example.sluzba.model.RadniStatus;
 import com.example.sluzba.repository.GradjaninRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -33,7 +32,7 @@ public class GradjaninService {
                     g.setAuthGradjaninId(authGradjaninId);
                     g.setIme(ime);
                     g.setPrezime(prezime);
-                    g.setStatusNezaposlenosti(StatusNezaposlenosti.NEZAPOSLEN);
+                    g.setRadniStatus(RadniStatus.NEZAPOSLEN);
                     return gradjaninRepository.save(g);
                 });
     }
@@ -50,7 +49,7 @@ public class GradjaninService {
             g.setJmbg(updated.getJmbg());
         }
 
-        g.setStatusNezaposlenosti(updated.getStatusNezaposlenosti());
+        g.setRadniStatus(updated.getRadniStatus());
 
         return gradjaninRepository.save(g);
     }

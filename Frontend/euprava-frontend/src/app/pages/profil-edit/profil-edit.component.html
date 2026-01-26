@@ -11,20 +11,20 @@
   <label>JMBG</label>
   <input type="text" [(ngModel)]="gradjanin.jmbg" name="jmbg" />
 
-  <label>Status nezaposlenosti</label>
+  <label>Radni status</label>
   <select
-    [(ngModel)]="gradjanin.statusNezaposlenosti"
+    [(ngModel)]="gradjanin.radniStatus"
     name="status">
 
-    <option [ngValue]="StatusNezaposlenosti.ZAPOSLEN">
+    <option [ngValue]="RadniStatus.ZAPOSLEN">
       Zaposlen
     </option>
 
-    <option [ngValue]="StatusNezaposlenosti.NEZAPOSLEN">
+    <option [ngValue]="RadniStatus.NEZAPOSLEN">
       Nezaposlen
     </option>
 
-    <option [ngValue]="StatusNezaposlenosti.STUDENT">
+    <option [ngValue]="RadniStatus.STUDENT">
       Student
     </option>
 

@@ -22,7 +22,10 @@ public class Gradjanin {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StatusNezaposlenosti statusNezaposlenosti;
+    private RadniStatus radniStatus;
+
+    @Column(nullable = false)
+    private boolean zahtevZatrazen = false;
 
     @Column(name = "auth_gradjanin_id",nullable = false, unique = true)
     private Long authGradjaninId;
@@ -36,12 +39,12 @@ public class Gradjanin {
 
     public Gradjanin() {}
 
-    public Gradjanin(Long id, String ime, String prezime, String jmbg, StatusNezaposlenosti statusNezaposlenosti) {
+    public Gradjanin(Long id, String ime, String prezime, String jmbg, RadniStatus radniStatus) {
         this.id = id;
         this.ime = ime;
         this.prezime = prezime;
         this.jmbg = jmbg;
-        this.statusNezaposlenosti = statusNezaposlenosti;
+        this.radniStatus = radniStatus;
     }
 
     // Getters and Setters
@@ -57,16 +60,24 @@ public class Gradjanin {
     public void setPrijave(List<Prijava> prijave) { this.prijave = prijave; }
     public PotvrdaNezaposlenosti getPotvrda() { return potvrda; }
     public void setPotvrda(PotvrdaNezaposlenosti potvrda) { this.potvrda = potvrda; }
-    public StatusNezaposlenosti getStatusNezaposlenosti() {
-        return statusNezaposlenosti;
+    public RadniStatus getRadniStatus() {
+        return radniStatus;
     }
-    public void setStatusNezaposlenosti(StatusNezaposlenosti statusNezaposlenosti) {
-        this.statusNezaposlenosti = statusNezaposlenosti;
+    public void setRadniStatus(RadniStatus radniStatus) {
+        this.radniStatus = radniStatus;
     }
     public Long getAuthGradjaninId() {
         return authGradjaninId;
     }
     public void setAuthGradjaninId(Long authGradjaninId) {
         this.authGradjaninId = authGradjaninId;
+    }
+
+    public boolean isZahtevZatrazen() {
+        return zahtevZatrazen;
+    }
+
+    public void setZahtevZatrazen(boolean zahtevZatrazen) {
+        this.zahtevZatrazen = zahtevZatrazen;
     }
 }

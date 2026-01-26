@@ -48,9 +48,28 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
-  isAdmin(): boolean {
-    const role = localStorage.getItem('role');
-    return role?.includes('ROLE_ADMIN') ?? false;
+  getRole(): string | null {
+    return localStorage.getItem('role'); // 'ADMIN', 'GRADJANIN', 'POSLODAVAC'
   }
+
+  isAdmin(): boolean {
+    const role = this.getRole();
+    return role?.includes('ADMIN') ?? false;
+  }
+
+  isGradjanin(): boolean {
+    const role = this.getRole();
+    return role?.includes('GRADJANIN') ?? false;
+  }
+
+  isPoslodavac(): boolean {
+    const role = this.getRole();
+    return role?.includes('POSLODAVAC') ?? false;
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
 }
 

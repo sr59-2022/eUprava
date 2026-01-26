@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {Gradjanin, GradjaninService} from '../../services/gradjanin.service';
 import {Router, RouterModule} from '@angular/router';
+import {PotvrdaService} from '../../services/potvrda.service';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class ProfilComponent implements OnInit {
   loading = true;
 
 
-  constructor(private gradjaninService: GradjaninService, private router: Router) {
+  constructor(private gradjaninService: GradjaninService, private potvrdaService: PotvrdaService, private router: Router) {
 
   }
 
@@ -36,5 +37,15 @@ export class ProfilComponent implements OnInit {
   }
   onEdit() {
     this.router.navigate(['/profil/uredi']);
+  }
+
+  onZatraziPotvrdu() {
+    if (!this.gradjanin?.id) return;
+
+    this.potvrdaService.zatraziPotvrdu(this.gradjanin.id)
+      .subscribe({
+        next: () => alert('Zahtev za potvrdu poslat'),
+        error: err => alert('Došlo je do greške: ' + err.error?.message || err.message)
+      });
   }
 }
