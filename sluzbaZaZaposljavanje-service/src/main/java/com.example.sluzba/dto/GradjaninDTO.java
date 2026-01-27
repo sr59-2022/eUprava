@@ -8,13 +8,15 @@ public class GradjaninDTO {
     private String prezime;
     private RadniStatus radniStatus;
     private boolean imaPotvrdu;
+    private Long potvrdaId;
 
-    public GradjaninDTO(Long id, String ime, String prezime, RadniStatus radniStatus, boolean imaPotvrdu) {
+    public GradjaninDTO(Long id, String ime, String prezime, RadniStatus radniStatus, boolean imaPotvrdu, Long potvrdaId) {
         this.id = id;
         this.ime = ime;
         this.prezime = prezime;
         this.radniStatus = radniStatus;
         this.imaPotvrdu = imaPotvrdu;
+        this.potvrdaId = potvrdaId;
     }
 
     public Long getId() {
@@ -55,6 +57,14 @@ public class GradjaninDTO {
 
     public void setImaPotvrdu(boolean imaPotvrdu) {
         this.imaPotvrdu = imaPotvrdu;
+    }
+
+    public Long getPotvrdaId() {
+        return potvrdaId;
+    }
+
+    public void setPotvrdaId(Long potvrdaId) {
+        this.potvrdaId = potvrdaId;
     }
 }
 

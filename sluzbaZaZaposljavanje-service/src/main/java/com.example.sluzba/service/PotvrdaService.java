@@ -11,6 +11,11 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.itextpdf.io.source.ByteArrayOutputStream;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
 
 @Service
 public class PotvrdaService {
@@ -61,19 +66,40 @@ public class PotvrdaService {
 
 
     public List<GradjaninDTO> getGradjaniSaPotvrdama() {
-        List<Gradjanin> gradjani = gradjaninRepo.findAll().stream()
+        return gradjaninRepo.findAll().stream()
                 .filter(g -> g.isZahtevZatrazen() || g.getPotvrda() != null)
+                .map(g -> {
+                    PotvrdaNezaposlenosti p = g.getPotvrda();
+                    return new GradjaninDTO(
+                            g.getId(),
+                            g.getIme(),
+                            g.getPrezime(),
+                            g.getRadniStatus(),
+                            p != null,
+                            p != null ? p.getIdPotvrde() : null
+                    );
+                })
                 .collect(Collectors.toList());
+    }
+    public byte[] generisiPdfPotvrdu(Long potvrdaId) throws Exception {
+        PotvrdaNezaposlenosti potvrda = potvrdaRepo.findById(potvrdaId)
+                .orElseThrow(() -> new RuntimeException("Potvrda ne postoji"));
 
-        return gradjani.stream()
-                .map(g -> new GradjaninDTO(
-                        g.getId(),
-                        g.getIme(),
-                        g.getPrezime(),
-                        g.getRadniStatus(),
-                        g.getPotvrda() != null // imaPotvrdu
-                ))
-                .collect(Collectors.toList());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        PdfWriter writer = new PdfWriter(baos);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document document = new Document(pdf);
+
+        document.add(new Paragraph("Potvrda o nezaposlenosti"));
+        document.add(new Paragraph("Ime: " + potvrda.getGradjanin().getIme()));
+        document.add(new Paragraph("Prezime: " + potvrda.getGradjanin().getPrezime()));
+        document.add(new Paragraph("Datum izdavanja: " + potvrda.getDatumIzdavanja()));
+        document.add(new Paragraph("Važi do: " + potvrda.getValidnaDo()));
+
+        document.close();
+
+        return baos.toByteArray();
     }
 }
 

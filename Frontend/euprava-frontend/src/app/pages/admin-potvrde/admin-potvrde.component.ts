@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { PotvrdaService, GradjaninDTO } from '../../services/potvrda.service';
+import { PotvrdaService } from '../../services/potvrda.service';
 import { CommonModule } from '@angular/common';
+import {GradjaninDTO} from '../../model/gradjanin.model';
 
 @Component({
   selector: 'app-admin-potvrde',

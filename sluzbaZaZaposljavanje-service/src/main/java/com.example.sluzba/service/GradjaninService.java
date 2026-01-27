@@ -1,6 +1,8 @@
 package com.example.sluzba.service;
 
+import com.example.sluzba.dto.GradjaninDTO;
 import com.example.sluzba.model.Gradjanin;
+import com.example.sluzba.model.PotvrdaNezaposlenosti;
 import com.example.sluzba.model.RadniStatus;
 import com.example.sluzba.repository.GradjaninRepository;
 import jakarta.transaction.Transactional;
@@ -52,6 +54,22 @@ public class GradjaninService {
         g.setRadniStatus(updated.getRadniStatus());
 
         return gradjaninRepository.save(g);
+    }
+
+    public GradjaninDTO getProfilGradjanin(Long gradjaninId) {
+        Gradjanin g = gradjaninRepository.findById(gradjaninId)
+                .orElseThrow(() -> new RuntimeException("Gradjanin ne postoji"));
+
+        PotvrdaNezaposlenosti p = g.getPotvrda();
+
+        return new GradjaninDTO(
+                g.getId(),
+                g.getIme(),
+                g.getPrezime(),
+                g.getRadniStatus(),
+                p != null,
+                p != null ? p.getIdPotvrde() : null
+        );
     }
 
 }

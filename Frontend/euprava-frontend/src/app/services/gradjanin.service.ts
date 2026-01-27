@@ -2,20 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export enum RadniStatus {
-  ZAPOSLEN = 'ZAPOSLEN',
-  NEZAPOSLEN = 'NEZAPOSLEN',
-  STUDENT = 'STUDENT'
-}
+import {Gradjanin} from '../model/gradjanin.model';
+import {GradjaninDTO} from '../model/gradjanin.model';
 
-export interface Gradjanin {
-  id: number;
-  ime: string;
-  prezime: string;
-  jmbg: string | null;
-  radniStatus: RadniStatus;
-  authGradjaninId: number;
-}
 
 
 @Injectable({
@@ -32,5 +21,9 @@ export class GradjaninService {
 
   updateMe(gradjanin: Gradjanin): Observable<Gradjanin> {
     return this.http.put<Gradjanin>(`${this.apiUrl}/me`, gradjanin);
+  }
+
+  getProfilSaPotvrdom(): Observable<GradjaninDTO> {
+    return this.http.get<GradjaninDTO>(`${this.apiUrl}/me/dto`);
   }
 }

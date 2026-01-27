@@ -5,7 +5,8 @@ import {DatePipe} from '@angular/common';
 import { CommonModule } from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
-import {Gradjanin, GradjaninService} from '../../services/gradjanin.service';
+import {GradjaninService} from '../../services/gradjanin.service';
+import {Gradjanin} from '../../model/gradjanin.model';
 
 @Component({
   selector: 'app-home-sluzba',

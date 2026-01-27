@@ -1,5 +1,6 @@
 package com.example.sluzba.controller;
 
+import com.example.sluzba.dto.GradjaninDTO;
 import com.example.sluzba.model.Gradjanin;
 import com.example.sluzba.service.GradjaninService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,4 +47,19 @@ public class GradjaninController {
         return gradjaninService.updateGradjanin(authId, updated);
     }
 
+    @GetMapping("/me/dto")
+    public GradjaninDTO getProfilSaPotvrdom(@AuthenticationPrincipal Jwt jwt) {
+        Map<String, Object> claims = jwt.getClaims();
+
+        Long authId = Long.valueOf(claims.get("uid").toString());
+        String ime = (String) claims.get("ime");
+        String prezime = (String) claims.get("prezime");
+        Collection<String> roles = (Collection<String>) claims.get("roles");
+
+        // Kreira gradjanina ako ne postoji (isto kao i /me)
+        Gradjanin g = gradjaninService.createGradjanin(authId, ime, prezime, roles);
+
+        // Vraća DTO sa potvrdom
+        return gradjaninService.getProfilGradjanin(g.getId());
+    }
 }

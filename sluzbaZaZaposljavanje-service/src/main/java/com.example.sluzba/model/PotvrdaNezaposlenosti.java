@@ -1,5 +1,6 @@
 package com.example.sluzba.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -19,6 +20,7 @@ public class PotvrdaNezaposlenosti {
 
     @OneToOne
     @JoinColumn(name = "gradjanin_id", unique = true, nullable = false)
+    @JsonIgnore
     private Gradjanin gradjanin;
 
     public PotvrdaNezaposlenosti() {}

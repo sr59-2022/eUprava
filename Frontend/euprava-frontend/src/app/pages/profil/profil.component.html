@@ -24,5 +24,13 @@
   <button (click)="onZatraziPotvrdu()" class="btn-primary">
     Zatraži potvrdu o nezaposlenosti
   </button>
+
+  <button
+    *ngIf="gradjaninSaPotvrdom?.imaPotvrdu"
+    (click)="preuzmiPotvrdu()"
+    class="btn-primary">
+    Preuzmi potvrdu
+  </button>
+
 </div>
 <div *ngIf="loading">Učitavanje...</div>

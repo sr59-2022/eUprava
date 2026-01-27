@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Gradjanin, GradjaninService, RadniStatus } from '../../services/gradjanin.service';
+import { GradjaninService } from '../../services/gradjanin.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import {Gradjanin, RadniStatus} from '../../model/gradjanin.model';
 
 @Component({
   selector: 'app-profil-edit',

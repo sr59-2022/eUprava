@@ -1,14 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {GradjaninDTO} from '../model/gradjanin.model';
 
-export interface GradjaninDTO {
-  id: number;
-  ime: string;
-  prezime: string;
-  radniStatus: string;
-  imaPotvrdu: boolean;
-}
 
 @Injectable({ providedIn: 'root' })
 export class PotvrdaService {
@@ -31,4 +25,9 @@ export class PotvrdaService {
   getGradjani(): Observable<GradjaninDTO[]> {
     return this.http.get<GradjaninDTO[]>(`${this.api}/admin/gradjani`);
   }
+
+  generisiPdfPotvrdu(potvrdaId: number) {
+    return this.http.get(`${this.api}/gradjanin/potvrda/pdf/${potvrdaId}`, { responseType: 'blob' });
+  }
+
 }
