@@ -7,13 +7,14 @@ import {FormsModule} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
 import {GradjaninService} from '../../services/gradjanin.service';
 import {Gradjanin} from '../../model/gradjanin.model';
+import {DodajOglasComponent} from '../dodaj-oglas/dodaj-oglas.component';
 
 @Component({
   selector: 'app-home-sluzba',
   templateUrl: './home-sluzba.component.html',
   standalone: true,
   imports: [
-    DatePipe, CommonModule, FormsModule
+    DatePipe, CommonModule, FormsModule, DodajOglasComponent
   ],
   styleUrls: ['./home-sluzba.component.css']
 })
@@ -24,8 +25,9 @@ export class HomeSluzbaComponent implements OnInit {
   nazivPozicije = '';
   tipOglasa?: TipOglasa;
   tipoviOglasa = Object.values(TipOglasa);
+  showDodajForm: boolean = false;
 
-  constructor(private oglasService: OglasService, private authService: AuthService,private gradjaninService: GradjaninService) { }
+  constructor(private oglasService: OglasService, public authService: AuthService,private gradjaninService: GradjaninService) { }
 
   ngOnInit(): void {
     if (this.authService.isLoggedIn()) {
@@ -57,4 +59,19 @@ export class HomeSluzbaComponent implements OnInit {
     this.tipOglasa = undefined;
     this.getAllOglasi();
   }
+
+
+  openDodajModal(): void {
+    this.showDodajForm = true;
+  }
+
+  closeDodajModal(): void {
+    this.showDodajForm = false;
+  }
+
+  osveziListu(): void {
+    this.showDodajForm = false;
+    this.getAllOglasi();
+  }
+
 }

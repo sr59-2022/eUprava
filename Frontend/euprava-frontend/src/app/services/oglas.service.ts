@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Oglas, TipOglasa } from '../model/oglas.model';
+import {OglasRequest} from '../model/oglas-request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,4 +29,12 @@ export class OglasService {
 
     return this.http.get<Oglas[]>(`${this.apiUrl}/pretraga`, { params });
   }
+
+  dodajOglas(oglas: OglasRequest) {
+    const token = localStorage.getItem('token');
+    return this.http.post(`${this.apiUrl}/dodaj`, oglas, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
 }

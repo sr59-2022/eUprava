@@ -1,0 +1,25 @@
+<div class="dodaj-oglas-form">
+  <h3>Novi oglas</h3>
+
+  <form (ngSubmit)="save()">
+    <label>Naziv pozicije</label>
+    <input [(ngModel)]="oglas.nazivPozicije" name="nazivPozicije" required />
+
+    <label>Opis</label>
+    <textarea [(ngModel)]="oglas.opis" name="opis"></textarea>
+
+    <label>Naziv kompanije</label>
+    <input [(ngModel)]="oglas.nazivKompanije" name="nazivKompanije" />
+
+    <label>Rok prijave</label>
+    <input type="date" [(ngModel)]="oglas.rokPrijave" name="rokPrijave" />
+
+    <label>Tip oglasa</label>
+    <select [(ngModel)]="oglas.tipOglasa" name="tipOglasa">
+      <option value="POSAO">Posao</option>
+      <option value="PRAKSA">Praksa</option>
+    </select>
+
+    <button type="submit">Sačuvaj</button>
+  </form>
+</div>

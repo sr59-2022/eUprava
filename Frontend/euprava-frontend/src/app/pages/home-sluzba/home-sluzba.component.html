@@ -19,7 +19,15 @@
 <hr />
 
 <h2>OGLASI</h2>
+<button class="btn" *ngIf="authService.isPoslodavac()"  (click)="openDodajModal()">Dodaj oglas</button>
 
+<div class="modal" *ngIf="showDodajForm">
+  <div class="modal-content">
+    <span class="close" (click)="closeDodajModal()">&times;</span>
+
+    <app-dodaj-oglas (oglasDodat)="osveziListu()"></app-dodaj-oglas>
+  </div>
+</div>
 <div class="oglasi-list">
   <div class="oglas-card" *ngFor="let oglas of oglasi">
     <div class="oglas-header">
