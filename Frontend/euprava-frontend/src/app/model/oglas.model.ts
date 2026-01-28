@@ -6,6 +6,7 @@ export interface Oglas {
   rokPrijave: string;
   tipOglasa: string;
   nazivKompanije: string;
+  oblast?: string;
 }
 
 export enum TipOglasa {

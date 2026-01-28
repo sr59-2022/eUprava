@@ -26,20 +26,29 @@ export class HomeSluzbaComponent implements OnInit {
   tipOglasa?: TipOglasa;
   tipoviOglasa = Object.values(TipOglasa);
   showDodajForm: boolean = false;
+  preporuke: Oglas[] = [];
 
   constructor(private oglasService: OglasService, public authService: AuthService,private gradjaninService: GradjaninService) { }
 
   ngOnInit(): void {
-    if (this.authService.isLoggedIn()) {
-      this.gradjaninService.getMe().subscribe({
-        next: (g) => {
-          this.gradjanin = g;
-          console.log('Gradjanin kreiran / učitan:', g);
-        },
-        error: (err) => console.error('Greška prilikom kreiranja gradjanina:', err)
-      });
+    if (!this.authService.isLoggedIn()) {
+      return;
+    }
 
-      this.getAllOglasi();
+    this.getAllOglasi();
+
+    if (this.authService.isGradjanin()) {
+      this.gradjaninService.getMe().subscribe({
+        next: g => {
+          this.gradjanin = g;
+
+          this.oglasService.getPreporuke().subscribe({
+            next: oglasi => this.preporuke = oglasi,
+            error: err => console.error('Greška pri preporukama', err)
+          });
+        },
+        error: err => console.error('Greška pri učitavanju profila', err)
+      });
     }
   }
 

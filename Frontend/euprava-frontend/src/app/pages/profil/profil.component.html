@@ -17,6 +17,10 @@
     <th>Status</th>
     <td>{{ gradjanin.radniStatus }}</td>
   </tr>
+  <tr>
+    <th>Oblast zainteresovanosti</th>
+    <td>{{ gradjanin.oblastZainteresovanosti || 'Nije definisano' }}</td>
+  </tr>
 </table>
 <div class="profil-actions" *ngIf="!loading">
   <button (click)="onEdit()" class="btn-edit">Dopuni profil</button>

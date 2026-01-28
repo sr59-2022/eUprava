@@ -24,6 +24,9 @@ public class Gradjanin {
     @Column(nullable = false)
     private RadniStatus radniStatus;
 
+    @Column(nullable = true)
+    private String oblastZainteresovanosti;
+
     @Column(nullable = false)
     private boolean zahtevZatrazen = false;
 
@@ -39,12 +42,13 @@ public class Gradjanin {
 
     public Gradjanin() {}
 
-    public Gradjanin(Long id, String ime, String prezime, String jmbg, RadniStatus radniStatus) {
+    public Gradjanin(Long id, String ime, String prezime, String jmbg, RadniStatus radniStatus, String oblastZainteresovanosti) {
         this.id = id;
         this.ime = ime;
         this.prezime = prezime;
         this.jmbg = jmbg;
         this.radniStatus = radniStatus;
+        this.oblastZainteresovanosti = oblastZainteresovanosti;
     }
 
     // Getters and Setters
@@ -79,5 +83,13 @@ public class Gradjanin {
 
     public void setZahtevZatrazen(boolean zahtevZatrazen) {
         this.zahtevZatrazen = zahtevZatrazen;
+    }
+
+    public String getOblastZainteresovanosti() {
+        return oblastZainteresovanosti;
+    }
+
+    public void setOblastZainteresovanosti(String oblastZainteresovanosti) {
+        this.oblastZainteresovanosti = oblastZainteresovanosti;
     }
 }

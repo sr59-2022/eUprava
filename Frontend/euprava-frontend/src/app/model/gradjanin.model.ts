@@ -21,4 +21,5 @@ export interface Gradjanin {
   jmbg: string | null;
   radniStatus: RadniStatus;
   authGradjaninId: number;
+  oblastZainteresovanosti: string;
 }

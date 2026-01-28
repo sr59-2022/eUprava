@@ -18,7 +18,8 @@ export class DodajOglasComponent {
     opis: '',
     nazivKompanije: '',
     rokPrijave: '',
-    tipOglasa: TipOglasa.POSAO
+    tipOglasa: TipOglasa.POSAO,
+    oblast: ''
   };
 
   constructor(private oglasService: OglasService) {}

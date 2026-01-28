@@ -10,5 +10,6 @@ public class OglasRequest {
     public LocalDate rokPrijave;
     public String nazivKompanije;
     public TipOglasa tipOglasa;
+    public String oblast;
 }
 

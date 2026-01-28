@@ -9,14 +9,16 @@ public class GradjaninDTO {
     private RadniStatus radniStatus;
     private boolean imaPotvrdu;
     private Long potvrdaId;
+    private String oblastZainteresovanosti;
 
-    public GradjaninDTO(Long id, String ime, String prezime, RadniStatus radniStatus, boolean imaPotvrdu, Long potvrdaId) {
+    public GradjaninDTO(Long id, String ime, String prezime, RadniStatus radniStatus, boolean imaPotvrdu, Long potvrdaId, String oblastZainteresovanosti) {
         this.id = id;
         this.ime = ime;
         this.prezime = prezime;
         this.radniStatus = radniStatus;
         this.imaPotvrdu = imaPotvrdu;
         this.potvrdaId = potvrdaId;
+        this.oblastZainteresovanosti = oblastZainteresovanosti;
     }
 
     public Long getId() {
@@ -65,6 +67,14 @@ public class GradjaninDTO {
 
     public void setPotvrdaId(Long potvrdaId) {
         this.potvrdaId = potvrdaId;
+    }
+
+    public String getOblastZainteresovanosti() {
+        return oblastZainteresovanosti;
+    }
+
+    public void setOblastZainteresovanosti(String oblastZainteresovanosti) {
+        this.oblastZainteresovanosti = oblastZainteresovanosti;
     }
 }
 

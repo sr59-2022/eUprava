@@ -52,6 +52,7 @@ public class GradjaninService {
         }
 
         g.setRadniStatus(updated.getRadniStatus());
+        g.setOblastZainteresovanosti(updated.getOblastZainteresovanosti());
 
         return gradjaninRepository.save(g);
     }
@@ -68,7 +69,8 @@ public class GradjaninService {
                 g.getPrezime(),
                 g.getRadniStatus(),
                 p != null,
-                p != null ? p.getIdPotvrde() : null
+                p != null ? p.getIdPotvrde() : null,
+                g.getOblastZainteresovanosti()
         );
     }
 

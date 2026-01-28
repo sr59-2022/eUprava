@@ -37,4 +37,8 @@ export class OglasService {
     });
   }
 
+  getPreporuke(): Observable<Oglas[]> {
+    return this.http.get<Oglas[]>(`${this.apiUrl}/preporuke`);
+  }
+
 }

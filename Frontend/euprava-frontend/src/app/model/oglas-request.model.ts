@@ -6,4 +6,5 @@ export interface OglasRequest {
   nazivKompanije: string;
   rokPrijave: string;
   tipOglasa: TipOglasa;
+  oblast?: string;
 }

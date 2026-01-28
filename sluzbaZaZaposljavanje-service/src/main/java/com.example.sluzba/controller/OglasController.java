@@ -44,4 +44,12 @@ public class OglasController {
 
         return oglasService.pretragaOglasa(naziv, tip);
     }
+
+    @GetMapping("/preporuke")
+    public List<Oglas> getPreporuke(@AuthenticationPrincipal Jwt jwt) {
+        Long authGradjaninId = ((Number) jwt.getClaims().get("uid")).longValue();
+        return oglasService.generisiPreporuke(authGradjaninId);
+    }
+
+
 }

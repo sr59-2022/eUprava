@@ -76,7 +76,8 @@ public class PotvrdaService {
                             g.getPrezime(),
                             g.getRadniStatus(),
                             p != null,
-                            p != null ? p.getIdPotvrde() : null
+                            p != null ? p.getIdPotvrde() : null,
+                            g.getOblastZainteresovanosti()
                     );
                 })
                 .collect(Collectors.toList());

@@ -1,4 +1,37 @@
 
+
+<div *ngIf="authService.isGradjanin()">
+
+  <h2 *ngIf="preporuke.length > 0">
+    Preporučeni oglasi,
+    <span *ngIf="gradjanin?.oblastZainteresovanosti">
+      vezani za oblast: {{ gradjanin?.oblastZainteresovanosti }}
+    </span>
+  </h2>
+
+  <div *ngIf="preporuke.length === 0">
+    <p>Trenutno nema preporučenih oglasa. Molimo dopunite svoj profil!</p>
+  </div>
+
+  <div class="oglasi-list" *ngIf="preporuke.length > 0">
+    <div class="oglas-card" *ngFor="let oglas of preporuke">
+      <h3>{{ oglas.nazivPozicije }}</h3>
+      <p class="tip">Tip: {{ oglas.tipOglasa }}</p>
+      <p class="kompanija">Kompanija: {{ oglas.nazivKompanije }}</p>
+      <p class="opis">Opis: {{ oglas.opis }}</p>
+      <div class="oglas-footer">
+        <span class="rok">
+          Rok prijave: {{ oglas.rokPrijave | date:'dd.MM.yyyy' }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+</div>
+
+<h2>OGLASI</h2>
+
 <div class="search-box">
   <input
     type="text"
@@ -17,8 +50,6 @@
   <button (click)="reset()">Reset</button>
 </div>
 <hr />
-
-<h2>OGLASI</h2>
 <button class="btn" *ngIf="authService.isPoslodavac()"  (click)="openDodajModal()">Dodaj oglas</button>
 
 <div class="modal" *ngIf="showDodajForm">
@@ -35,6 +66,7 @@
       <p class="tip">Tip oglasa: {{ oglas.tipOglasa }}</p>
       <p class="kompanija">Kompanija: {{ oglas.nazivKompanije }}</p>
       <p class="opis">Opis: {{ oglas.opis }}</p>
+      <p class="opis">Oblast: {{ oglas.oblast }}</p>
       <div class="oglas-footer">
       <span class="datum">Objavljeno: {{ oglas.datumObjave | date:'dd.MM.yyyy' }}</span>
       <span class="rok">Rok prijave: {{ oglas.rokPrijave | date:'dd.MM.yyyy' }}</span>
