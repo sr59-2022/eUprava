@@ -1,0 +1,75 @@
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-family: Arial, sans-serif;
+}
+
+thead th {
+  background-color: #7fb2cc;
+  color: white;
+  padding: 10px;
+  text-align: left;
+}
+
+
+tbody td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+
+tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+
+button {
+  padding: 5px 10px;
+  margin-right: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+
+button:nth-child(1) {
+  background-color: #28a745;
+  color: white;
+}
+
+button:nth-child(1):hover:not([disabled]) {
+  background-color: #218838;
+}
+
+
+button:nth-child(2) {
+  background-color: #dc3545;
+  color: white;
+}
+
+button:nth-child(2):hover:not([disabled]) {
+  background-color: #c82333;
+}
+
+
+div[ng-reflect-ng-if="true"] {
+  font-weight: bold;
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+
+div[ng-reflect-ng-if="false"] {
+  font-style: italic;
+  margin-top: 10px;
+  color: #555;
+}

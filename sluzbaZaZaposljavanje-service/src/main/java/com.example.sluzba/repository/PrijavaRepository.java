@@ -13,7 +13,7 @@ import java.util.List;
 public interface PrijavaRepository extends JpaRepository<Prijava, Long> {
 
     List<Prijava> findByGradjaninId(Long gradjaninId);
-    List<Prijava> findByOglasPoslodavacId(Long poslodavacId);
+    List<Prijava> findByOglas_Poslodavac_Id(Long poslodavacId);
     boolean existsByGradjaninIdAndOglas_IdOglasa(Long gradjaninId, Long oglasId);
 }
 

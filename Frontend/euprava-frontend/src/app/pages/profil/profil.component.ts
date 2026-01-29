@@ -33,6 +33,14 @@ export class ProfilComponent implements OnInit {
       next: data => {
         this.gradjanin = data;
         this.loading = false;
+
+        this.prijavaService.getMojePrijave().subscribe({
+          next: prijave => {
+            this.mojePrijave = prijave;
+          },
+          error: err => console.error('Greška pri učitavanju prijava', err)
+        });
+
       },
       error: err => {
         console.error(err);
@@ -48,15 +56,6 @@ export class ProfilComponent implements OnInit {
         console.error('Greška prilikom učitavanja potvrde:', err);
       }
     });
-
-    if (this.gradjanin) {
-      this.prijavaService.getMojePrijave().subscribe({
-        next: prijave => {
-          this.mojePrijave = prijave;
-        },
-        error: err => console.error('Greška pri učitavanju prijava', err)
-      });
-    }
   }
 
   onEdit() {

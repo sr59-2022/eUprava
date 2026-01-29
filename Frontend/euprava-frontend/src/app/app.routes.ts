@@ -35,6 +35,11 @@ export const routes: Routes = [
     path: 'admin/potvrde',
     loadComponent: () => import('./pages/admin-potvrde/admin-potvrde.component')
       .then(m => m.AdminPotvrdeComponent)
+  },
+  {
+    path: 'prijave/poslodavac',
+    loadComponent: () => import('./pages/prijave-poslodavac/prijave-poslodavac.component')
+      .then(m => m.PrijavePoslodavacComponent)
   }
 
 

@@ -2,6 +2,7 @@ package com.example.sluzba.controller;
 
 import com.example.sluzba.dto.PrijavaDTO;
 import com.example.sluzba.dto.PrikazPrijaveDTO;
+import com.example.sluzba.dto.PrikazPrijavePoslodavacDTO;
 import com.example.sluzba.model.Prijava;
 import com.example.sluzba.model.StatusPrijave;
 import com.example.sluzba.service.PrijavaService;
@@ -37,6 +38,27 @@ public class PrijavaController {
     public List<PrikazPrijaveDTO> mojePrijave(@AuthenticationPrincipal Jwt jwt) {
         Long authGradjaninId = ((Number) jwt.getClaims().get("uid")).longValue();
         return prijavaService.prijaveZaGradjaninaDTO(authGradjaninId);
+    }
+
+    @GetMapping("/poslodavac")
+    public List<PrikazPrijavePoslodavacDTO> prijavePoslodavca(@AuthenticationPrincipal Jwt jwt) {
+        Long authPoslodavacId = ((Number) jwt.getClaims().get("uid")).longValue();
+        return prijavaService.prijaveZaPoslodavca(authPoslodavacId);
+    }
+
+    @PostMapping("/prihvati/{prijavaId}")
+    public PrikazPrijaveDTO prihvati(@PathVariable Long prijavaId,
+                                     @AuthenticationPrincipal Jwt jwt) {
+        Long authPoslodavacId = ((Number) jwt.getClaims().get("uid")).longValue();
+        return prijavaService.prihvatiPrijavu(prijavaId);
+    }
+
+    @PostMapping("/odbij/{prijavaId}")
+    public PrikazPrijaveDTO odbij(@PathVariable Long prijavaId,
+                                  @RequestParam String razlog,
+                                  @AuthenticationPrincipal Jwt jwt) {
+        Long authPoslodavacId = ((Number) jwt.getClaims().get("uid")).longValue();
+        return prijavaService.odbijPrijavu(prijavaId, razlog);
     }
 
 }

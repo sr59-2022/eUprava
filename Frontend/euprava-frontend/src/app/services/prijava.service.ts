@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {PrikazPrijave} from '../model/prijava.model';
+import {PrikazPrijave, PrikazPrijavePoslodavacDTO} from '../model/prijava.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,5 +18,18 @@ export class PrijavaService {
 
   getMojePrijave(): Observable<PrikazPrijave[]> {
     return this.http.get<PrikazPrijave[]>(`${this.apiUrl}/moje`);
+  }
+
+  getPrijavePoslodavca(): Observable<PrikazPrijavePoslodavacDTO[]> {
+    return this.http.get<PrikazPrijavePoslodavacDTO[]>(`${this.apiUrl}/poslodavac`);
+  }
+
+
+  prihvatiPrijavu(prijavaId: number): Observable<PrikazPrijavePoslodavacDTO> {
+    return this.http.post<PrikazPrijavePoslodavacDTO>(`${this.apiUrl}/prihvati/${prijavaId}`, {});
+  }
+
+  odbijPrijavu(prijavaId: number, razlog: string): Observable<PrikazPrijavePoslodavacDTO> {
+    return this.http.post<PrikazPrijavePoslodavacDTO>(`${this.apiUrl}/odbij/${prijavaId}?razlog=${encodeURIComponent(razlog)}`, {});
   }
 }

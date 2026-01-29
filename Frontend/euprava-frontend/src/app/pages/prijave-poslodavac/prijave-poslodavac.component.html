@@ -1,0 +1,46 @@
+<div *ngIf="loading">Učitavanje prijava...</div>
+
+<table *ngIf="!loading && prijave.length > 0" border="1" cellpadding="5">
+  <thead>
+  <tr>
+    <th>Gradjanin</th>
+    <th>Oblast</th>
+    <th>Radni status</th>
+    <th>Oglas</th>
+    <th>Datum prijave</th>
+    <th>Status</th>
+    <th>Razlog odbijanja</th>
+    <th>Akcije</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let p of prijave">
+    <td>{{p.imeGradjanina}} {{p.prezimeGradjanina}}</td>
+    <td>{{p.oblastGradjanina}}</td>
+    <td>{{p.radniStatusGradjanina}}</td>
+    <td>{{p.nazivPozicije}} ({{p.nazivKompanije}})</td>
+    <td>{{p.datumPrijave | date}}</td>
+    <td>{{p.status}}</td>
+    <td>{{p.razlogOdbijanja}}</td>
+    <td>
+      <button (click)="prihvati(p.idPrijave)" [disabled]="p.status !== 'PODNETA'">Prihvati</button>
+      <button (click)="otvoriOdbijModal(p.idPrijave)" [disabled]="p.status !== 'PODNETA'">Odbij</button>
+
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="modal" *ngIf="odbijModalOpen">
+  <div class="modal-content">
+    <h3>Unesite razlog odbijanja</h3>
+    <textarea [(ngModel)]="odbijRazlog" rows="4" placeholder="Razlog..."></textarea>
+    <div class="modal-actions">
+      <button (click)="potvrdiOdbij()">Potvrdi</button>
+      <button (click)="zatvoriOdbijModal()">Otkaži</button>
+    </div>
+  </div>
+</div>
+<div *ngIf="!loading && prijave.length === 0">
+  Nema prijava za prikaz.
+</div>

@@ -49,6 +49,10 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/oglasi/preporuke").hasRole("GRADJANIN")
                         .requestMatchers(HttpMethod.POST, "/api/prijave/prijavi").hasRole("GRADJANIN")
                         .requestMatchers(HttpMethod.GET, "/api/prijave/moje").hasRole("GRADJANIN")
+                        .requestMatchers(HttpMethod.GET, "/api/prijave/poslodavac").hasRole("POSLODAVAC")
+                        .requestMatchers(HttpMethod.POST, "/api/prijave/prihvati/**").hasRole("POSLODAVAC")
+                        .requestMatchers(HttpMethod.POST, "/api/prijave/odbij/**").hasRole("POSLODAVAC")
+
 
                         .anyRequest().authenticated()
                 )

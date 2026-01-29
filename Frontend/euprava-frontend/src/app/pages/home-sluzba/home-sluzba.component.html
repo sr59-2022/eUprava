@@ -79,7 +79,6 @@
           {{ jePrijavljen(oglas.idOglasa) ? 'Već ste prijavljeni' : 'Prijavi se' }}
         </button>
 
-        <!-- Status prijave ispod dugmeta -->
         <span *ngIf="jePrijavljen(oglas.idOglasa)">
   Status: {{ statusPrijave(oglas.idOglasa) }}
 </span>
