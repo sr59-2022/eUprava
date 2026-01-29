@@ -3,14 +3,12 @@ package com.example.sluzba.service;
 import com.example.sluzba.dto.PrikazPrijaveDTO;
 import com.example.sluzba.dto.PrikazPrijavePoslodavacDTO;
 import com.example.sluzba.model.*;
-import com.example.sluzba.repository.GradjaninRepository;
-import com.example.sluzba.repository.OglasRepository;
-import com.example.sluzba.repository.PoslodavacRepository;
-import com.example.sluzba.repository.PrijavaRepository;
+import com.example.sluzba.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,15 +19,18 @@ public class PrijavaService {
     private final GradjaninRepository gradjaninRepository;
     private final OglasRepository oglasRepository;
     private final PoslodavacRepository poslodavacRepository;
+    private final ObavestenjeRepository obavestenjeRepository;
 
     public PrijavaService(PrijavaRepository prijavaRepository,
                           GradjaninRepository gradjaninRepository,
                           OglasRepository oglasRepository,
-                          PoslodavacRepository poslodavacRepository) {
+                          PoslodavacRepository poslodavacRepository,
+                          ObavestenjeRepository obavestenjeRepository) {
         this.prijavaRepository = prijavaRepository;
         this.gradjaninRepository = gradjaninRepository;
         this.oglasRepository = oglasRepository;
         this.poslodavacRepository = poslodavacRepository;
+        this.obavestenjeRepository = obavestenjeRepository;
     }
 
     @Transactional
@@ -51,6 +52,14 @@ public class PrijavaService {
         p.setOglas(o);
         p.setDatumPrijave(LocalDate.now());
         p.setStatus(StatusPrijave.PODNETA);
+
+        Obavestenje obavestenje = new Obavestenje();
+        obavestenje.setPoruka("Novi korisnik se prijavio na oglas: " + o.getNazivPozicije());
+        obavestenje.setDatum(LocalDateTime.now());
+        obavestenje.setProcitano(false);
+        obavestenje.setPoslodavac(o.getPoslodavac());
+
+        obavestenjeRepository.save(obavestenje);
 
         return prijavaRepository.save(p);
     }

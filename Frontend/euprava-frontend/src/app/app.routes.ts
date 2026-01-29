@@ -40,6 +40,12 @@ export const routes: Routes = [
     path: 'prijave/poslodavac',
     loadComponent: () => import('./pages/prijave-poslodavac/prijave-poslodavac.component')
       .then(m => m.PrijavePoslodavacComponent)
+  },
+
+  {
+    path: 'obavestenja',
+    loadComponent: () => import('./pages/obavestenja/obavestenja.component')
+      .then(m => m.ObavestenjaComponent)
   }
 
 

@@ -1,4 +1,13 @@
 
+<app-obavestenja
+  *ngIf="showObavestenjeModal"
+  [obavestenja]="obavestenja"
+  [brojNeprocitanih]="getBrojNeprocitanih"
+  (procitano)="onObavestenjeProcitano($event)"
+  (close)="closeObavestenjeModal()">
+</app-obavestenja>
+
+
 
 <div *ngIf="authService.isGradjanin()">
 
@@ -51,6 +60,7 @@
 </div>
 <hr />
 <button class="btn" *ngIf="authService.isPoslodavac()"  (click)="openDodajModal()">Dodaj oglas</button>
+
 
 <div class="modal" *ngIf="showDodajForm">
   <div class="modal-content">

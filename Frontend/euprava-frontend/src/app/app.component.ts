@@ -2,18 +2,18 @@ import { Component } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {AuthService} from './services/auth.service';
-import {AdminPotvrdeComponent} from './pages/admin-potvrde/admin-potvrde.component';
+import {ObavestenjeService} from './services/obavestenje.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterModule, CommonModule, AdminPotvrdeComponent],
+  imports: [RouterModule, CommonModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   showAdminList = false;
-  constructor(private router: Router, public authService: AuthService) {}
+  constructor(private router: Router, public authService: AuthService, private obavestenjeService: ObavestenjeService) {}
   title = 'euprava-frontend';
 
 
@@ -24,6 +24,8 @@ export class AppComponent {
   goToHome() {
     this.router.navigate(['/home-sluzba']);
   }
+
+
 
   logout() {
     localStorage.removeItem('token');

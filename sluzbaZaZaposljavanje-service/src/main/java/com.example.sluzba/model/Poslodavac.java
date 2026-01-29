@@ -14,9 +14,15 @@ public class Poslodavac {
     @Column(name = "auth_poslodavac_id", nullable = false, unique = true)
     private Long authPoslodavacId;
 
+    @OneToMany(mappedBy = "poslodavac")
+    private List<Obavestenje> obavestenja;
+
     public Poslodavac() {}
-    public Poslodavac(Long id) {
+
+    public Poslodavac(Long id, Long authPoslodavacId) {
+
         this.id = id;
+        this.authPoslodavacId = authPoslodavacId;
     }
 
 

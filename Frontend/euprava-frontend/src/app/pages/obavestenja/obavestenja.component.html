@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="modal">
+  <div class="modal-content">
+      <span class="close" (click)="closeModal()">&times;</span>
+
+      <div class="neprocitana-obavestenja" *ngIf="brojNeprocitanih > 0">
+        <p>Imate {{ brojNeprocitanih }} novih obaveštenja</p>
+      </div>
+
+      <div *ngIf="obavestenja.length > 0; else noNotifications">
+        <ul>
+          <li *ngFor="let obavestenje of obavestenja">
+            <p>{{ obavestenje.poruka }}</p>
+            <span>{{ obavestenje.datum | date:'short' }}</span>
+            <button (click)="oznaciProcitano(obavestenje.id)" class="btn">Označi kao pročitano</button>
+          </li>
+        </ul>
+      </div>
+
+      <ng-template #noNotifications>
+        <p>Nema novih obaveštenja.</p>
+      </ng-template>
+    </div>
+  </div>
+
+</div>

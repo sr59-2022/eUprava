@@ -10,13 +10,17 @@ import {Gradjanin} from '../../model/gradjanin.model';
 import {DodajOglasComponent} from '../dodaj-oglas/dodaj-oglas.component';
 import {PrijavaService} from '../../services/prijava.service';
 import {PrikazPrijave} from '../../model/prijava.model';
+import {ObavestenjeService} from '../../services/obavestenje.service';
+import {ObavestenjaComponent} from '../obavestenja/obavestenja.component';
+import {RouterModule} from '@angular/router';
+import {ObavestenjeDTO} from '../../model/obavestenje.model';
 
 @Component({
   selector: 'app-home-sluzba',
   templateUrl: './home-sluzba.component.html',
   standalone: true,
   imports: [
-    DatePipe, CommonModule, FormsModule, DodajOglasComponent
+    DatePipe, CommonModule, FormsModule, DodajOglasComponent, RouterModule, ObavestenjaComponent
   ],
   styleUrls: ['./home-sluzba.component.css']
 })
@@ -30,9 +34,12 @@ export class HomeSluzbaComponent implements OnInit {
   showDodajForm: boolean = false;
   preporuke: Oglas[] = [];
   prijavljeniOglasi = new Map<number, PrikazPrijave>();
+  getBrojNeprocitanih: number = 0;
+  showObavestenjeModal: boolean = false;
+  obavestenja: ObavestenjeDTO[] = [];
 
 
-  constructor(private oglasService: OglasService, public authService: AuthService,private gradjaninService: GradjaninService, private prijavaService: PrijavaService) { }
+  constructor(private oglasService: OglasService, public authService: AuthService,private gradjaninService: GradjaninService, private prijavaService: PrijavaService, private obavestenjeService: ObavestenjeService) { }
 
   ngOnInit(): void {
     if (!this.authService.isLoggedIn()) {
@@ -65,10 +72,31 @@ export class HomeSluzbaComponent implements OnInit {
         },
         error: err => console.error('Greška pri učitavanju profila', err)
       });
+    } else if (this.authService.isPoslodavac()) {
+      this.obavestenjeService.getBrojNeprocitanih().subscribe({
+        next: (broj) => {
+          this.getBrojNeprocitanih = broj;
+
+          if (broj > 0) {
+            this.obavestenjeService.getObavestenja().subscribe({
+              next: (data) => {
+                console.log('Ucitana obavestenja', data);
+                this.obavestenja = data;
+                this.showObavestenjeModal = true;
+              },
+              error: err =>
+                console.error('Greška pri učitavanju obaveštenja', err)
+            });
+          }
+        },
+        error: err =>
+          console.error('Greška pri dobijanju broja nepročitanih obaveštenja', err),
+      });
     }
   }
 
-  getAllOglasi() {
+
+    getAllOglasi() {
     this.oglasService.getAllOglasi().subscribe(oglasi => {
       this.oglasi = oglasi;
     });
@@ -127,5 +155,23 @@ export class HomeSluzbaComponent implements OnInit {
     });
   }
 
+  loadObavestenja(): void {
+    this.obavestenjeService.getObavestenja().subscribe((data) => {
+      this.obavestenja = data;
+    });
+  }
+
+
+  onObavestenjeProcitano(id: number): void {
+    this.obavestenja = this.obavestenja.filter(o => o.id !== id);
+
+    if (this.getBrojNeprocitanih > 0) {
+      this.getBrojNeprocitanih--;
+    }
+  }
+
+  closeObavestenjeModal(): void {
+    this.showObavestenjeModal = false;
+  }
 
 }
