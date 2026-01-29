@@ -28,10 +28,10 @@ public class Uverenje {
     @Column(name = "datum_izdavanja", nullable = false)
     private LocalDate datumIzdavanja;
 
-    @NotBlank
-    @Size(max = 30)
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
-    private String tip;
+    private TipUverenja tip;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "student_id", nullable = false)
@@ -47,8 +47,8 @@ public class Uverenje {
     public LocalDate getDatumIzdavanja() { return datumIzdavanja; }
     public void setDatumIzdavanja(LocalDate datumIzdavanja) { this.datumIzdavanja = datumIzdavanja; }
 
-    public String getTip() { return tip; }
-    public void setTip(String tip) { this.tip = tip; }
+    public TipUverenja getTip() { return tip; }
+    public void setTip(TipUverenja tip) { this.tip = tip; }
 
     public Student getStudent() { return student; }
     public void setStudent(Student student) { this.student = student; }
