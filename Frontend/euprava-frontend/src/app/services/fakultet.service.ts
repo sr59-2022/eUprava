@@ -1,5 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+export interface OcenaPregledDto {
+  ocenaId: number;
+  vrednost: number;
+  datumUpisa: string;
+
+  ispitId: number;
+  datumOdrzavanja: string;
+
+  predmetId: number;
+  predmetSifra: string;
+  predmetNaziv: string;
+  predmetEspb: number;
+
+  rokNaziv: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class FakultetService {
@@ -42,6 +59,14 @@ export class FakultetService {
   me() {
     return this.http.get(
       `${this.baseUrl}/api/fakultet/me`,
+      this.authOptions()
+    );
+  }
+
+
+  mojeOcene(): Observable<OcenaPregledDto[]> {
+    return this.http.get<OcenaPregledDto[]>(
+      `${this.baseUrl}/api/fakultet/ocene/me`,
       this.authOptions()
     );
   }

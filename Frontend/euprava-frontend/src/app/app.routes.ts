@@ -21,8 +21,13 @@ export const routes: Routes = [
   },
 
 
+  {
+    path: 'fakultet',
+    loadComponent: () =>
+      import('./pages/fakultet/fakultet.component')
+        .then(m => m.FakultetComponent)
+  },
+
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-
-
   { path: '**', redirectTo: '/login' }
 ];
