@@ -1,0 +1,21 @@
+<div class="page-container">
+  <div class="card">
+    <h2>Prijava ispita</h2>
+
+    <div class="form-group">
+      <label>ID ispita</label>
+      <input type="number" [(ngModel)]="ispitId" placeholder="npr. 1" />
+    </div>
+
+    <button class="btn" (click)="prijavi()" [disabled]="loading">
+      {{ loading ? 'Obrada...' : 'Prijavi ispit' }}
+    </button>
+
+    <button class="btn btn-secondary" (click)="otkazi()" [disabled]="loading" style="margin-top:10px;">
+      {{ loading ? 'Obrada...' : 'Otkaži prijavu' }}
+    </button>
+
+    <p class="success" *ngIf="successMsg">{{ successMsg }}</p>
+    <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+  </div>
+</div>

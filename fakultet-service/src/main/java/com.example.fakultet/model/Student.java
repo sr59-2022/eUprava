@@ -2,6 +2,7 @@ package com.example.fakultet.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
@@ -11,7 +12,11 @@ import java.util.List;
 @Table(
         name = "studenti",
         indexes = {
-                @Index(name = "idx_studenti_broj_indeksa", columnList = "broj_indeksa")
+                @Index(name = "idx_studenti_broj_indeksa", columnList = "broj_indeksa"),
+                @Index(name = "idx_studenti_auth_uid", columnList = "auth_uid")
+        },
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uq_studenti_auth_uid", columnNames = {"auth_uid"})
         }
 )
 public class Student {
@@ -19,6 +24,11 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    // ID korisnika iz auth-service (JWT claim "uid")
+    @NotNull
+    @Column(name = "auth_uid", nullable = false, unique = true)
+    private Long authUid;
 
     @NotBlank
     @Size(max = 30)
@@ -37,7 +47,7 @@ public class Student {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status_studenta", nullable = false, length = 20)
-    private StatusStudenta statusStudenta;
+    private StatusStudenta statusStudenta = StatusStudenta.AKTIVAN;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ocena> ocene = new ArrayList<>();
@@ -48,6 +58,9 @@ public class Student {
     public Student() {}
 
     public Long getId() { return id; }
+
+    public Long getAuthUid() { return authUid; }
+    public void setAuthUid(Long authUid) { this.authUid = authUid; }
 
     public String getBrojIndeksa() { return brojIndeksa; }
     public void setBrojIndeksa(String brojIndeksa) { this.brojIndeksa = brojIndeksa; }
