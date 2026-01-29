@@ -1,0 +1,53 @@
+<div class="page">
+  <div class="header">
+    <h2>Uverenja</h2>
+
+    <div class="actions">
+      <label class="label">Tip:</label>
+      <select class="select" [(ngModel)]="selectedTip">
+        <option *ngFor="let t of tipovi" [value]="t">{{ t }}</option>
+      </select>
+
+      <button class="btn" (click)="izdaj()" [disabled]="issuing">
+        {{ issuing ? 'Izdavanje...' : 'Izdaj uverenje' }}
+      </button>
+
+      <button class="btn secondary" (click)="ucitajUverenja()" [disabled]="loading">
+        Osveži
+      </button>
+    </div>
+  </div>
+
+  <div class="status" *ngIf="loading">Učitavanje...</div>
+  <div class="error" *ngIf="error">{{ error }}</div>
+
+  <div class="card" *ngIf="!loading">
+    <table class="table" *ngIf="uverenja.length > 0; else prazno">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Broj dokumenta</th>
+        <th>Datum izdavanja</th>
+        <th>Tip</th>
+        <th>PDF</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let u of uverenja">
+        <td>{{ u.id }}</td>
+        <td>{{ u.brojDokumenta }}</td>
+        <td>{{ u.datumIzdavanja | date:'dd.MM.yyyy' }}</td>
+        <td>{{ u.tip }}</td>
+        <td>
+          <button class="btn small" (click)="preuzmiPdf(u)">Preuzmi PDF</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <ng-template #prazno>
+      <div class="empty">Nema izdatih uverenja.</div>
+    </ng-template>
+  </div>
+</div>

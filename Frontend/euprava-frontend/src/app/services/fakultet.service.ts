@@ -18,6 +18,14 @@ export interface OcenaPregledDto {
   rokNaziv: string;
 }
 
+
+export interface UverenjeDto {
+  id: number;
+  brojDokumenta: string;
+  datumIzdavanja: string;
+  tip: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class FakultetService {
   private baseUrl = 'http://localhost:8081';
@@ -63,11 +71,40 @@ export class FakultetService {
     );
   }
 
-
   mojeOcene(): Observable<OcenaPregledDto[]> {
     return this.http.get<OcenaPregledDto[]>(
       `${this.baseUrl}/api/fakultet/ocene/me`,
       this.authOptions()
+    );
+  }
+
+
+
+
+  izdajUverenje(tip: string): Observable<UverenjeDto> {
+    return this.http.post<UverenjeDto>(
+      `${this.baseUrl}/api/fakultet/uverenja/me?tip=${encodeURIComponent(tip)}`,
+      {},
+      this.authOptions()
+    );
+  }
+
+
+  mojaUverenja(): Observable<UverenjeDto[]> {
+    return this.http.get<UverenjeDto[]>(
+      `${this.baseUrl}/api/fakultet/uverenja/me`,
+      this.authOptions()
+    );
+  }
+
+
+  preuzmiUverenjePdf(id: number): Observable<Blob> {
+    return this.http.get(
+      `${this.baseUrl}/api/fakultet/uverenja/${id}/pdf`,
+      {
+        ...this.authOptions(),
+        responseType: 'blob' as const
+      }
     );
   }
 }

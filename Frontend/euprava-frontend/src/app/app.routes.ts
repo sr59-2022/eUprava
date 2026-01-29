@@ -19,8 +19,6 @@ export const routes: Routes = [
       import('./pages/prijava-ispita/prijava-ispita.component')
         .then(m => m.PrijavaIspitaComponent)
   },
-
-
   {
     path: 'fakultet',
     loadComponent: () =>
@@ -28,6 +26,16 @@ export const routes: Routes = [
         .then(m => m.FakultetComponent)
   },
 
+
+  {
+    path: 'uverenja',
+    loadComponent: () =>
+      import('./pages/uverenja/uverenja.component')
+        .then(m => m.UverenjaComponent)
+  },
+
   { path: '', redirectTo: '/login', pathMatch: 'full' },
+
+
   { path: '**', redirectTo: '/login' }
 ];
