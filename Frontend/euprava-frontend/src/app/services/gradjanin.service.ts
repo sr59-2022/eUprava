@@ -13,7 +13,8 @@ import {GradjaninDTO} from '../model/gradjanin.model';
 export class GradjaninService {
   private apiUrl = 'http://localhost:8082/api/gradjanin';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getMe(): Observable<Gradjanin> {
     return this.http.get<Gradjanin>(`${this.apiUrl}/me`);

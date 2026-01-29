@@ -8,6 +8,8 @@ import {AuthService} from '../../services/auth.service';
 import {GradjaninService} from '../../services/gradjanin.service';
 import {Gradjanin} from '../../model/gradjanin.model';
 import {DodajOglasComponent} from '../dodaj-oglas/dodaj-oglas.component';
+import {PrijavaService} from '../../services/prijava.service';
+import {PrikazPrijave} from '../../model/prijava.model';
 
 @Component({
   selector: 'app-home-sluzba',
@@ -27,8 +29,10 @@ export class HomeSluzbaComponent implements OnInit {
   tipoviOglasa = Object.values(TipOglasa);
   showDodajForm: boolean = false;
   preporuke: Oglas[] = [];
+  prijavljeniOglasi = new Map<number, PrikazPrijave>();
 
-  constructor(private oglasService: OglasService, public authService: AuthService,private gradjaninService: GradjaninService) { }
+
+  constructor(private oglasService: OglasService, public authService: AuthService,private gradjaninService: GradjaninService, private prijavaService: PrijavaService) { }
 
   ngOnInit(): void {
     if (!this.authService.isLoggedIn()) {
@@ -46,6 +50,18 @@ export class HomeSluzbaComponent implements OnInit {
             next: oglasi => this.preporuke = oglasi,
             error: err => console.error('Greška pri preporukama', err)
           });
+
+          this.prijavaService.getMojePrijave().subscribe({
+            next: prijave => {
+              prijave.forEach(p => {
+                if (p.oglasId) {
+                  this.prijavljeniOglasi.set(p.oglasId, p);
+                }
+              });
+            },
+            error: err => console.error('Greška pri učitavanju prijava', err)
+          });
+
         },
         error: err => console.error('Greška pri učitavanju profila', err)
       });
@@ -82,5 +98,34 @@ export class HomeSluzbaComponent implements OnInit {
     this.showDodajForm = false;
     this.getAllOglasi();
   }
+
+  jePrijavljen(oglasId: number): boolean {
+    return this.prijavljeniOglasi.has(oglasId);
+  }
+
+  statusPrijave(oglasId: number): string | null {
+    return this.prijavljeniOglasi.get(oglasId)?.status ?? null;
+  }
+
+  prijaviSe(oglasId: number): void {
+    this.prijavaService.prijaviSe(oglasId).subscribe({
+      next: () => {
+        // dodaj u mapu prijavljenih oglasa
+        this.prijavljeniOglasi.set(oglasId, {
+          oglasId,
+          prijavaId: 0,
+          nazivPozicije: '',
+          nazivKompanije: '',
+          datumPrijave: new Date().toISOString(),
+          status: 'PODNETA'
+        });
+        alert('Uspešno ste se prijavili na oglas.');
+      },
+      error: err => {
+        alert('Došlo je do greške pri prijavi.');
+      }
+    });
+  }
+
 
 }

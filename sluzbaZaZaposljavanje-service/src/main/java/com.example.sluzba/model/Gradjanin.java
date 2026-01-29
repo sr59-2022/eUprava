@@ -1,5 +1,6 @@
 package com.example.sluzba.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class Gradjanin {
 
 
     @OneToMany(mappedBy = "gradjanin", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Prijava> prijave;
 
     @OneToOne(mappedBy = "gradjanin", cascade = CascadeType.ALL)

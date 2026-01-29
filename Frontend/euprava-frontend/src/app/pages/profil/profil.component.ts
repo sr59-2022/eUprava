@@ -4,6 +4,8 @@ import {Router, RouterModule} from '@angular/router';
 import {PotvrdaService} from '../../services/potvrda.service';
 import {Gradjanin, GradjaninDTO} from '../../model/gradjanin.model';
 import {GradjaninService} from '../../services/gradjanin.service';
+import {PrijavaService} from '../../services/prijava.service';
+import {PrikazPrijave} from '../../model/prijava.model';
 
 
 @Component({
@@ -18,11 +20,11 @@ export class ProfilComponent implements OnInit {
   gradjanin?: Gradjanin;
   loading = true;
   gradjaninSaPotvrdom?: GradjaninDTO;
+  mojePrijave: PrikazPrijave[] = [];
 
 
 
-
-  constructor(private gradjaninService: GradjaninService, private potvrdaService: PotvrdaService, private router: Router) {
+  constructor(private gradjaninService: GradjaninService, private potvrdaService: PotvrdaService, private router: Router, private prijavaService: PrijavaService) {
 
   }
 
@@ -46,8 +48,16 @@ export class ProfilComponent implements OnInit {
         console.error('Greška prilikom učitavanja potvrde:', err);
       }
     });
-  }
 
+    if (this.gradjanin) {
+      this.prijavaService.getMojePrijave().subscribe({
+        next: prijave => {
+          this.mojePrijave = prijave;
+        },
+        error: err => console.error('Greška pri učitavanju prijava', err)
+      });
+    }
+  }
 
   onEdit() {
     this.router.navigate(['/profil/uredi']);

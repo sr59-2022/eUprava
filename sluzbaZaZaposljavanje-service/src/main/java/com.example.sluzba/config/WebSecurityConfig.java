@@ -47,6 +47,9 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/gradjanin/me/dto").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/gradjanin/potvrda/pdf/**").hasRole("GRADJANIN")
                         .requestMatchers(HttpMethod.GET, "/api/oglasi/preporuke").hasRole("GRADJANIN")
+                        .requestMatchers(HttpMethod.POST, "/api/prijave/prijavi").hasRole("GRADJANIN")
+                        .requestMatchers(HttpMethod.GET, "/api/prijave/moje").hasRole("GRADJANIN")
+
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2

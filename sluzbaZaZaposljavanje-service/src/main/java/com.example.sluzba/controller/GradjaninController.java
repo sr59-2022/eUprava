@@ -24,28 +24,31 @@ public class GradjaninController {
     }
 
     @GetMapping("/me")
-    public Gradjanin getOrCreateGradjanin(@AuthenticationPrincipal Jwt jwt) {
+    public GradjaninDTO getOrCreateGradjanin(@AuthenticationPrincipal Jwt jwt) {
         Map<String, Object> claims = jwt.getClaims();
 
         Long authId = Long.valueOf(claims.get("uid").toString());
         String ime = (String) claims.get("ime");
         String prezime = (String) claims.get("prezime");
-
         Collection<String> roles = (Collection<String>) claims.get("roles");
 
-        return gradjaninService.createGradjanin(authId, ime, prezime, roles);
+        Gradjanin g = gradjaninService.createGradjanin(authId, ime, prezime, roles);
+        return gradjaninService.getProfilGradjanin(g.getId());
     }
 
     @PutMapping("/me")
-    public Gradjanin updateMe(
+    public GradjaninDTO updateMe(
             @AuthenticationPrincipal Jwt jwt,
             @RequestBody Gradjanin updated
     ) {
         Map<String, Object> claims = jwt.getClaims();
         Long authId = Long.valueOf(claims.get("uid").toString());
 
-        return gradjaninService.updateGradjanin(authId, updated);
+        Gradjanin g = gradjaninService.updateGradjanin(authId, updated);
+        return gradjaninService.getProfilGradjanin(g.getId());
     }
+
+
 
     @GetMapping("/me/dto")
     public GradjaninDTO getProfilSaPotvrdom(@AuthenticationPrincipal Jwt jwt) {
@@ -56,7 +59,6 @@ public class GradjaninController {
         String prezime = (String) claims.get("prezime");
         Collection<String> roles = (Collection<String>) claims.get("roles");
 
-        // Kreira gradjanina ako ne postoji (isto kao i /me)
         Gradjanin g = gradjaninService.createGradjanin(authId, ime, prezime, roles);
 
         // Vraća DTO sa potvrdom

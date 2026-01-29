@@ -1,5 +1,5 @@
 export interface Oglas {
-  id: number;
+  idOglasa: number;
   nazivPozicije: string;
   opis: string;
   datumObjave: string;

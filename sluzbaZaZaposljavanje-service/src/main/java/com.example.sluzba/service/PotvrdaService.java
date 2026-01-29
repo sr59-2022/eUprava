@@ -74,6 +74,7 @@ public class PotvrdaService {
                             g.getId(),
                             g.getIme(),
                             g.getPrezime(),
+                            g.getJmbg(),
                             g.getRadniStatus(),
                             p != null,
                             p != null ? p.getIdPotvrde() : null,

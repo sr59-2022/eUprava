@@ -1,5 +1,6 @@
 package com.example.sluzba.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -17,9 +18,13 @@ public class Prijava {
     @Enumerated(EnumType.STRING)
     private StatusPrijave status;
 
+    @Column(length = 500)
+    private String razlogOdbijanja;
+
 
     @ManyToOne
     @JoinColumn(name = "gradjanin_id", nullable = false)
+    @JsonBackReference
     private Gradjanin gradjanin;
 
     @ManyToOne
@@ -28,10 +33,11 @@ public class Prijava {
 
 
     public Prijava() {}
-    public Prijava(Long idPrijave, LocalDate datumPrijave, StatusPrijave status) {
+    public Prijava(Long idPrijave, LocalDate datumPrijave, StatusPrijave status, String razlogOdbijanja) {
         this.idPrijave = idPrijave;
         this.datumPrijave = datumPrijave;
         this.status = status;
+        this.razlogOdbijanja = razlogOdbijanja;
 
     }
 
@@ -51,5 +57,13 @@ public class Prijava {
 
     public void setStatus(StatusPrijave status) {
         this.status = status;
+    }
+
+    public String getRazlogOdbijanja() {
+        return razlogOdbijanja;
+    }
+
+    public void setRazlogOdbijanja(String razlogOdbijanja) {
+        this.razlogOdbijanja = razlogOdbijanja;
     }
 }

@@ -36,5 +36,17 @@
     Preuzmi potvrdu
   </button>
 
+  <h2>Moje prijave na oglase</h2>
+  <div *ngIf="mojePrijave.length === 0">Nemate nijednu prijavu.</div>
+  <div *ngFor="let p of mojePrijave" class="prijava-card">
+    <p><strong>{{ p.nazivPozicije }}</strong> - {{ p.nazivKompanije }}</p>
+    <p>Datum prijave: {{ p.datumPrijave | date:'dd.MM.yyyy' }}</p>
+    <p>Status: {{ p.status }}</p>
+    <p *ngIf="p.razlogOdbijanja">Razlog odbijanja: {{ p.razlogOdbijanja }}</p>
+    <hr />
+  </div>
+
+
 </div>
+
 <div *ngIf="loading">Učitavanje...</div>

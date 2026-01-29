@@ -70,6 +70,20 @@
       <div class="oglas-footer">
       <span class="datum">Objavljeno: {{ oglas.datumObjave | date:'dd.MM.yyyy' }}</span>
       <span class="rok">Rok prijave: {{ oglas.rokPrijave | date:'dd.MM.yyyy' }}</span>
+        <button
+          *ngIf="authService.isGradjanin()"
+          class="btn-prijava"
+          (click)="prijaviSe(oglas.idOglasa)"
+          [disabled]="jePrijavljen(oglas.idOglasa)"
+        >
+          {{ jePrijavljen(oglas.idOglasa) ? 'Već ste prijavljeni' : 'Prijavi se' }}
+        </button>
+
+        <!-- Status prijave ispod dugmeta -->
+        <span *ngIf="jePrijavljen(oglas.idOglasa)">
+  Status: {{ statusPrijave(oglas.idOglasa) }}
+</span>
+
       </div>
     </div>
   </div>

@@ -1,5 +1,6 @@
 package com.example.sluzba.controller;
 
+import com.example.sluzba.dto.OglasDTO;
 import com.example.sluzba.dto.OglasRequest;
 import com.example.sluzba.model.Oglas;
 import com.example.sluzba.model.TipOglasa;
@@ -10,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/oglasi")
@@ -23,33 +25,38 @@ public class OglasController {
 
     @PostMapping("/dodaj")
     @PreAuthorize("hasRole('POSLODAVAC')")
-    public Oglas dodajOglas(
+    public OglasDTO dodajOglas(
             @RequestBody OglasRequest req,
             @AuthenticationPrincipal Jwt jwt) {
 
-        Long uid = ((Number) jwt.getClaims().get("uid")).longValue();
-
-        return oglasService.dodajOglas(req, uid);
+        Long authPoslodavacId = ((Number) jwt.getClaims().get("uid")).longValue();
+        Oglas o = oglasService.dodajOglas(req, authPoslodavacId); // vraća entitet
+        return oglasService.oglasDTO(o); // mapira u DTO
     }
 
     @GetMapping
-    public List<Oglas> getAllOglasi() {
-        return oglasService.getAllOglasi();
+    public List<OglasDTO> getAllOglasi() {
+        return oglasService.getAllOglasi().stream()
+                .map(oglasService::oglasDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/pretraga")
-    public List<Oglas> pretraga(
+    public List<OglasDTO> pretraga(
             @RequestParam(required = false) String naziv,
             @RequestParam(required = false) TipOglasa tip) {
 
-        return oglasService.pretragaOglasa(naziv, tip);
+        return oglasService.pretragaOglasa(naziv, tip).stream()
+                .map(oglasService::oglasDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/preporuke")
-    public List<Oglas> getPreporuke(@AuthenticationPrincipal Jwt jwt) {
+    public List<OglasDTO> getPreporuke(@AuthenticationPrincipal Jwt jwt) {
         Long authGradjaninId = ((Number) jwt.getClaims().get("uid")).longValue();
-        return oglasService.generisiPreporuke(authGradjaninId);
+        return oglasService.generisiPreporuke(authGradjaninId).stream()
+                .map(oglasService::oglasDTO)
+                .collect(Collectors.toList());
     }
-
-
 }
+

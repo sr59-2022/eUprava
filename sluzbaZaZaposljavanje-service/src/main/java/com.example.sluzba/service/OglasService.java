@@ -1,5 +1,6 @@
 package com.example.sluzba.service;
 
+import com.example.sluzba.dto.OglasDTO;
 import com.example.sluzba.dto.OglasRequest;
 import com.example.sluzba.model.*;
 import com.example.sluzba.repository.GradjaninRepository;
@@ -85,5 +86,18 @@ public class OglasService {
                 .collect(Collectors.toList());
     }
 
+    public OglasDTO oglasDTO(Oglas o) {
+        return new OglasDTO(
+                o.getIdOglasa(),
+                o.getNazivPozicije(),
+                o.getNazivKompanije(),
+                o.getOblast(),
+                o.getOpis(),
+                o.getDatumObjave(),
+                o.getRokPrijave(),
+                o.getTipOglasa() != null ? o.getTipOglasa().name() : null
+        );
+    }
 
 }
+
