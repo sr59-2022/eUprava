@@ -54,6 +54,13 @@ public class OglasService {
         return oglasRepo.findAll();
     }
 
+    public List<Oglas> getOglasiPoslodavca(Long authPoslodavacId) {
+        Poslodavac poslodavac = poslodavacRepo.findByAuthPoslodavacId(authPoslodavacId)
+                .orElseThrow(() -> new RuntimeException("Poslodavac ne postoji"));
+        return oglasRepo.findAllByPoslodavac(poslodavac);
+    }
+
+
     public List<Oglas> pretragaOglasa(
             String nazivPozicije,
             TipOglasa tipOglasa) {

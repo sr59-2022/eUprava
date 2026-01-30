@@ -41,7 +41,7 @@
 
 <h2>OGLASI</h2>
 
-<div class="search-box">
+<div class="search-box" *ngIf="authService.isGradjanin()" >
   <input
     type="text"
     placeholder="Naziv pozicije"

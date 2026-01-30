@@ -30,8 +30,8 @@ public class OglasController {
             @AuthenticationPrincipal Jwt jwt) {
 
         Long authPoslodavacId = ((Number) jwt.getClaims().get("uid")).longValue();
-        Oglas o = oglasService.dodajOglas(req, authPoslodavacId); // vraća entitet
-        return oglasService.oglasDTO(o); // mapira u DTO
+        Oglas o = oglasService.dodajOglas(req, authPoslodavacId);
+        return oglasService.oglasDTO(o);
     }
 
     @GetMapping
@@ -58,5 +58,14 @@ public class OglasController {
                 .map(oglasService::oglasDTO)
                 .collect(Collectors.toList());
     }
+
+    @GetMapping("/moji")
+    public List<OglasDTO> getMojiOglasi(@AuthenticationPrincipal Jwt jwt) {
+        Long authPoslodavacId = ((Number) jwt.getClaims().get("uid")).longValue();
+        return oglasService.getOglasiPoslodavca(authPoslodavacId).stream()
+                .map(oglasService::oglasDTO)
+                .collect(Collectors.toList());
+    }
+
 }
 

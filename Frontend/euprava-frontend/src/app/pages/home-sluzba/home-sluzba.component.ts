@@ -46,9 +46,8 @@ export class HomeSluzbaComponent implements OnInit {
       return;
     }
 
-    this.getAllOglasi();
-
     if (this.authService.isGradjanin()) {
+      this.getAllOglasi();
       this.gradjaninService.getMe().subscribe({
         next: g => {
           this.gradjanin = g;
@@ -73,6 +72,11 @@ export class HomeSluzbaComponent implements OnInit {
         error: err => console.error('Greška pri učitavanju profila', err)
       });
     } else if (this.authService.isPoslodavac()) {
+      this.oglasService.getMojiOglasi().subscribe({
+        next: oglasi => this.oglasi = oglasi,
+        error: err => console.error('Greška pri učitavanju oglasa poslodavca', err)
+      });
+
       this.obavestenjeService.getBrojNeprocitanih().subscribe({
         next: (broj) => {
           this.getBrojNeprocitanih = broj;

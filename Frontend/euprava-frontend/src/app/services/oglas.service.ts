@@ -41,4 +41,11 @@ export class OglasService {
     return this.http.get<Oglas[]>(`${this.apiUrl}/preporuke`);
   }
 
+  getMojiOglasi(): Observable<Oglas[]> {
+    const token = localStorage.getItem('token');
+    return this.http.get<Oglas[]>(`${this.apiUrl}/moji`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
 }
