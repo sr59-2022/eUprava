@@ -18,8 +18,27 @@ public class OcenaService {
         this.studentService = studentService;
     }
 
-    public List<OcenaPregledDto> mojeOcene(Long authUid) {
+
+    public List<OcenaPregledDto> mojeOceneFilter(
+            Long authUid,
+            Integer ocena,
+            Integer ocenaMin,
+            Integer ocenaMax,
+            Boolean polozio,
+            String predmet
+    ) {
         Student s = studentService.getByAuthUid(authUid);
-        return ocenaRepository.findPregledByStudentId(s.getId());
+
+        Integer min = (ocena != null) ? ocena : ocenaMin;
+        Integer max = (ocena != null) ? ocena : ocenaMax;
+
+        String q = (predmet == null || predmet.isBlank()) ? null : predmet.trim().toLowerCase();
+
+        return ocenaRepository.findPregledByFilters(s.getId(), min, max, polozio, q);
+    }
+
+
+    public List<OcenaPregledDto> mojeOcene(Long authUid) {
+        return mojeOceneFilter(authUid, null, null, null, null, null);
     }
 }

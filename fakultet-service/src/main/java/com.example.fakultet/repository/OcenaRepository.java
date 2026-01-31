@@ -4,6 +4,7 @@ import com.example.fakultet.dto.OcenaPregledDto;
 import com.example.fakultet.model.Ocena;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -21,7 +22,25 @@ public interface OcenaRepository extends JpaRepository<Ocena, Long> {
         join i.predmet p
         join i.rok r
         where o.student.id = :studentId
+          and (:min is null or o.vrednost >= :min)
+          and (:max is null or o.vrednost <= :max)
+          and (
+                :polozio is null
+                or (:polozio = true and o.vrednost >= 6)
+                or (:polozio = false and o.vrednost < 6)
+              )
+          and (
+                :predmetQ is null
+                or lower(p.naziv) like concat('%', :predmetQ, '%')
+                or lower(p.sifra) like concat('%', :predmetQ, '%')
+              )
         order by o.datumUpisa desc
     """)
-    List<OcenaPregledDto> findPregledByStudentId(Long studentId);
+    List<OcenaPregledDto> findPregledByFilters(
+            @Param("studentId") Long studentId,
+            @Param("min") Integer min,
+            @Param("max") Integer max,
+            @Param("polozio") Boolean polozio,
+            @Param("predmetQ") String predmetQ
+    );
 }

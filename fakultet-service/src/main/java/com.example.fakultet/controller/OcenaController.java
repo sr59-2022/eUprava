@@ -18,12 +18,20 @@ public class OcenaController {
         this.ocenaService = ocenaService;
     }
 
+
     @GetMapping("/ocene/me")
-    public List<OcenaPregledDto> mojeOcene(JwtAuthenticationToken auth) {
+    public List<OcenaPregledDto> mojeOcene(
+            JwtAuthenticationToken auth,
+            @RequestParam(required = false) Integer ocena,
+            @RequestParam(required = false) Integer ocenaMin,
+            @RequestParam(required = false) Integer ocenaMax,
+            @RequestParam(required = false) Boolean polozio,
+            @RequestParam(required = false) String predmet
+    ) {
         Jwt jwt = auth.getToken();
         Object raw = jwt.getClaims().get("uid");
         Long uid = (raw instanceof Number n) ? n.longValue() : Long.parseLong(raw.toString());
 
-        return ocenaService.mojeOcene(uid);
+        return ocenaService.mojeOceneFilter(uid, ocena, ocenaMin, ocenaMax, polozio, predmet);
     }
 }
