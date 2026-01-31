@@ -1,9 +1,53 @@
 <div class="page">
   <div class="header">
     <h2>Pregled ispita i ocena</h2>
-    <button class="btn" (click)="ucitajOcene()" [disabled]="loading">
-      Osveži
-    </button>
+
+    <div style="display:flex; gap:10px; align-items:center;">
+      <button class="btn" (click)="ucitajOcene()" [disabled]="loading">
+        Osveži
+      </button>
+    </div>
+  </div>
+
+
+  <div class="card" style="margin-bottom: 12px;">
+    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <label>Predmet (šifra ili naziv)</label>
+        <input class="input" type="text" [(ngModel)]="filter.predmet" placeholder="npr. oop / matematika" />
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <label>Predmeti</label>
+        <select class="input" [(ngModel)]="filter.polozio">
+          <option [ngValue]="null">Svi</option>
+          <option [ngValue]="true">Položio</option>
+          <option [ngValue]="false">Nije položio</option>
+        </select>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <label>Tačna ocena</label>
+        <input class="input" type="number" min="5" max="10" [(ngModel)]="filter.ocena" placeholder="npr. 9" />
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <label>Ocena min</label>
+        <input class="input" type="number" min="5" max="10" [(ngModel)]="filter.ocenaMin" placeholder="npr. 8" />
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <label>Ocena max</label>
+        <input class="input" type="number" min="5" max="10" [(ngModel)]="filter.ocenaMax" placeholder="npr. 10" />
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <button class="btn" (click)="pretrazi()" [disabled]="loading">Pretraži</button>
+        <button class="btn" (click)="resetujFiltere()" [disabled]="loading">Resetuj</button>
+      </div>
+    </div>
+
+
   </div>
 
   <div class="status" *ngIf="loading">Učitavanje...</div>
@@ -37,7 +81,7 @@
     </table>
 
     <ng-template #prazno>
-      <div class="empty">Nema upisanih ocena.</div>
+      <div class="empty">Nema rezultata za izabrane filtere.</div>
     </ng-template>
   </div>
 </div>

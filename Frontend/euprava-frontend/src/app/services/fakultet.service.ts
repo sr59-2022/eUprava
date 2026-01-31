@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface OcenaPregledDto {
@@ -18,12 +18,19 @@ export interface OcenaPregledDto {
   rokNaziv: string;
 }
 
-
 export interface UverenjeDto {
   id: number;
   brojDokumenta: string;
   datumIzdavanja: string;
   tip: string;
+}
+
+export interface OceneFilter {
+  ocena?: number | null;
+  ocenaMin?: number | null;
+  ocenaMax?: number | null;
+  polozio?: boolean | null;
+  predmet?: string | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -36,7 +43,7 @@ export class FakultetService {
     const token = localStorage.getItem('token');
     return {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token ?? ''}`
       })
     };
   }
@@ -71,15 +78,27 @@ export class FakultetService {
     );
   }
 
-  mojeOcene(): Observable<OcenaPregledDto[]> {
+  mojeOcene(filters?: OceneFilter): Observable<OcenaPregledDto[]> {
+    let params = new HttpParams();
+
+    if (filters) {
+      if (filters.ocena != null) params = params.set('ocena', String(filters.ocena));
+      if (filters.ocenaMin != null) params = params.set('ocenaMin', String(filters.ocenaMin));
+      if (filters.ocenaMax != null) params = params.set('ocenaMax', String(filters.ocenaMax));
+      if (filters.polozio != null) params = params.set('polozio', String(filters.polozio));
+      if (filters.predmet != null && filters.predmet.trim().length > 0) {
+        params = params.set('predmet', filters.predmet.trim());
+      }
+    }
+
     return this.http.get<OcenaPregledDto[]>(
       `${this.baseUrl}/api/fakultet/ocene/me`,
-      this.authOptions()
+      {
+        ...this.authOptions(),
+        params
+      }
     );
   }
-
-
-
 
   izdajUverenje(tip: string): Observable<UverenjeDto> {
     return this.http.post<UverenjeDto>(
@@ -89,14 +108,12 @@ export class FakultetService {
     );
   }
 
-
   mojaUverenja(): Observable<UverenjeDto[]> {
     return this.http.get<UverenjeDto[]>(
       `${this.baseUrl}/api/fakultet/uverenja/me`,
       this.authOptions()
     );
   }
-
 
   preuzmiUverenjePdf(id: number): Observable<Blob> {
     return this.http.get(
