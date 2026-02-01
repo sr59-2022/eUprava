@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,6 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     @NotNull
     @Column(name = "auth_uid", nullable = false, unique = true)
@@ -49,9 +49,12 @@ public class Student {
     @Column(name = "status_studenta", nullable = false, length = 20)
     private StatusStudenta statusStudenta = StatusStudenta.AKTIVAN;
 
-
     @Column(name = "zavrsni_rad_odbranjen", nullable = false)
     private boolean zavrsniRadOdbranjen = false;
+
+    // 🔹 NOVO – DATUM DIPLOMIRANJA
+    @Column(name = "datum_diplomiranja")
+    private LocalDate datumDiplomiranja;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ocena> ocene = new ArrayList<>();
@@ -80,6 +83,11 @@ public class Student {
 
     public boolean isZavrsniRadOdbranjen() { return zavrsniRadOdbranjen; }
     public void setZavrsniRadOdbranjen(boolean zavrsniRadOdbranjen) { this.zavrsniRadOdbranjen = zavrsniRadOdbranjen; }
+
+    public LocalDate getDatumDiplomiranja() { return datumDiplomiranja; }
+    public void setDatumDiplomiranja(LocalDate datumDiplomiranja) {
+        this.datumDiplomiranja = datumDiplomiranja;
+    }
 
     public List<Ocena> getOcene() { return ocene; }
     public void setOcene(List<Ocena> ocene) { this.ocene = ocene; }
