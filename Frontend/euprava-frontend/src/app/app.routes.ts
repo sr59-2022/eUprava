@@ -28,6 +28,13 @@ export const routes: Routes = [
 
 
   {
+    path: 'diplomiranje',
+    loadComponent: () =>
+      import('./pages/diplomiranje/diplomiranje.component')
+        .then(m => m.DiplomiranjeComponent)
+  },
+
+  {
     path: 'uverenja',
     loadComponent: () =>
       import('./pages/uverenja/uverenja.component')
@@ -35,7 +42,5 @@ export const routes: Routes = [
   },
 
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-
-
   { path: '**', redirectTo: '/login' }
 ];
