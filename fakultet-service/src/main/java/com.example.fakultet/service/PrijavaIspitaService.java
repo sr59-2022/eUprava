@@ -27,12 +27,12 @@ public class PrijavaIspitaService {
         Ispit ispit = ispitRepo.findById(ispitId)
                 .orElseThrow(() -> new RuntimeException("Ispit ne postoji (id=" + ispitId + ")"));
 
-        // 1) rok prijave
+
         if (LocalDateTime.now().isAfter(ispit.getPrijavaDo())) {
             throw new RuntimeException("Rok za prijavu je istekao.");
         }
 
-        // 2) postoji već prijava?
+
         var existingOpt = prijavaRepo.findByStudentIdAndIspitId(student.getId(), ispitId);
 
         if (existingOpt.isPresent()) {

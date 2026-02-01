@@ -1,5 +1,6 @@
 package com.example.fakultet.controller;
 
+import com.example.fakultet.dto.DiplomiranjeStatusDto;
 import com.example.fakultet.model.Student;
 import com.example.fakultet.service.StudentService;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class StudentController {
     public Student me(JwtAuthenticationToken auth) {
         Jwt jwt = auth.getToken();
 
-        Object raw = jwt.getClaims().get("uid");   // <-- umesto getClaim()
+        Object raw = jwt.getClaims().get("uid");
         if (raw == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token nema claim 'uid'");
         }
@@ -35,5 +36,20 @@ public class StudentController {
                     "Student za uid=" + uid + " ne postoji u fakultet servisu");
         }
         return s;
+    }
+
+
+    @GetMapping("/me/diplomiranje-status")
+    public DiplomiranjeStatusDto diplomiranjeStatus(JwtAuthenticationToken auth) {
+        Jwt jwt = auth.getToken();
+
+        Object raw = jwt.getClaims().get("uid");
+        if (raw == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token nema claim 'uid'");
+        }
+
+        Long uid = (raw instanceof Number n) ? n.longValue() : Long.parseLong(raw.toString());
+
+        return studentService.proveraDiplomiranja(uid);
     }
 }

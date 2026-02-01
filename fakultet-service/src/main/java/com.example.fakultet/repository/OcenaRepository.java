@@ -43,4 +43,16 @@ public interface OcenaRepository extends JpaRepository<Ocena, Long> {
             @Param("polozio") Boolean polozio,
             @Param("predmetQ") String predmetQ
     );
+
+
+    @Query("""
+        select p.id, coalesce(p.espb, 0)
+        from Ocena o
+        join o.ispit i
+        join i.predmet p
+        where o.student.id = :studentId
+          and o.vrednost >= 6
+        group by p.id, p.espb
+    """)
+    List<Object[]> findPolozeniPredmetiEspb(@Param("studentId") Long studentId);
 }

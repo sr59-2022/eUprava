@@ -25,7 +25,7 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // ID korisnika iz auth-service (JWT claim "uid")
+
     @NotNull
     @Column(name = "auth_uid", nullable = false, unique = true)
     private Long authUid;
@@ -48,6 +48,10 @@ public class Student {
     @Enumerated(EnumType.STRING)
     @Column(name = "status_studenta", nullable = false, length = 20)
     private StatusStudenta statusStudenta = StatusStudenta.AKTIVAN;
+
+
+    @Column(name = "zavrsni_rad_odbranjen", nullable = false)
+    private boolean zavrsniRadOdbranjen = false;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ocena> ocene = new ArrayList<>();
@@ -73,6 +77,9 @@ public class Student {
 
     public StatusStudenta getStatusStudenta() { return statusStudenta; }
     public void setStatusStudenta(StatusStudenta statusStudenta) { this.statusStudenta = statusStudenta; }
+
+    public boolean isZavrsniRadOdbranjen() { return zavrsniRadOdbranjen; }
+    public void setZavrsniRadOdbranjen(boolean zavrsniRadOdbranjen) { this.zavrsniRadOdbranjen = zavrsniRadOdbranjen; }
 
     public List<Ocena> getOcene() { return ocene; }
     public void setOcene(List<Ocena> ocene) { this.ocene = ocene; }
