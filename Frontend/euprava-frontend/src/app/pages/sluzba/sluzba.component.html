@@ -1,1 +1,35 @@
-<p>sluzba works!</p>
+<div class="page">
+  <div class="header" style="display:flex; justify-content:space-between; align-items:center;">
+    <h2>Služba – Izveštaji</h2>
+
+    <button class="btn" (click)="ucitajIzvestaj()" [disabled]="loading">
+      Osveži
+    </button>
+  </div>
+
+  <div class="status" *ngIf="loading">Učitavanje...</div>
+  <div class="error" *ngIf="error">{{ error }}</div>
+
+  <div class="card" *ngIf="!loading && !error">
+    <h3 style="margin-top:0;">Diplomirani po godini</h3>
+
+    <table class="table" *ngIf="diplomiraniPoGodini.length > 0; else prazno">
+      <thead>
+      <tr>
+        <th>Godina</th>
+        <th>Broj diplomiranih</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let r of diplomiraniPoGodini">
+        <td>{{ r.godina }}</td>
+        <td>{{ r.brojDiplomiranih }}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <ng-template #prazno>
+      <div class="empty">Nema podataka za izveštaj.</div>
+    </ng-template>
+  </div>
+</div>

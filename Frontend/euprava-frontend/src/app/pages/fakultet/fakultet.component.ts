@@ -15,7 +15,6 @@ export class FakultetComponent implements OnInit {
   loading = false;
   error: string | null = null;
 
-  // filteri (bind na HTML)
   filter: OceneFilter = {
     ocena: null,
     ocenaMin: null,
@@ -47,8 +46,11 @@ export class FakultetComponent implements OnInit {
   }
 
   pretrazi() {
-
-    if (this.filter.ocenaMin != null && this.filter.ocenaMax != null && this.filter.ocenaMin > this.filter.ocenaMax) {
+    if (
+      this.filter.ocenaMin != null &&
+      this.filter.ocenaMax != null &&
+      this.filter.ocenaMin > this.filter.ocenaMax
+    ) {
       const tmp = this.filter.ocenaMin;
       this.filter.ocenaMin = this.filter.ocenaMax;
       this.filter.ocenaMax = tmp;

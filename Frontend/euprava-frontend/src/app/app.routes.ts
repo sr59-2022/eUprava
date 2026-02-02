@@ -25,20 +25,25 @@ export const routes: Routes = [
       import('./pages/fakultet/fakultet.component')
         .then(m => m.FakultetComponent)
   },
-
-
   {
     path: 'diplomiranje',
     loadComponent: () =>
       import('./pages/diplomiranje/diplomiranje.component')
         .then(m => m.DiplomiranjeComponent)
   },
-
   {
     path: 'uverenja',
     loadComponent: () =>
       import('./pages/uverenja/uverenja.component')
         .then(m => m.UverenjaComponent)
+  },
+
+
+  {
+    path: 'sluzba',
+    loadComponent: () =>
+      import('./pages/sluzba/sluzba.component')
+        .then(m => m.SluzbaComponent)
   },
 
   { path: '', redirectTo: '/login', pathMatch: 'full' },

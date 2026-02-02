@@ -33,12 +33,17 @@ export interface OceneFilter {
   predmet?: string | null;
 }
 
-/** NOVO: DTO za proveru uslova za diplomiranje */
 export interface DiplomiranjeStatusDto {
   status: 'ISPUNJAVA' | 'NE_ISPUNJAVA';
   ukupnoEspb: number;
   potrebnoEspb: number;
   zavrsniRadOdbranjen: boolean;
+}
+
+
+export interface DiplomiraniPoGodiniDto {
+  godina: number;
+  brojDiplomiranih: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -133,10 +138,17 @@ export class FakultetService {
     );
   }
 
-
   getDiplomiranjeStatus(): Observable<DiplomiranjeStatusDto> {
     return this.http.get<DiplomiranjeStatusDto>(
       `${this.baseUrl}/api/fakultet/me/diplomiranje-status`,
+      this.authOptions()
+    );
+  }
+
+
+  getDiplomiraniPoGodini(): Observable<DiplomiraniPoGodiniDto[]> {
+    return this.http.get<DiplomiraniPoGodiniDto[]>(
+      `${this.baseUrl}/api/fakultet/izvestaji/diplomirani-po-godini`,
       this.authOptions()
     );
   }
