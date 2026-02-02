@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/fakultet")
@@ -18,54 +19,57 @@ public class StudentController {
 
     private final StudentService studentService;
 
+    private static final String SERVICE_TOKEN = "TAJNA123";
+
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
 
-    // ===================== ME =====================
+
+    @PostMapping("/internal/studenti")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void internalCreateStudent(
+            @RequestHeader(value = "X-SERVICE-TOKEN", required = false) String token,
+            @RequestBody Map<String, Object> body
+    ) {
+        if (token == null || !SERVICE_TOKEN.equals(token)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Forbidden");
+        }
+
+        Object rawUid = body.get("authUid");
+        if (rawUid == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nedostaje authUid");
+        }
+
+        Long authUid = (rawUid instanceof Number n) ? n.longValue() : Long.parseLong(rawUid.toString());
+        String ime = body.get("ime") != null ? body.get("ime").toString() : null;
+        String prezime = body.get("prezime") != null ? body.get("prezime").toString() : null;
+        String brojIndeksa = body.get("brojIndeksa") != null ? body.get("brojIndeksa").toString() : null;
+
+        studentService.createIfMissing(authUid, ime, prezime, brojIndeksa);
+    }
 
     @GetMapping("/me")
     public Student me(JwtAuthenticationToken auth) {
         Jwt jwt = auth.getToken();
 
         Object raw = jwt.getClaims().get("uid");
-        if (raw == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token nema claim 'uid'");
-        }
+        if (raw == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token nema claim 'uid'");
 
-        Long uid = (raw instanceof Number n)
-                ? n.longValue()
-                : Long.parseLong(raw.toString());
-
-        Student s = studentService.getByAuthUid(uid);
-        if (s == null) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    "Student za uid=" + uid + " ne postoji u fakultet servisu"
-            );
-        }
-        return s;
+        Long uid = (raw instanceof Number n) ? n.longValue() : Long.parseLong(raw.toString());
+        return studentService.getByAuthUid(uid);
     }
-
-
 
     @GetMapping("/me/diplomiranje-status")
     public DiplomiranjeStatusDto diplomiranjeStatus(JwtAuthenticationToken auth) {
         Jwt jwt = auth.getToken();
 
         Object raw = jwt.getClaims().get("uid");
-        if (raw == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token nema claim 'uid'");
-        }
+        if (raw == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token nema claim 'uid'");
 
-        Long uid = (raw instanceof Number n)
-                ? n.longValue()
-                : Long.parseLong(raw.toString());
-
+        Long uid = (raw instanceof Number n) ? n.longValue() : Long.parseLong(raw.toString());
         return studentService.proveraDiplomiranja(uid);
     }
-
-
 
     @PostMapping("/me/diplomiraj")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -73,18 +77,11 @@ public class StudentController {
         Jwt jwt = auth.getToken();
 
         Object raw = jwt.getClaims().get("uid");
-        if (raw == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token nema claim 'uid'");
-        }
+        if (raw == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token nema claim 'uid'");
 
-        Long uid = (raw instanceof Number n)
-                ? n.longValue()
-                : Long.parseLong(raw.toString());
-
+        Long uid = (raw instanceof Number n) ? n.longValue() : Long.parseLong(raw.toString());
         studentService.diplomirajAkoIspunjava(uid);
     }
-
-
 
     @GetMapping("/izvestaji/diplomirani-po-godini")
     public List<DiplomiraniPoGodiniDto> diplomiraniPoGodini() {
