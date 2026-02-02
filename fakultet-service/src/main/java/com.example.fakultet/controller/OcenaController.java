@@ -1,7 +1,11 @@
 package com.example.fakultet.controller;
 
 import com.example.fakultet.dto.OcenaPregledDto;
+import com.example.fakultet.dto.OcenaUpisDto;
 import com.example.fakultet.service.OcenaService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +22,6 @@ public class OcenaController {
         this.ocenaService = ocenaService;
     }
 
-
     @GetMapping("/ocene/me")
     public List<OcenaPregledDto> mojeOcene(
             JwtAuthenticationToken auth,
@@ -33,5 +36,12 @@ public class OcenaController {
         Long uid = (raw instanceof Number n) ? n.longValue() : Long.parseLong(raw.toString());
 
         return ocenaService.mojeOceneFilter(uid, ocena, ocenaMin, ocenaMax, polozio, predmet);
+    }
+
+    @PostMapping("/ocene")
+    @PreAuthorize("hasRole('PROFESOR')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void upisiOcenu(@Valid @RequestBody OcenaUpisDto dto) {
+        ocenaService.upisiOcenu(dto.getStudentId(), dto.getIspitId(), dto.getVrednost());
     }
 }
