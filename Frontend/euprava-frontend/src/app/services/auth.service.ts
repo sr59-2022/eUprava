@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-
 export interface LoginResponse {
   token: string;
   uloge: string[];
@@ -12,12 +11,9 @@ export interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-
   private apiUrl = 'http://localhost:8080/api/auth';
 
-
-  constructor(private http: HttpClient) { }
-
+  constructor(private http: HttpClient) {}
 
   register(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, data);
@@ -32,7 +28,19 @@ export class AuthService {
 
   saveToken(token: string, uloge: string[]) {
     localStorage.setItem('token', token);
-    localStorage.setItem('role', uloge.join(','));
+    localStorage.setItem('role', uloge.join(',')); // npr: "ROLE_ADMIN,ROLE_STUDENT"
+  }
+
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+
+  getRoles(): string[] {
+    const raw = localStorage.getItem('role');
+    if (!raw) return [];
+    return raw.split(',').map(r => r.trim()).filter(Boolean);
   }
 
   logout() {
@@ -41,12 +49,10 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+    return !!this.getToken();
   }
 
   isAdmin(): boolean {
-    const role = localStorage.getItem('role');
-    return role?.includes('ROLE_ADMIN') ?? false;
+    return this.getRoles().includes('ROLE_ADMIN');
   }
 }
-

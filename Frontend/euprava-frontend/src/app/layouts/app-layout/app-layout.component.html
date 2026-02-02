@@ -1,0 +1,24 @@
+<nav class="app-navbar">
+  <div class="app-navbar__left">
+    <a class="app-navbar__brand" routerLink="/app/prijava-ispita">eUprava</a>
+
+    <a class="app-navbar__link" routerLink="/app/prijava-ispita">Prijava ispita</a>
+    <a class="app-navbar__link" routerLink="/app/fakultet">Fakultet</a>
+    <a class="app-navbar__link" routerLink="/app/diplomiranje">Diplomiranje</a>
+    <a class="app-navbar__link" routerLink="/app/uverenja">Uverenja</a>
+
+    <a
+      *ngIf="isAdmin"
+      class="app-navbar__link app-navbar__link--admin"
+      routerLink="/app/sluzba"
+    >
+      Služba
+    </a>
+  </div>
+
+  <button class="app-navbar__btn" (click)="logout()">Logout</button>
+</nav>
+
+<div class="app-content">
+  <router-outlet></router-outlet>
+</div>

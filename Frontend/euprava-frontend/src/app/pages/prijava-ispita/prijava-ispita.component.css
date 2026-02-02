@@ -52,3 +52,11 @@ input {
 
 .error { color: red; margin-top: 10px; text-align: center; }
 .success { color: #1a7f37; margin-top: 10px; text-align: center; }
+
+.select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cfcfcf;
+  border-radius: 6px;
+  background: #fff;
+}

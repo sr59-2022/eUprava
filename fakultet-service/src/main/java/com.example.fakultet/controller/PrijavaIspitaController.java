@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import com.example.fakultet.dto.IspitOpcijaDto;
 
 import java.util.List;
 
@@ -53,4 +54,12 @@ public class PrijavaIspitaController {
         Long uid = (raw instanceof Number n) ? n.longValue() : Long.parseLong(raw.toString());
         return studentService.getByAuthUid(uid);
     }
+
+    @GetMapping("/dostupni")
+    @PreAuthorize("hasRole('STUDENT')")
+    public List<IspitOpcijaDto> dostupni(JwtAuthenticationToken auth) {
+        Student s = getCurrentStudent(auth);
+        return prijavaService.dostupniIspiti(s);
+    }
+
 }

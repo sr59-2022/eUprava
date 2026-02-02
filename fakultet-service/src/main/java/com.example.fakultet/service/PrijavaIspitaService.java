@@ -1,37 +1,47 @@
 package com.example.fakultet.service;
 
+import com.example.fakultet.dto.IspitOpcijaDto;
 import com.example.fakultet.dto.PrijavaIspitaDto;
 import com.example.fakultet.model.Ispit;
 import com.example.fakultet.model.PrijavaIspita;
 import com.example.fakultet.model.StatusPrijave;
 import com.example.fakultet.model.Student;
 import com.example.fakultet.repository.IspitRepository;
+import com.example.fakultet.repository.OcenaRepository;
 import com.example.fakultet.repository.PrijavaIspitaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class PrijavaIspitaService {
 
     private final PrijavaIspitaRepository prijavaRepo;
     private final IspitRepository ispitRepo;
+    private final OcenaRepository ocenaRepo;
 
-    public PrijavaIspitaService(PrijavaIspitaRepository prijavaRepo, IspitRepository ispitRepo) {
+    public PrijavaIspitaService(
+            PrijavaIspitaRepository prijavaRepo,
+            IspitRepository ispitRepo,
+            OcenaRepository ocenaRepo
+    ) {
         this.prijavaRepo = prijavaRepo;
         this.ispitRepo = ispitRepo;
+        this.ocenaRepo = ocenaRepo;
     }
 
     public PrijavaIspitaDto prijavi(Student student, Long ispitId) {
         Ispit ispit = ispitRepo.findById(ispitId)
                 .orElseThrow(() -> new RuntimeException("Ispit ne postoji (id=" + ispitId + ")"));
 
-
         if (LocalDateTime.now().isAfter(ispit.getPrijavaDo())) {
             throw new RuntimeException("Rok za prijavu je istekao.");
         }
-
 
         var existingOpt = prijavaRepo.findByStudentIdAndIspitId(student.getId(), ispitId);
 
@@ -49,7 +59,7 @@ public class PrijavaIspitaService {
             return toDto(saved);
         }
 
-        // 3) napravi novu prijavu
+        // nova prijava
         PrijavaIspita p = new PrijavaIspita();
         p.setStudent(student);
         p.setIspit(ispit);
@@ -68,7 +78,6 @@ public class PrijavaIspitaService {
             return toDto(p);
         }
 
-        // pravilo: ne može otkazati nakon prijavaDo (možeš promijeniti na datumOdrzavanja ako želiš)
         if (LocalDateTime.now().isAfter(p.getIspit().getPrijavaDo())) {
             throw new RuntimeException("Ne možeš otkazati prijavu nakon isteka roka.");
         }
@@ -86,7 +95,6 @@ public class PrijavaIspitaService {
     }
 
     private PrijavaIspitaDto toDto(PrijavaIspita p) {
-        // ovdje pristupamo nazivima — radi dok smo u transakciji (service je ok)
         return new PrijavaIspitaDto(
                 p.getId(),
                 p.getIspit().getId(),
@@ -97,5 +105,38 @@ public class PrijavaIspitaService {
                 p.getStatus(),
                 p.getDatumPrijave()
         );
+    }
+
+    @Transactional(readOnly = true)
+    public List<IspitOpcijaDto> dostupniIspiti(Student student) {
+
+
+        List<Ispit> aktivni = ispitRepo.findByPrijavaDoAfter(LocalDateTime.now());
+
+
+        Set<Long> vecPrijavljeni = prijavaRepo
+                .findByStudentIdAndStatus(student.getId(), StatusPrijave.PRIJAVLJEN)
+                .stream()
+                .map(p -> p.getIspit().getId())
+                .collect(Collectors.toSet());
+
+
+        Set<Long> polozeniPredmeti = new HashSet<>(
+                ocenaRepo.findPolozeniPredmetIds(student.getId())
+        );
+
+
+        return aktivni.stream()
+                .filter(i -> !vecPrijavljeni.contains(i.getId()))
+                .filter(i -> !polozeniPredmeti.contains(i.getPredmet().getId()))
+                .sorted((a, b) -> a.getDatumOdrzavanja().compareTo(b.getDatumOdrzavanja()))
+                .map(i -> new IspitOpcijaDto(
+                        i.getId(),
+                        i.getPredmet().getNaziv(),
+                        i.getRok().getNaziv(),
+                        i.getDatumOdrzavanja(),
+                        i.getPrijavaDo()
+                ))
+                .toList();
     }
 }

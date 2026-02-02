@@ -1,4 +1,3 @@
-// src/app/pages/login/login.component.ts
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -18,22 +17,29 @@ export class LoginComponent {
   lozinka: string = '';
   errorMsg: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-  login() {
+  login(): void {
+    this.errorMsg = '';
+
     this.authService.login(this.korisnickoIme, this.lozinka).subscribe({
       next: (res) => {
-        this.authService.saveToken(res.token, Array.from(res.uloge));
-        this.router.navigate(['/']);
+
+        this.authService.saveToken(res.token, res.uloge);
+
+
+        this.router.navigate(['/app']);
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
         this.errorMsg = 'Neuspešna prijava. Proveri korisničko ime i lozinku.';
       }
     });
   }
-  navigateToRegister() {
-    this.router.navigate(['registracija']);
+
+  navigateToRegister(): void {
+    this.router.navigate(['/registracija']);
   }
 }
-

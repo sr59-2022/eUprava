@@ -27,7 +27,7 @@ public class AuthService {
         Korisnik k = korisnikRepository.findByKorisnickoIme(request.getKorisnickoIme())
                 .orElseThrow(() -> new RuntimeException("Pogrešno korisničko ime ili lozinka"));
 
-        // direktno poređenje (plain text)
+
         if (!k.getLozinka().equals(request.getLozinka())) {
             throw new RuntimeException("Pogrešno korisničko ime ili lozinka");
         }

@@ -40,10 +40,29 @@ export interface DiplomiranjeStatusDto {
   zavrsniRadOdbranjen: boolean;
 }
 
-
 export interface DiplomiraniPoGodiniDto {
   godina: number;
   brojDiplomiranih: number;
+}
+
+export interface IspitOpcijaDto {
+  id: number;
+  predmetNaziv: string;
+  rokNaziv: string;
+  datumOdrzavanja: string; // ISO string
+  prijavaDo: string;       // ISO string
+}
+
+
+export interface PrijavaIspitaDto {
+  id: number;
+  ispitId: number;
+  predmetNaziv: string;
+  rokNaziv: string;
+  datumOdrzavanja: string;
+  prijavaDo: string;
+  status: string;
+  datumPrijave: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -59,6 +78,13 @@ export class FakultetService {
         Authorization: `Bearer ${token ?? ''}`
       })
     };
+  }
+
+  dostupniIspiti(): Observable<IspitOpcijaDto[]> {
+    return this.http.get<IspitOpcijaDto[]>(
+      `${this.baseUrl}/api/ispiti/dostupni`,
+      this.authOptions()
+    );
   }
 
   prijaviIspit(ispitId: number) {
@@ -77,8 +103,9 @@ export class FakultetService {
     );
   }
 
-  mojePrijave() {
-    return this.http.get(
+
+  mojePrijave(): Observable<PrijavaIspitaDto[]> {
+    return this.http.get<PrijavaIspitaDto[]>(
       `${this.baseUrl}/api/ispiti/moje-prijave`,
       this.authOptions()
     );
@@ -144,7 +171,6 @@ export class FakultetService {
       this.authOptions()
     );
   }
-
 
   getDiplomiraniPoGodini(): Observable<DiplomiraniPoGodiniDto[]> {
     return this.http.get<DiplomiraniPoGodiniDto[]>(

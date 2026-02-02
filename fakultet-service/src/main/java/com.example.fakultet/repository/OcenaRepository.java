@@ -55,4 +55,15 @@ public interface OcenaRepository extends JpaRepository<Ocena, Long> {
         group by p.id, p.espb
     """)
     List<Object[]> findPolozeniPredmetiEspb(@Param("studentId") Long studentId);
+
+    @Query("""
+  select distinct p.id
+  from Ocena o
+  join o.ispit i
+  join i.predmet p
+  where o.student.id = :studentId
+    and o.vrednost >= 6
+""")
+    List<Long> findPolozeniPredmetIds(@Param("studentId") Long studentId);
+
 }
