@@ -17,5 +17,7 @@ public interface PrijavaIspitaRepository extends JpaRepository<PrijavaIspita, Lo
     List<PrijavaIspita> findByStudentIdAndStatus(Long studentId, StatusPrijave status);
 
 
+    List<PrijavaIspita> findByIspitId(Long ispitId);
+    List<PrijavaIspita> findByIspitIdAndStatus(Long ispitId, StatusPrijave status);
 
 }

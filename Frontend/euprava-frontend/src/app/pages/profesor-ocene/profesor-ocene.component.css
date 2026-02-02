@@ -1,0 +1,137 @@
+:host {
+  display: block;
+  padding: 24px;
+  max-width: 980px;
+}
+
+/* Naslov */
+h2 {
+  margin: 0 0 16px;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+/* Gornji red (select + button) */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.toolbar label {
+  font-weight: 600;
+}
+
+select {
+  min-width: 420px;
+  max-width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #cfd8dc;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 14px;
+}
+
+button {
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: #1976d2;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.03s ease, opacity 0.15s ease;
+}
+
+button:hover {
+  opacity: 0.92;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Poruke */
+.status {
+  margin: 10px 0 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #eef6ff;
+  border: 1px solid #cfe3ff;
+  color: #0b3d91;
+  font-weight: 600;
+}
+
+.status.error {
+  background: #fff1f1;
+  border-color: #ffd0d0;
+  color: #9b1c1c;
+}
+
+/* Tabela */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  border: 1px solid #e3e8ee;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+thead th {
+  text-align: left;
+  padding: 12px 12px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  background: #f6f8fb;
+  border-bottom: 1px solid #e3e8ee;
+}
+
+tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #eef2f6;
+  vertical-align: middle;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Ocjena select u tabeli */
+tbody select {
+  min-width: 90px;
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+
+/* Dugme u tabeli */
+tbody button {
+  padding: 7px 10px;
+  border-radius: 10px;
+  background: #2e7d32; /* "save" green */
+}
+
+tbody button:disabled {
+  background: #2e7d32;
+}
+
+/* "Nema prijavljenih" */
+.empty {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #fafafa;
+  border: 1px dashed #d7dde3;
+  color: #455a64;
+}

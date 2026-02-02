@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+
 import java.util.List;
+import java.util.Optional;
 
 public interface OcenaRepository extends JpaRepository<Ocena, Long> {
 
@@ -44,7 +46,6 @@ public interface OcenaRepository extends JpaRepository<Ocena, Long> {
             @Param("predmetQ") String predmetQ
     );
 
-
     @Query("""
         select p.id, coalesce(p.espb, 0)
         from Ocena o
@@ -57,13 +58,14 @@ public interface OcenaRepository extends JpaRepository<Ocena, Long> {
     List<Object[]> findPolozeniPredmetiEspb(@Param("studentId") Long studentId);
 
     @Query("""
-  select distinct p.id
-  from Ocena o
-  join o.ispit i
-  join i.predmet p
-  where o.student.id = :studentId
-    and o.vrednost >= 6
-""")
+        select distinct p.id
+        from Ocena o
+        join o.ispit i
+        join i.predmet p
+        where o.student.id = :studentId
+          and o.vrednost >= 6
+    """)
     List<Long> findPolozeniPredmetIds(@Param("studentId") Long studentId);
 
+    Optional<Ocena> findByStudentIdAndIspitId(Long studentId, Long ispitId);
 }

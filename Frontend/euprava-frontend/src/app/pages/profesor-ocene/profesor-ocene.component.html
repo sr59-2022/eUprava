@@ -1,0 +1,68 @@
+<h2>Profesor – upis ocena</h2>
+
+<div style="margin-bottom: 12px;">
+  <label style="margin-right: 8px;">Ispit:</label>
+
+  <select [(ngModel)]="selectedIspitId" (ngModelChange)="onIspitChange()">
+    <option [ngValue]="null">-- izaberi ispit --</option>
+
+    <option *ngFor="let i of ispiti" [ngValue]="i.id">
+      {{ i.predmetNaziv }} ({{ i.rokNaziv }}) - {{ i.datumOdrzavanja }}
+    </option>
+  </select>
+
+  <button
+    (click)="ucitajPrijave()"
+    [disabled]="!selectedIspitId"
+    style="margin-left: 8px;"
+  >
+    Učitaj prijave
+  </button>
+</div>
+
+<div *ngIf="loading">Učitavam...</div>
+<div *ngIf="msg" style="margin: 8px 0;">{{ msg }}</div>
+
+<table *ngIf="prijave.length > 0" border="1" cellspacing="0" cellpadding="6">
+  <thead>
+  <tr>
+    <th>Indeks</th>
+    <th>Ime</th>
+    <th>Prezime</th>
+    <th>Status</th>
+    <th>Ocena</th>
+    <th>Akcija</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr *ngFor="let p of prijave">
+    <td>{{ p.brojIndeksa }}</td>
+    <td>{{ p.ime }}</td>
+    <td>{{ p.prezime }}</td>
+    <td>{{ p.status }}</td>
+
+    <td>
+      <select [(ngModel)]="p.ocena">
+        <option [ngValue]="null">--</option>
+        <option *ngFor="let o of [5,6,7,8,9,10]" [ngValue]="o">
+          {{ o }}
+        </option>
+      </select>
+    </td>
+
+    <td>
+      <button (click)="sacuvajOcenu(p)" [disabled]="!p.ocena">
+        Sačuvaj
+      </button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<div
+  *ngIf="!loading && loaded && selectedIspitId && prijave.length === 0"
+  style="margin-top: 10px;"
+>
+  Nema prijavljenih studenata za ovaj ispit.
+</div>

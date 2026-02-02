@@ -2,7 +2,9 @@ package com.example.fakultet.service;
 
 import com.example.fakultet.dto.IspitOpcijaDto;
 import com.example.fakultet.dto.PrijavaIspitaDto;
+import com.example.fakultet.dto.PrijavljeniStudentDto;
 import com.example.fakultet.model.Ispit;
+import com.example.fakultet.model.Ocena;
 import com.example.fakultet.model.PrijavaIspita;
 import com.example.fakultet.model.StatusPrijave;
 import com.example.fakultet.model.Student;
@@ -110,9 +112,7 @@ public class PrijavaIspitaService {
     @Transactional(readOnly = true)
     public List<IspitOpcijaDto> dostupniIspiti(Student student) {
 
-
         List<Ispit> aktivni = ispitRepo.findByPrijavaDoAfter(LocalDateTime.now());
-
 
         Set<Long> vecPrijavljeni = prijavaRepo
                 .findByStudentIdAndStatus(student.getId(), StatusPrijave.PRIJAVLJEN)
@@ -120,11 +120,9 @@ public class PrijavaIspitaService {
                 .map(p -> p.getIspit().getId())
                 .collect(Collectors.toSet());
 
-
         Set<Long> polozeniPredmeti = new HashSet<>(
                 ocenaRepo.findPolozeniPredmetIds(student.getId())
         );
-
 
         return aktivni.stream()
                 .filter(i -> !vecPrijavljeni.contains(i.getId()))
@@ -137,6 +135,32 @@ public class PrijavaIspitaService {
                         i.getDatumOdrzavanja(),
                         i.getPrijavaDo()
                 ))
+                .toList();
+    }
+
+
+    @Transactional(readOnly = true)
+    public List<PrijavljeniStudentDto> prijavljeniZaIspit(Long ispitId) {
+
+        var prijave = prijavaRepo.findByIspitId(ispitId);
+
+        return prijave.stream()
+                .map(p -> {
+                    var s = p.getStudent();
+
+                    Integer ocena = ocenaRepo.findByStudentIdAndIspitId(s.getId(), ispitId)
+                            .map(Ocena::getVrednost)
+                            .orElse(null);
+
+                    return new PrijavljeniStudentDto(
+                            s.getId(),
+                            s.getBrojIndeksa(),
+                            s.getIme(),
+                            s.getPrezime(),
+                            p.getStatus().name(),
+                            ocena
+                    );
+                })
                 .toList();
     }
 }

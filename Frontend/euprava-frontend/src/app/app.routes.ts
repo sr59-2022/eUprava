@@ -22,6 +22,15 @@ export const routes: Routes = [
       { path: '', redirectTo: 'prijava-ispita', pathMatch: 'full' },
 
       {
+        path: 'profesor/ocene',
+        canActivate: [roleGuard],
+        data: { roles: ['ROLE_PROFESOR', 'ROLE_ADMIN'] },
+        loadComponent: () =>
+          import('./pages/profesor-ocene/profesor-ocene.component')
+            .then(m => m.ProfesorOceneComponent),
+      },
+
+      {
         path: 'prijava-ispita',
         loadComponent: () =>
           import('./pages/prijava-ispita/prijava-ispita.component')
@@ -54,7 +63,6 @@ export const routes: Routes = [
             .then(m => m.SluzbaComponent),
       },
     ],
-
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' },

@@ -49,8 +49,8 @@ export interface IspitOpcijaDto {
   id: number;
   predmetNaziv: string;
   rokNaziv: string;
-  datumOdrzavanja: string; // ISO string
-  prijavaDo: string;       // ISO string
+  datumOdrzavanja: string;
+  prijavaDo: string;
 }
 
 
@@ -178,4 +178,31 @@ export class FakultetService {
       this.authOptions()
     );
   }
+
+
+  listaIspitaZaProfesora(): Observable<IspitOpcijaDto[]> {
+    return this.http.get<IspitOpcijaDto[]>(
+      `${this.baseUrl}/api/ispiti/lista`,
+      this.authOptions()
+    );
+  }
+
+
+  prijaveZaIspit(ispitId: number): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.baseUrl}/api/ispiti/${ispitId}/prijave`,
+      this.authOptions()
+    );
+  }
+
+
+  upisiOcenu(studentId: number, ispitId: number, vrednost: number) {
+    return this.http.post(
+      `${this.baseUrl}/api/fakultet/ocene`,
+      { studentId, ispitId, vrednost },
+      this.authOptions()
+    );
+  }
+
+
 }

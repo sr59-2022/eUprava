@@ -65,7 +65,9 @@ public class OcenaService {
         Ispit i = ispitRepository.findById(ispitId)
                 .orElseThrow(() -> new RuntimeException("Ispit ne postoji (id=" + ispitId + ")"));
 
-        Ocena o = new Ocena();
+        Ocena o = ocenaRepository.findByStudentIdAndIspitId(studentId, ispitId)
+                .orElseGet(Ocena::new);
+
         o.setStudent(s);
         o.setIspit(i);
         o.setVrednost(vrednost);

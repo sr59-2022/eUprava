@@ -1,11 +1,14 @@
 <nav class="app-navbar">
   <div class="app-navbar__left">
-    <a class="app-navbar__brand" routerLink="/app/prijava-ispita">eUprava</a>
+    <a class="app-navbar__brand" routerLink="/app">eUprava</a>
 
-    <a class="app-navbar__link" routerLink="/app/prijava-ispita">Prijava ispita</a>
-    <a class="app-navbar__link" routerLink="/app/fakultet">Fakultet</a>
-    <a class="app-navbar__link" routerLink="/app/diplomiranje">Diplomiranje</a>
-    <a class="app-navbar__link" routerLink="/app/uverenja">Uverenja</a>
+
+    <ng-container *ngIf="isStudent">
+      <a class="app-navbar__link" routerLink="/app/prijava-ispita">Prijava ispita</a>
+      <a class="app-navbar__link" routerLink="/app/fakultet">Fakultet</a>
+      <a class="app-navbar__link" routerLink="/app/diplomiranje">Diplomiranje</a>
+      <a class="app-navbar__link" routerLink="/app/uverenja">Uverenja</a>
+    </ng-container>
 
     <a
       *ngIf="isAdmin"

@@ -27,8 +27,21 @@ export class LoginComponent {
 
     this.authService.login(this.korisnickoIme, this.lozinka).subscribe({
       next: (res) => {
-
+        // res.uloge je niz/string[] u tvom backu
         this.authService.saveToken(res.token, res.uloge);
+
+        const roles: string[] = res.uloge ?? [];
+
+
+        if (roles.includes('ROLE_PROFESOR')) {
+          this.router.navigate(['/app/profesor/ocene']);
+          return;
+        }
+
+        if (roles.includes('ROLE_STUDENT')) {
+          this.router.navigate(['/app/prijava-ispita']);
+          return;
+        }
 
 
         this.router.navigate(['/app']);

@@ -17,6 +17,14 @@ export class AppLayoutComponent {
     return this.auth.isAdmin();
   }
 
+  get isProfesor(): boolean {
+    return this.auth.getRoles().includes('ROLE_PROFESOR');
+  }
+
+  get isStudent(): boolean {
+    return this.auth.getRoles().includes('ROLE_STUDENT');
+  }
+
   logout() {
     this.auth.logout();
     this.router.navigate(['/login']);
