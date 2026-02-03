@@ -20,7 +20,7 @@ public class IspitniRokController {
         this.rokService = rokService;
     }
 
-    // ✅ profesor/admin kreira rok
+
     @PostMapping
     @PreAuthorize("hasRole('PROFESOR') or hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
@@ -28,7 +28,7 @@ public class IspitniRokController {
         return rokService.kreiraj(dto);
     }
 
-    // ✅ svi mogu da vide rokove (da student zna na šta prijavljuje)
+
     @GetMapping
     public List<IspitniRok> svi() {
         return rokService.svi();

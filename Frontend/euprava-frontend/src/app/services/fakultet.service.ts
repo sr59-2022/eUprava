@@ -53,7 +53,6 @@ export interface IspitOpcijaDto {
   prijavaDo: string;
 }
 
-
 export interface PrijavaIspitaDto {
   id: number;
   ispitId: number;
@@ -63,6 +62,35 @@ export interface PrijavaIspitaDto {
   prijavaDo: string;
   status: string;
   datumPrijave: string;
+}
+
+
+export interface IspitniRokDto {
+  id: number;
+  naziv: string;
+  pocetak: string; // YYYY-MM-DD
+  kraj: string;    // YYYY-MM-DD
+}
+
+export interface IspitniRokCreateDto {
+  naziv: string;
+  pocetak: string; // YYYY-MM-DD
+  kraj: string;    // YYYY-MM-DD
+}
+
+export interface PredmetDto {
+  id: number;
+  sifra: string;
+  naziv: string;
+  espb: number;
+}
+
+export interface IspitCreateDto {
+  predmetId: number;
+  rokId: number;
+  datumOdrzavanja: string; // ISO (datetime-local string)
+  prijavaDo: string;       // ISO
+  sala: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -79,6 +107,7 @@ export class FakultetService {
       })
     };
   }
+
 
   dostupniIspiti(): Observable<IspitOpcijaDto[]> {
     return this.http.get<IspitOpcijaDto[]>(
@@ -103,13 +132,13 @@ export class FakultetService {
     );
   }
 
-
   mojePrijave(): Observable<PrijavaIspitaDto[]> {
     return this.http.get<PrijavaIspitaDto[]>(
       `${this.baseUrl}/api/ispiti/moje-prijave`,
       this.authOptions()
     );
   }
+
 
   me() {
     return this.http.get(
@@ -140,6 +169,7 @@ export class FakultetService {
     );
   }
 
+
   izdajUverenje(tip: string): Observable<UverenjeDto> {
     return this.http.post<UverenjeDto>(
       `${this.baseUrl}/api/fakultet/uverenja/me?tip=${encodeURIComponent(tip)}`,
@@ -165,6 +195,7 @@ export class FakultetService {
     );
   }
 
+
   getDiplomiranjeStatus(): Observable<DiplomiranjeStatusDto> {
     return this.http.get<DiplomiranjeStatusDto>(
       `${this.baseUrl}/api/fakultet/me/diplomiranje-status`,
@@ -187,14 +218,12 @@ export class FakultetService {
     );
   }
 
-
   prijaveZaIspit(ispitId: number): Observable<any[]> {
     return this.http.get<any[]>(
       `${this.baseUrl}/api/ispiti/${ispitId}/prijave`,
       this.authOptions()
     );
   }
-
 
   upisiOcenu(studentId: number, ispitId: number, vrednost: number) {
     return this.http.post(
@@ -205,4 +234,36 @@ export class FakultetService {
   }
 
 
+
+  rokovi(): Observable<IspitniRokDto[]> {
+    return this.http.get<IspitniRokDto[]>(
+      `${this.baseUrl}/api/rokovi`,
+      this.authOptions()
+    );
+  }
+
+  kreirajRok(dto: IspitniRokCreateDto): Observable<IspitniRokDto> {
+    return this.http.post<IspitniRokDto>(
+      `${this.baseUrl}/api/rokovi`,
+      dto,
+      this.authOptions()
+    );
+  }
+
+
+  predmeti(): Observable<PredmetDto[]> {
+    return this.http.get<PredmetDto[]>(
+      `${this.baseUrl}/api/predmeti`,
+      this.authOptions()
+    );
+  }
+
+
+  kreirajIspit(dto: IspitCreateDto): Observable<any> {
+    return this.http.post(
+      `${this.baseUrl}/api/ispiti-admin`,
+      dto,
+      this.authOptions()
+    );
+  }
 }

@@ -1,68 +1,81 @@
-<h2>Profesor – upis ocena</h2>
+<div class="page">
+  <h2>Profesor – upis ocena</h2>
 
-<div style="margin-bottom: 12px;">
-  <label style="margin-right: 8px;">Ispit:</label>
+  <div class="sub-actions">
+    <a class="btn btn-primary" routerLink="/app/profesor/ispiti">
+      Ispitni rokovi i kreiranje ispita
+    </a>
+  </div>
 
-  <select [(ngModel)]="selectedIspitId" (ngModelChange)="onIspitChange()">
-    <option [ngValue]="null">-- izaberi ispit --</option>
+  <div class="card">
+    <div class="toolbar">
+      <label>Ispit:</label>
 
-    <option *ngFor="let i of ispiti" [ngValue]="i.id">
-      {{ i.predmetNaziv }} ({{ i.rokNaziv }}) - {{ i.datumOdrzavanja }}
-    </option>
-  </select>
+      <select class="select" [(ngModel)]="selectedIspitId" (ngModelChange)="onIspitChange()">
+        <option [ngValue]="null">-- izaberi ispit --</option>
 
-  <button
-    (click)="ucitajPrijave()"
-    [disabled]="!selectedIspitId"
-    style="margin-left: 8px;"
-  >
-    Učitaj prijave
-  </button>
-</div>
-
-<div *ngIf="loading">Učitavam...</div>
-<div *ngIf="msg" style="margin: 8px 0;">{{ msg }}</div>
-
-<table *ngIf="prijave.length > 0" border="1" cellspacing="0" cellpadding="6">
-  <thead>
-  <tr>
-    <th>Indeks</th>
-    <th>Ime</th>
-    <th>Prezime</th>
-    <th>Status</th>
-    <th>Ocena</th>
-    <th>Akcija</th>
-  </tr>
-  </thead>
-
-  <tbody>
-  <tr *ngFor="let p of prijave">
-    <td>{{ p.brojIndeksa }}</td>
-    <td>{{ p.ime }}</td>
-    <td>{{ p.prezime }}</td>
-    <td>{{ p.status }}</td>
-
-    <td>
-      <select [(ngModel)]="p.ocena">
-        <option [ngValue]="null">--</option>
-        <option *ngFor="let o of [5,6,7,8,9,10]" [ngValue]="o">
-          {{ o }}
+        <option *ngFor="let i of ispiti" [ngValue]="i.id">
+          {{ i.predmetNaziv }} ({{ i.rokNaziv }}) - {{ i.datumOdrzavanja }}
         </option>
       </select>
-    </td>
 
-    <td>
-      <button (click)="sacuvajOcenu(p)" [disabled]="!p.ocena">
-        Sačuvaj
+      <button
+        class="btn btn-primary"
+        (click)="ucitajPrijave()"
+        [disabled]="!selectedIspitId || loading"
+      >
+        Učitaj prijave
       </button>
-    </td>
-  </tr>
-  </tbody>
-</table>
+    </div>
 
-<div
-  *ngIf="!loading && loaded && selectedIspitId && prijave.length === 0"
-  style="margin-top: 10px;"
->
-  Nema prijavljenih studenata za ovaj ispit.
+    <div *ngIf="loading" class="status">Učitavam...</div>
+    <div *ngIf="msg" class="status" [class.error]="msg.toLowerCase().includes('greška')">
+      {{ msg }}
+    </div>
+
+    <div class="table-wrap" *ngIf="prijave.length > 0">
+      <table>
+        <thead>
+        <tr>
+          <th>Indeks</th>
+          <th>Ime</th>
+          <th>Prezime</th>
+          <th>Status</th>
+          <th>Ocena</th>
+          <th>Akcija</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let p of prijave">
+          <td>{{ p.brojIndeksa }}</td>
+          <td>{{ p.ime }}</td>
+          <td>{{ p.prezime }}</td>
+          <td>
+              <span class="pill" [class.ok]="p.status === 'PRIJAVLJEN'" [class.muted]="p.status !== 'PRIJAVLJEN'">
+                {{ p.status }}
+              </span>
+          </td>
+
+          <td>
+            <select class="select small" [(ngModel)]="p.ocena">
+              <option [ngValue]="null">--</option>
+              <option *ngFor="let o of [5,6,7,8,9,10]" [ngValue]="o">{{ o }}</option>
+            </select>
+          </td>
+
+          <td>
+            <button class="btn btn-success" (click)="sacuvajOcenu(p)" [disabled]="!p.ocena || loading">
+              Sačuvaj
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="empty" *ngIf="!loading && loaded && selectedIspitId && prijave.length === 0">
+      Nema prijavljenih studenata za ovaj ispit.
+    </div>
+  </div>
 </div>

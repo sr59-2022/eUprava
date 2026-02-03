@@ -7,7 +7,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IspitRepository extends JpaRepository<Ispit, Long> {
+
     List<Ispit> findByPrijavaDoAfter(LocalDateTime now);
+
     List<Ispit> findAllByOrderByDatumOdrzavanjaDesc();
 
+    boolean existsByPredmetIdAndRokId(Long predmetId, Long rokId);
 }

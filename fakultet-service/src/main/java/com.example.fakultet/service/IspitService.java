@@ -36,11 +36,25 @@ public class IspitService {
             throw new RuntimeException("Ne možeš zakazati ispit u prošlosti.");
         }
 
+
+        if (ispitRepo.existsByPredmetIdAndRokId(dto.getPredmetId(), dto.getRokId())) {
+            throw new RuntimeException("Ispit za taj predmet u tom ispitnom roku već postoji.");
+        }
+
         Predmet p = predmetRepo.findById(dto.getPredmetId())
                 .orElseThrow(() -> new RuntimeException("Predmet ne postoji (id=" + dto.getPredmetId() + ")"));
 
         IspitniRok r = rokRepo.findById(dto.getRokId())
                 .orElseThrow(() -> new RuntimeException("Rok ne postoji (id=" + dto.getRokId() + ")"));
+
+
+        var datumIspita = dto.getDatumOdrzavanja().toLocalDate();
+        if (r.getPocetak() != null && datumIspita.isBefore(r.getPocetak())) {
+            throw new RuntimeException("Datum ispita mora biti u okviru izabranog roka (pre početka roka).");
+        }
+        if (r.getKraj() != null && datumIspita.isAfter(r.getKraj())) {
+            throw new RuntimeException("Datum ispita mora biti u okviru izabranog roka (posle kraja roka).");
+        }
 
         Ispit i = new Ispit();
         i.setPredmet(p);
@@ -51,6 +65,7 @@ public class IspitService {
 
         return ispitRepo.save(i);
     }
+
 
     @Transactional(readOnly = true)
     public List<Ispit> sviAktivniZaPrijavu() {

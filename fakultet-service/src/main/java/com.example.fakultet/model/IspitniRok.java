@@ -17,7 +17,7 @@ public class IspitniRok {
     @NotBlank
     @Size(max = 50)
     @Column(nullable = false, length = 50)
-    private String naziv; // npr. "Januar 2026"
+    private String naziv;
 
     private LocalDate pocetak;
     private LocalDate kraj;

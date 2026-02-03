@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FakultetService, IspitOpcijaDto } from '../../services/fakultet.service';
+import { RouterModule } from '@angular/router';
+
+
 
 type PrijavaRow = {
   studentId: number;
@@ -15,7 +18,7 @@ type PrijavaRow = {
 @Component({
   selector: 'app-profesor-ocene',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './profesor-ocene.component.html',
   styleUrls: ['./profesor-ocene.component.css']
 })

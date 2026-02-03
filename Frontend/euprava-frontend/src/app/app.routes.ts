@@ -31,6 +31,16 @@ export const routes: Routes = [
       },
 
       {
+        path: 'profesor/ispiti',
+        canActivate: [roleGuard],
+        data: { roles: ['ROLE_PROFESOR', 'ROLE_ADMIN'] },
+        loadComponent: () =>
+          import('./pages/profesor-ispiti/profesor-ispiti.component')
+            .then(m => m.ProfesorIspitiComponent),
+      },
+
+
+      {
         path: 'prijava-ispita',
         loadComponent: () =>
           import('./pages/prijava-ispita/prijava-ispita.component')
