@@ -2,10 +2,14 @@ package com.example.fakultet.service;
 
 import com.example.fakultet.dto.DiplomiranjeStatusDto;
 import com.example.fakultet.dto.DiplomiraniPoGodiniDto;
+import com.example.fakultet.dto.StudentRowDto;
 import com.example.fakultet.model.StatusStudenta;
 import com.example.fakultet.model.Student;
 import com.example.fakultet.repository.OcenaRepository;
 import com.example.fakultet.repository.StudentRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -94,5 +98,28 @@ public class StudentService {
                 .stream()
                 .map(r -> new DiplomiraniPoGodiniDto((Integer) r[0], (Long) r[1]))
                 .toList();
+    }
+
+    @Transactional
+    public void postaviZavrsniRad(Long studentId, boolean odbranjen) {
+        Student s = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student nije pronađen id=" + studentId));
+
+        s.setZavrsniRadOdbranjen(odbranjen);
+
+        studentRepository.save(s);
+    }
+
+    public Page<StudentRowDto> listajStudente(String q, int page, int size) {
+        var pageable = PageRequest.of(page, size, Sort.by("prezime").ascending().and(Sort.by("ime").ascending()));
+        return studentRepository.search(q, pageable)
+                .map(s -> new StudentRowDto(
+                        s.getId(),
+                        s.getBrojIndeksa(),
+                        s.getIme(),
+                        s.getPrezime(),
+                        s.getStatusStudenta().name(),
+                        s.isZavrsniRadOdbranjen()
+                ));
     }
 }

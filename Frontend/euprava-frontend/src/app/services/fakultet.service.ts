@@ -68,14 +68,14 @@ export interface PrijavaIspitaDto {
 export interface IspitniRokDto {
   id: number;
   naziv: string;
-  pocetak: string; // YYYY-MM-DD
-  kraj: string;    // YYYY-MM-DD
+  pocetak: string;
+  kraj: string;
 }
 
 export interface IspitniRokCreateDto {
   naziv: string;
-  pocetak: string; // YYYY-MM-DD
-  kraj: string;    // YYYY-MM-DD
+  pocetak: string;
+  kraj: string;
 }
 
 export interface PredmetDto {
@@ -88,9 +88,26 @@ export interface PredmetDto {
 export interface IspitCreateDto {
   predmetId: number;
   rokId: number;
-  datumOdrzavanja: string; // ISO (datetime-local string)
-  prijavaDo: string;       // ISO
+  datumOdrzavanja: string;
+  prijavaDo: string;
   sala: string;
+}
+
+export interface StudentRowDto {
+  id: number;
+  brojIndeksa: string;
+  ime: string;
+  prezime: string;
+  statusStudenta: string;
+  zavrsniRadOdbranjen: boolean;
+}
+
+export interface PageResponse<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  number: number;
+  size: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -263,6 +280,29 @@ export class FakultetService {
     return this.http.post(
       `${this.baseUrl}/api/ispiti-admin`,
       dto,
+      this.authOptions()
+    );
+  }
+
+  getStudenti(q = '', page = 0, size = 20): Observable<PageResponse<StudentRowDto>> {
+    let params = new HttpParams()
+      .set('page', String(page))
+      .set('size', String(size));
+
+    if (q && q.trim().length > 0) {
+      params = params.set('q', q.trim());
+    }
+
+    return this.http.get<PageResponse<StudentRowDto>>(
+      `${this.baseUrl}/api/fakultet/studenti`,
+      { ...this.authOptions(), params }
+    );
+  }
+
+  postaviZavrsniRad(studentId: number, odbranjen: boolean) {
+    return this.http.patch<void>(
+      `${this.baseUrl}/api/fakultet/studenti/${studentId}/zavrsni-rad`,
+      { odbranjen },
       this.authOptions()
     );
   }

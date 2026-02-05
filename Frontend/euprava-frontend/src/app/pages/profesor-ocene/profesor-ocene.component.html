@@ -1,12 +1,26 @@
 <div class="page">
   <h2>Profesor – upis ocena</h2>
 
-  <div class="sub-actions">
-    <a class="btn btn-primary" routerLink="/app/profesor/ispiti">
-      Ispitni rokovi i kreiranje ispita
+  <div class="prof-tabs">
+    <a class="tab"
+       routerLink="/app/profesor/ocene"
+       routerLinkActive="active"
+       [routerLinkActiveOptions]="{ exact: true }">
+      Upis ocena
+    </a>
+
+    <a class="tab"
+       routerLink="/app/profesor/ispiti"
+       routerLinkActive="active">
+      Ispiti i rokovi
+    </a>
+
+    <a class="tab"
+       routerLink="/app/profesor/studenti"
+       routerLinkActive="active">
+      Studenti
     </a>
   </div>
-
   <div class="card">
     <div class="toolbar">
       <label>Ispit:</label>

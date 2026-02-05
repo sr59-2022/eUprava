@@ -72,6 +72,15 @@ export const routes: Routes = [
           import('./pages/sluzba/sluzba.component')
             .then(m => m.SluzbaComponent),
       },
+
+      {
+        path: 'profesor/studenti',
+        canActivate: [roleGuard],
+        data: { roles: ['ROLE_PROFESOR', 'ROLE_ADMIN'] },
+        loadComponent: () =>
+          import('./pages/profesor-studenti/profesor-studenti.component')
+            .then(m => m.ProfesorStudentiComponent),
+      },
     ],
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
