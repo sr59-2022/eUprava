@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { FakultetService, OcenaPregledDto, OceneFilter } from '../../services/fakultet.service';
+import { FakultetService, PredmetIndeksDto, PredmetiFilter } from '../../services/fakultet.service';
 
 @Component({
   selector: 'app-fakultet',
@@ -11,14 +11,11 @@ import { FakultetService, OcenaPregledDto, OceneFilter } from '../../services/fa
   styleUrl: './fakultet.component.css'
 })
 export class FakultetComponent implements OnInit {
-  ocene: OcenaPregledDto[] = [];
+  predmeti: PredmetIndeksDto[] = [];
   loading = false;
   error: string | null = null;
 
-  filter: OceneFilter = {
-    ocena: null,
-    ocenaMin: null,
-    ocenaMax: null,
+  filter: PredmetiFilter = {
     polozio: null,
     predmet: null
   };
@@ -26,46 +23,36 @@ export class FakultetComponent implements OnInit {
   constructor(private fakultetService: FakultetService) {}
 
   ngOnInit(): void {
-    this.ucitajOcene();
+    this.ucitajPredmete();
   }
 
-  ucitajOcene() {
+  ucitajPredmete() {
     this.loading = true;
     this.error = null;
 
-    this.fakultetService.mojeOcene().subscribe({
+    this.fakultetService.mojiPredmetiIndeks().subscribe({
       next: (data) => {
-        this.ocene = data;
+        this.predmeti = data;
         this.loading = false;
       },
       error: (err) => {
-        this.error = err?.error?.message || 'Greška pri učitavanju ocena.';
+        this.error = err?.error?.message || 'Greška pri učitavanju predmeta.';
         this.loading = false;
       }
     });
   }
 
   pretrazi() {
-    if (
-      this.filter.ocenaMin != null &&
-      this.filter.ocenaMax != null &&
-      this.filter.ocenaMin > this.filter.ocenaMax
-    ) {
-      const tmp = this.filter.ocenaMin;
-      this.filter.ocenaMin = this.filter.ocenaMax;
-      this.filter.ocenaMax = tmp;
-    }
-
     this.loading = true;
     this.error = null;
 
-    this.fakultetService.mojeOcene(this.filter).subscribe({
+    this.fakultetService.mojiPredmetiIndeks(this.filter).subscribe({
       next: (data) => {
-        this.ocene = data;
+        this.predmeti = data;
         this.loading = false;
       },
       error: (err) => {
-        this.error = err?.error?.message || 'Greška pri pretrazi ocena.';
+        this.error = err?.error?.message || 'Greška pri pretrazi predmeta.';
         this.loading = false;
       }
     });
@@ -73,12 +60,9 @@ export class FakultetComponent implements OnInit {
 
   resetujFiltere() {
     this.filter = {
-      ocena: null,
-      ocenaMin: null,
-      ocenaMax: null,
       polozio: null,
       predmet: null
     };
-    this.ucitajOcene();
+    this.ucitajPredmete();
   }
 }

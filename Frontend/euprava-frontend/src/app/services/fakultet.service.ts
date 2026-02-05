@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 export interface OcenaPregledDto {
   ocenaId: number;
-  vrednost: number;
+  vrednost: number | null;
   datumUpisa: string;
 
   ispitId: number;
@@ -110,6 +110,20 @@ export interface PageResponse<T> {
   size: number;
 }
 
+export interface PredmetIndeksDto {
+  predmetId: number;
+  sifra: string;
+  naziv: string;
+  espb: number;
+  ocena: number | null;
+  polozio: boolean;
+}
+
+export interface PredmetiFilter {
+  polozio?: boolean | null;
+  predmet?: string | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class FakultetService {
   private baseUrl = 'http://localhost:8081';
@@ -186,7 +200,21 @@ export class FakultetService {
     );
   }
 
+  mojiPredmetiIndeks(filters?: PredmetiFilter): Observable<PredmetIndeksDto[]> {
+    let params = new HttpParams();
 
+    if (filters) {
+      if (filters.polozio != null) params = params.set('polozio', String(filters.polozio));
+      if (filters.predmet != null && filters.predmet.trim().length > 0) {
+        params = params.set('predmet', filters.predmet.trim());
+      }
+    }
+
+    return this.http.get<PredmetIndeksDto[]>(
+      `${this.baseUrl}/api/predmeti/indeks/me`,
+      { ...this.authOptions(), params }
+    );
+  }
   izdajUverenje(tip: string): Observable<UverenjeDto> {
     return this.http.post<UverenjeDto>(
       `${this.baseUrl}/api/fakultet/uverenja/me?tip=${encodeURIComponent(tip)}`,

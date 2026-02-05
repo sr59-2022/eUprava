@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public record OcenaPregledDto(
         Long ocenaId,
-        int vrednost,
+        Integer vrednost,
         LocalDate datumUpisa,
 
         Long ispitId,

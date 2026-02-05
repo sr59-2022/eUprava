@@ -18,7 +18,6 @@ public class OcenaService {
 
     private final OcenaRepository ocenaRepository;
     private final StudentService studentService;
-
     private final StudentRepository studentRepository;
     private final IspitRepository ispitRepository;
 
@@ -49,13 +48,13 @@ public class OcenaService {
 
         String q = (predmet == null || predmet.isBlank()) ? null : predmet.trim().toLowerCase();
 
-        return ocenaRepository.findPregledByFilters(s.getId(), min, max, polozio, q);
+
+        return ocenaRepository.findPregledMojihIspitaByFilters(s.getId(), min, max, polozio, q);
     }
 
     public List<OcenaPregledDto> mojeOcene(Long authUid) {
         return mojeOceneFilter(authUid, null, null, null, null, null);
     }
-
 
     @Transactional
     public void upisiOcenu(Long studentId, Long ispitId, int vrednost) {
