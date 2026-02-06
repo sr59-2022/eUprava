@@ -64,7 +64,6 @@ export interface PrijavaIspitaDto {
   datumPrijave: string;
 }
 
-
 export interface IspitniRokDto {
   id: number;
   naziv: string;
@@ -130,20 +129,18 @@ export class FakultetService {
 
   constructor(private http: HttpClient) {}
 
-  private authOptions() {
-    const token = localStorage.getItem('token');
-    return {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${token ?? ''}`
-      })
-    };
-  }
 
+  private authHeaders() {
+    const token = localStorage.getItem('token');
+    return token
+      ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) }
+      : {};
+  }
 
   dostupniIspiti(): Observable<IspitOpcijaDto[]> {
     return this.http.get<IspitOpcijaDto[]>(
       `${this.baseUrl}/api/ispiti/dostupni`,
-      this.authOptions()
+      this.authHeaders()
     );
   }
 
@@ -151,7 +148,7 @@ export class FakultetService {
     return this.http.post(
       `${this.baseUrl}/api/ispiti/${ispitId}/prijava`,
       {},
-      this.authOptions()
+      this.authHeaders()
     );
   }
 
@@ -159,23 +156,19 @@ export class FakultetService {
     return this.http.post(
       `${this.baseUrl}/api/ispiti/${ispitId}/otkazi`,
       {},
-      this.authOptions()
+      this.authHeaders()
     );
   }
 
   mojePrijave(): Observable<PrijavaIspitaDto[]> {
     return this.http.get<PrijavaIspitaDto[]>(
       `${this.baseUrl}/api/ispiti/moje-prijave`,
-      this.authOptions()
+      this.authHeaders()
     );
   }
 
-
   me() {
-    return this.http.get(
-      `${this.baseUrl}/api/fakultet/me`,
-      this.authOptions()
-    );
+    return this.http.get(`${this.baseUrl}/api/fakultet/me`, this.authHeaders());
   }
 
   mojeOcene(filters?: OceneFilter): Observable<OcenaPregledDto[]> {
@@ -193,10 +186,7 @@ export class FakultetService {
 
     return this.http.get<OcenaPregledDto[]>(
       `${this.baseUrl}/api/fakultet/ocene/me`,
-      {
-        ...this.authOptions(),
-        params
-      }
+      { ...this.authHeaders(), params }
     );
   }
 
@@ -212,61 +202,57 @@ export class FakultetService {
 
     return this.http.get<PredmetIndeksDto[]>(
       `${this.baseUrl}/api/predmeti/indeks/me`,
-      { ...this.authOptions(), params }
+      { ...this.authHeaders(), params }
     );
   }
+
   izdajUverenje(tip: string): Observable<UverenjeDto> {
     return this.http.post<UverenjeDto>(
       `${this.baseUrl}/api/fakultet/uverenja/me?tip=${encodeURIComponent(tip)}`,
       {},
-      this.authOptions()
+      this.authHeaders()
     );
   }
 
   mojaUverenja(): Observable<UverenjeDto[]> {
     return this.http.get<UverenjeDto[]>(
       `${this.baseUrl}/api/fakultet/uverenja/me`,
-      this.authOptions()
+      this.authHeaders()
     );
   }
 
   preuzmiUverenjePdf(id: number): Observable<Blob> {
-    return this.http.get(
-      `${this.baseUrl}/api/fakultet/uverenja/${id}/pdf`,
-      {
-        ...this.authOptions(),
-        responseType: 'blob' as const
-      }
-    );
+    return this.http.get(`${this.baseUrl}/api/fakultet/uverenja/${id}/pdf`, {
+      ...this.authHeaders(),
+      responseType: 'blob' as const,
+    });
   }
-
 
   getDiplomiranjeStatus(): Observable<DiplomiranjeStatusDto> {
     return this.http.get<DiplomiranjeStatusDto>(
       `${this.baseUrl}/api/fakultet/me/diplomiranje-status`,
-      this.authOptions()
+      this.authHeaders()
     );
   }
 
   getDiplomiraniPoGodini(): Observable<DiplomiraniPoGodiniDto[]> {
     return this.http.get<DiplomiraniPoGodiniDto[]>(
       `${this.baseUrl}/api/fakultet/izvestaji/diplomirani-po-godini`,
-      this.authOptions()
+      this.authHeaders()
     );
   }
-
 
   listaIspitaZaProfesora(): Observable<IspitOpcijaDto[]> {
     return this.http.get<IspitOpcijaDto[]>(
       `${this.baseUrl}/api/ispiti/lista`,
-      this.authOptions()
+      this.authHeaders()
     );
   }
 
   prijaveZaIspit(ispitId: number): Observable<any[]> {
     return this.http.get<any[]>(
       `${this.baseUrl}/api/ispiti/${ispitId}/prijave`,
-      this.authOptions()
+      this.authHeaders()
     );
   }
 
@@ -274,16 +260,14 @@ export class FakultetService {
     return this.http.post(
       `${this.baseUrl}/api/fakultet/ocene`,
       { studentId, ispitId, vrednost },
-      this.authOptions()
+      this.authHeaders()
     );
   }
-
-
 
   rokovi(): Observable<IspitniRokDto[]> {
     return this.http.get<IspitniRokDto[]>(
       `${this.baseUrl}/api/rokovi`,
-      this.authOptions()
+      this.authHeaders()
     );
   }
 
@@ -291,24 +275,22 @@ export class FakultetService {
     return this.http.post<IspitniRokDto>(
       `${this.baseUrl}/api/rokovi`,
       dto,
-      this.authOptions()
+      this.authHeaders()
     );
   }
-
 
   predmeti(): Observable<PredmetDto[]> {
     return this.http.get<PredmetDto[]>(
       `${this.baseUrl}/api/predmeti`,
-      this.authOptions()
+      this.authHeaders()
     );
   }
-
 
   kreirajIspit(dto: IspitCreateDto): Observable<any> {
     return this.http.post(
       `${this.baseUrl}/api/ispiti-admin`,
       dto,
-      this.authOptions()
+      this.authHeaders()
     );
   }
 
@@ -323,7 +305,7 @@ export class FakultetService {
 
     return this.http.get<PageResponse<StudentRowDto>>(
       `${this.baseUrl}/api/fakultet/studenti`,
-      { ...this.authOptions(), params }
+      { ...this.authHeaders(), params }
     );
   }
 
@@ -331,7 +313,15 @@ export class FakultetService {
     return this.http.patch<void>(
       `${this.baseUrl}/api/fakultet/studenti/${studentId}/zavrsni-rad`,
       { odbranjen },
-      this.authOptions()
+      this.authHeaders()
+    );
+  }
+
+  postaviStatusStudenta(studentId: number, status: 'AKTIVAN' | 'DIPLOMIRAO') {
+    return this.http.patch<void>(
+      `${this.baseUrl}/api/fakultet/studenti/${studentId}/status`,
+      { status },
+      this.authHeaders()
     );
   }
 }

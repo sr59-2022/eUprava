@@ -2,7 +2,7 @@
   <div class="header">
     <div>
       <h2>Profesor – studenti</h2>
-      <p class="subtitle">Pregled svih studenata i status završnog rada.</p>
+      <p class="subtitle">Pregled studenata i evidencija završnog rada i diplomiranja.</p>
     </div>
   </div>
 
@@ -34,7 +34,7 @@
     </div>
 
     <div *ngIf="loading" class="loading">
-      Učitavam...
+      Učitavanje podataka...
     </div>
 
     <div class="table-wrap" *ngIf="!loading && studenti.length > 0">
@@ -44,7 +44,7 @@
           <th>Indeks</th>
           <th>Ime</th>
           <th>Prezime</th>
-          <th>Status</th>
+          <th>Status studija</th>
           <th>Završni rad</th>
         </tr>
         </thead>
@@ -54,11 +54,40 @@
           <td class="mono">{{ s.brojIndeksa }}</td>
           <td>{{ s.ime }}</td>
           <td>{{ s.prezime }}</td>
+
+
           <td>
-            <span class="pill" [class.ok]="s.statusStudenta === 'DIPLOMIRAO'">
-              {{ s.statusStudenta }}
-            </span>
+            <div class="toggle-row">
+
+                <span class="pill" [class.ok]="s.statusStudenta === 'DIPLOMIRAO'">
+                  {{ s.statusStudenta === 'DIPLOMIRAO' ? 'Diplomirao' : 'Aktivan student' }}
+                </span>
+
+
+              <button
+                class="btn-status btn-status-primary"
+                *ngIf="s.statusStudenta !== 'DIPLOMIRAO'"
+                (click)="promeniStatus(s, 'DIPLOMIRAO')"
+                [disabled]="savingStatus[s.id]"
+                title="Sistem provjerava da li student ispunjava uslove"
+              >
+                Označi diplomiranje
+              </button>
+
+
+              <button
+                class="btn-status btn-status-secondary"
+                *ngIf="s.statusStudenta === 'DIPLOMIRAO'"
+                (click)="promeniStatus(s, 'AKTIVAN')"
+                [disabled]="savingStatus[s.id]"
+              >
+                Poništi status
+              </button>
+
+              <span *ngIf="savingStatus[s.id]" class="saving">snimam...</span>
+            </div>
           </td>
+
           <td>
             <div class="toggle-row">
               <label class="switch">
@@ -72,19 +101,20 @@
               </label>
 
               <span class="hint" [class.hint-ok]="s.zavrsniRadOdbranjen">
-                {{ s.zavrsniRadOdbranjen ? 'Odbranjen' : 'Nije odbranjen' }}
-              </span>
+                  {{ s.zavrsniRadOdbranjen ? 'Rad odbranjen' : 'Rad nije odbranjen' }}
+                </span>
 
               <span *ngIf="saving[s.id]" class="saving">snimam...</span>
             </div>
           </td>
+
         </tr>
         </tbody>
       </table>
     </div>
 
     <div class="empty" *ngIf="!loading && studenti.length === 0">
-      Nema rezultata.
+      Nema pronađenih studenata.
     </div>
 
     <div class="pager" *ngIf="totalPages > 1">
@@ -93,7 +123,7 @@
       </button>
 
       <div class="pager-info">
-        Strana <strong>{{ page + 1 }}</strong> / <strong>{{ totalPages }}</strong>
+        Strana <strong>{{ page + 1 }}</strong> od <strong>{{ totalPages }}</strong>
       </div>
 
       <button class="btn btn-ghost" (click)="next()" [disabled]="page + 1 >= totalPages || loading">

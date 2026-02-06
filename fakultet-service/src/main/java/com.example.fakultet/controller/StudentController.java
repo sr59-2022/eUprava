@@ -2,19 +2,21 @@ package com.example.fakultet.controller;
 
 import com.example.fakultet.dto.DiplomiranjeStatusDto;
 import com.example.fakultet.dto.DiplomiraniPoGodiniDto;
+import com.example.fakultet.dto.StudentRowDto;
+import com.example.fakultet.dto.StudentStatusRequest;
+import com.example.fakultet.dto.ZavrsniRadStatusRequest;
+import com.example.fakultet.model.StatusStudenta;
 import com.example.fakultet.model.Student;
 import com.example.fakultet.service.StudentService;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import com.example.fakultet.dto.ZavrsniRadStatusRequest;
-import jakarta.validation.Valid;
-import org.springframework.security.access.prepost.PreAuthorize;
-import com.example.fakultet.dto.StudentRowDto;
-import org.springframework.data.domain.Page;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +31,6 @@ public class StudentController {
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
-
 
     @PostMapping("/internal/studenti")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -76,6 +77,7 @@ public class StudentController {
         return studentService.proveraDiplomiranja(uid);
     }
 
+    @PreAuthorize("hasRole('PROFESOR')")
     @PostMapping("/me/diplomiraj")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void diplomiraj(JwtAuthenticationToken auth) {
@@ -93,8 +95,6 @@ public class StudentController {
         return studentService.izvestajDiplomiraniPoGodini();
     }
 
-
-
     @PreAuthorize("hasRole('PROFESOR')")
     @PatchMapping("/studenti/{studentId}/zavrsni-rad")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -105,7 +105,6 @@ public class StudentController {
         studentService.postaviZavrsniRad(studentId, req.getOdbranjen());
     }
 
-
     @PreAuthorize("hasRole('PROFESOR')")
     @GetMapping("/studenti")
     public Page<StudentRowDto> studenti(
@@ -114,5 +113,17 @@ public class StudentController {
             @RequestParam(defaultValue = "20") int size
     ) {
         return studentService.listajStudente(q, page, size);
+    }
+
+
+    @PreAuthorize("hasRole('PROFESOR')")
+    @PatchMapping("/studenti/{studentId}/status")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void postaviStatusStudenta(
+            @PathVariable Long studentId,
+            @Valid @RequestBody StudentStatusRequest req
+    ) {
+        StatusStudenta status = req.getStatus();
+        studentService.profesorPostaviStatus(studentId, status);
     }
 }

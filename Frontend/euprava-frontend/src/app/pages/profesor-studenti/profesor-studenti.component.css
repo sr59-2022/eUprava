@@ -262,3 +262,52 @@ h2 {
 .pager-info {
   color: #444;
 }
+
+/* STATUS BUTTONS (profesionalni admin stil) */
+.btn-status {
+  border: none;
+  padding: 7px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .18s ease;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+/* pastelno plavo - glavna akcija */
+.btn-status-primary {
+  background: #e0f2ff;
+  color: #0b5cad;
+  box-shadow: 0 2px 6px rgba(80,140,220,0.15);
+}
+
+.btn-status-primary:hover {
+  background: #cde9ff;
+  box-shadow: 0 4px 10px rgba(80,140,220,0.22);
+}
+
+
+.btn-status-secondary {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.btn-status-secondary:hover {
+  background: #e5e7eb;
+}
+
+
+.btn-status:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}

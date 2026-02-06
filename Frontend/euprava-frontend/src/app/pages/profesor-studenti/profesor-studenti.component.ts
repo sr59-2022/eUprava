@@ -11,6 +11,7 @@ import { FakultetService, StudentRowDto } from '../../services/fakultet.service'
   styleUrls: ['./profesor-studenti.component.css']
 })
 export class ProfesorStudentiComponent implements OnInit {
+
   q = '';
   studenti: StudentRowDto[] = [];
 
@@ -22,8 +23,8 @@ export class ProfesorStudentiComponent implements OnInit {
   msg = '';
   isError = false;
 
-  // da blokiramo toggle dok snima
   saving: Record<number, boolean> = {};
+  savingStatus: Record<number, boolean> = {};   // 🔹 NOVO
 
   constructor(private service: FakultetService) {}
 
@@ -67,9 +68,10 @@ export class ProfesorStudentiComponent implements OnInit {
     this.ucitaj();
   }
 
+
   toggleZavrsni(s: StudentRowDto, value: boolean) {
     const old = s.zavrsniRadOdbranjen;
-    s.zavrsniRadOdbranjen = value; // optimistic
+    s.zavrsniRadOdbranjen = value;
 
     this.saving[s.id] = true;
     this.msg = '';
@@ -78,12 +80,36 @@ export class ProfesorStudentiComponent implements OnInit {
     this.service.postaviZavrsniRad(s.id, value).subscribe({
       next: () => {
         delete this.saving[s.id];
+        this.ucitaj();
       },
       error: (err) => {
-        // rollback
         s.zavrsniRadOdbranjen = old;
         delete this.saving[s.id];
         this.msg = this.extractMsg(err) || 'Greška pri snimanju statusa završnog rada.';
+        this.isError = true;
+      }
+    });
+  }
+
+
+  promeniStatus(s: StudentRowDto, status: 'AKTIVAN' | 'DIPLOMIRAO') {
+
+    const old = s.statusStudenta as 'AKTIVAN' | 'DIPLOMIRAO';
+    s.statusStudenta = status;
+
+    this.savingStatus[s.id] = true;
+    this.msg = '';
+    this.isError = false;
+
+    this.service.postaviStatusStudenta(s.id, status).subscribe({
+      next: () => {
+        delete this.savingStatus[s.id];
+        this.ucitaj();
+      },
+      error: (err) => {
+        s.statusStudenta = old;
+        delete this.savingStatus[s.id];
+        this.msg = this.extractMsg(err) || 'Ne može se promijeniti status studenta.';
         this.isError = true;
       }
     });
