@@ -10,6 +10,12 @@
   <div class="status" *ngIf="loading">Učitavanje...</div>
   <div class="error" *ngIf="error">{{ error }}</div>
 
+
+  <div class="diplomirao-banner" *ngIf="!loading && !error && diplomirao">
+    🎓 Status: <b>Diplomirani student</b>
+    <span *ngIf="student?.datumDiplomiranja"> ({{ student?.datumDiplomiranja }})</span>
+  </div>
+
   <div class="card" *ngIf="!loading && !error && data">
     <div class="grid">
       <div class="row">

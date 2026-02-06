@@ -123,12 +123,23 @@ export interface PredmetiFilter {
   predmet?: string | null;
 }
 
+
+export interface StudentMeDto {
+  id: number;
+  authUid: number;
+  brojIndeksa: string;
+  ime: string;
+  prezime: string;
+  statusStudenta: 'AKTIVAN' | 'DIPLOMIRAO';
+  zavrsniRadOdbranjen: boolean;
+  datumDiplomiranja: string | null; // LocalDate -> "YYYY-MM-DD"
+}
+
 @Injectable({ providedIn: 'root' })
 export class FakultetService {
   private baseUrl = 'http://localhost:8081';
 
   constructor(private http: HttpClient) {}
-
 
   private authHeaders() {
     const token = localStorage.getItem('token');
@@ -167,8 +178,12 @@ export class FakultetService {
     );
   }
 
-  me() {
-    return this.http.get(`${this.baseUrl}/api/fakultet/me`, this.authHeaders());
+
+  me(): Observable<StudentMeDto> {
+    return this.http.get<StudentMeDto>(
+      `${this.baseUrl}/api/fakultet/me`,
+      this.authHeaders()
+    );
   }
 
   mojeOcene(filters?: OceneFilter): Observable<OcenaPregledDto[]> {

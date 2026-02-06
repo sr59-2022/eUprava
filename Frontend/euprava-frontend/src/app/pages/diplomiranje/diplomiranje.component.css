@@ -110,3 +110,12 @@ h2 {
   border: 1px dashed #d1d5db;
   color: #374151;
 }
+
+.diplomirao-banner {
+  margin: 12px 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 2px solid #28a745;
+  background: #eaffef;
+  font-size: 14px;
+}
