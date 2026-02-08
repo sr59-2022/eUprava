@@ -40,7 +40,7 @@ export class LoginComponent {
         }
 
         if (roles.includes('ROLE_STUDENT')) {
-          this.router.navigate(['/app/prijava-ispita']);
+          this.router.navigate(['/app']);
           return;
         }
 

@@ -58,7 +58,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./layouts/app-layout/app-layout.component').then(m => m.AppLayoutComponent),
     children: [
-      { path: '', redirectTo: 'prijava-ispita', pathMatch: 'full' },
+      {
+        path: '',
+        pathMatch: 'full',
+        loadComponent: () =>
+          import('./pages/fakultet-home/fakultet-home.component')
+            .then(m => m.FakultetHomeComponent),
+      },
 
       {
         path: 'profesor/ocene',
@@ -79,8 +85,11 @@ export const routes: Routes = [
       },
 
 
+
       {
         path: 'prijava-ispita',
+        canActivate: [roleGuard],
+        data: { roles: ['ROLE_STUDENT'] },
         loadComponent: () =>
           import('./pages/prijava-ispita/prijava-ispita.component')
             .then(m => m.PrijavaIspitaComponent),
