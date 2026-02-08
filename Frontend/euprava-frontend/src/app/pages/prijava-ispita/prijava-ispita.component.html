@@ -1,0 +1,62 @@
+<div class="page-container">
+  <div class="card">
+    <h2>Prijava ispita</h2>
+
+
+    <div class="form-group">
+      <label>Ispit (dostupni)</label>
+
+      <select [(ngModel)]="selectedIspitId" [disabled]="loading" class="select">
+        <option [ngValue]="null" disabled>-- Izaberi ispit --</option>
+
+        <option *ngFor="let i of ispiti" [ngValue]="i.id">
+          {{ i.predmetNaziv }} — {{ i.rokNaziv }}
+          ({{ i.datumOdrzavanja | date:'dd.MM.yyyy HH:mm' }})
+        </option>
+      </select>
+
+      <small *ngIf="!loading && ispiti.length === 0" style="display:block; margin-top:8px;">
+        Nema dostupnih ispita za prijavu.
+      </small>
+    </div>
+
+    <button class="btn" (click)="prijavi()" [disabled]="loading || selectedIspitId == null">
+      {{ loading ? 'Obrada...' : 'Prijavi ispit' }}
+    </button>
+
+
+    <div class="form-group" style="margin-top:16px;">
+      <label>Moje prijave (za otkaz)</label>
+
+      <select [(ngModel)]="selectedPrijavaIspitId" [disabled]="loading" class="select">
+        <option [ngValue]="null" disabled>-- Izaberi prijavu --</option>
+
+        <option *ngFor="let p of mojePrijave" [ngValue]="p.ispitId">
+          {{ p.predmetNaziv }} — {{ p.rokNaziv }}
+          ({{ p.datumOdrzavanja | date:'dd.MM.yyyy HH:mm' }})
+        </option>
+      </select>
+
+      <small *ngIf="!loading && mojePrijave.length === 0" style="display:block; margin-top:8px;">
+        Nemaš prijavljenih ispita.
+      </small>
+    </div>
+
+    <button class="btn btn-secondary"
+            (click)="otkaziPrijavuIzListe()"
+            [disabled]="loading || selectedPrijavaIspitId == null"
+            style="margin-top:10px;">
+      {{ loading ? 'Obrada...' : 'Otkaži prijavu' }}
+    </button>
+
+    <button class="btn btn-secondary"
+            (click)="ucitajSve()"
+            [disabled]="loading"
+            style="margin-top:10px;">
+      Osveži listu
+    </button>
+
+    <p class="success" *ngIf="successMsg">{{ successMsg }}</p>
+    <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+  </div>
+</div>

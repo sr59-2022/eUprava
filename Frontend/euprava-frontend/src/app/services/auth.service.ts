@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
 
-
 export interface LoginResponse {
   token: string;
   uloge: string[];
@@ -12,14 +11,16 @@ export interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-
   private apiUrl = 'http://localhost:8080/api/auth';
+
 
   private loggedIn = new BehaviorSubject<boolean>(!!localStorage.getItem('token'));
   loggedIn$ = this.loggedIn.asObservable();
 
 
   constructor(private http: HttpClient) { }
+
+
 
 
   register(data: any): Observable<any> {
@@ -35,8 +36,22 @@ export class AuthService {
 
   saveToken(token: string, uloge: string[]) {
     localStorage.setItem('token', token);
+
     localStorage.setItem('role', uloge.join(','));
     this.loggedIn.next(true);
+
+  }
+
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+
+  getRoles(): string[] {
+    const raw = localStorage.getItem('role');
+    if (!raw) return [];
+    return raw.split(',').map(r => r.trim()).filter(Boolean);
   }
 
   logout() {
@@ -45,11 +60,11 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+    return !!this.getToken();
   }
 
   getRole(): string | null {
-    return localStorage.getItem('role'); // 'ADMIN', 'GRADJANIN', 'POSLODAVAC'
+    return localStorage.getItem('role');
   }
 
   isAdmin(): boolean {
@@ -67,9 +82,5 @@ export class AuthService {
     return role?.includes('POSLODAVAC') ?? false;
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('token');
-  }
 
 }
-

@@ -1,0 +1,95 @@
+<div class="page">
+  <h2>Profesor – upis ocena</h2>
+
+  <div class="prof-tabs">
+    <a class="tab"
+       routerLink="/app/profesor/ocene"
+       routerLinkActive="active"
+       [routerLinkActiveOptions]="{ exact: true }">
+      Upis ocena
+    </a>
+
+    <a class="tab"
+       routerLink="/app/profesor/ispiti"
+       routerLinkActive="active">
+      Ispiti i rokovi
+    </a>
+
+    <a class="tab"
+       routerLink="/app/profesor/studenti"
+       routerLinkActive="active">
+      Studenti
+    </a>
+  </div>
+  <div class="card">
+    <div class="toolbar">
+      <label>Ispit:</label>
+
+      <select class="select" [(ngModel)]="selectedIspitId" (ngModelChange)="onIspitChange()">
+        <option [ngValue]="null">-- izaberi ispit --</option>
+
+        <option *ngFor="let i of ispiti" [ngValue]="i.id">
+          {{ i.predmetNaziv }} ({{ i.rokNaziv }}) - {{ i.datumOdrzavanja }}
+        </option>
+      </select>
+
+      <button
+        class="btn btn-primary"
+        (click)="ucitajPrijave()"
+        [disabled]="!selectedIspitId || loading"
+      >
+        Učitaj prijave
+      </button>
+    </div>
+
+    <div *ngIf="loading" class="status">Učitavam...</div>
+    <div *ngIf="msg" class="status" [class.error]="msg.toLowerCase().includes('greška')">
+      {{ msg }}
+    </div>
+
+    <div class="table-wrap" *ngIf="prijave.length > 0">
+      <table>
+        <thead>
+        <tr>
+          <th>Indeks</th>
+          <th>Ime</th>
+          <th>Prezime</th>
+          <th>Status</th>
+          <th>Ocena</th>
+          <th>Akcija</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let p of prijave">
+          <td>{{ p.brojIndeksa }}</td>
+          <td>{{ p.ime }}</td>
+          <td>{{ p.prezime }}</td>
+          <td>
+              <span class="pill" [class.ok]="p.status === 'PRIJAVLJEN'" [class.muted]="p.status !== 'PRIJAVLJEN'">
+                {{ p.status }}
+              </span>
+          </td>
+
+          <td>
+            <select class="select small" [(ngModel)]="p.ocena">
+              <option [ngValue]="null">--</option>
+              <option *ngFor="let o of [5,6,7,8,9,10]" [ngValue]="o">{{ o }}</option>
+            </select>
+          </td>
+
+          <td>
+            <button class="btn btn-success" (click)="sacuvajOcenu(p)" [disabled]="!p.ocena || loading">
+              Sačuvaj
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="empty" *ngIf="!loading && loaded && selectedIspitId && prijave.length === 0">
+      Nema prijavljenih studenata za ovaj ispit.
+    </div>
+  </div>
+</div>

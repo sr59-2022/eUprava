@@ -4,25 +4,37 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "ispiti")
+@Table(
+        name = "ispiti",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uq_ispit_predmet_rok",
+                columnNames = {"predmet_id", "rok_id"}
+        )
+)
 public class Ispit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(max = 100)
-    @Column(nullable = false, length = 100)
-    private String predmet;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "predmet_id", nullable = false)
+    private Predmet predmet;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "rok_id", nullable = false)
+    private IspitniRok rok;
 
     @Column(nullable = false)
-    private LocalDate datum;
+    private LocalDateTime datumOdrzavanja;
+
+    @Column(name = "prijava_do", nullable = false)
+    private LocalDateTime prijavaDo;
 
     @NotBlank
     @Size(max = 30)
@@ -36,11 +48,17 @@ public class Ispit {
 
     public Long getId() { return id; }
 
-    public String getPredmet() { return predmet; }
-    public void setPredmet(String predmet) { this.predmet = predmet; }
+    public Predmet getPredmet() { return predmet; }
+    public void setPredmet(Predmet predmet) { this.predmet = predmet; }
 
-    public LocalDate getDatum() { return datum; }
-    public void setDatum(LocalDate datum) { this.datum = datum; }
+    public IspitniRok getRok() { return rok; }
+    public void setRok(IspitniRok rok) { this.rok = rok; }
+
+    public LocalDateTime getDatumOdrzavanja() { return datumOdrzavanja; }
+    public void setDatumOdrzavanja(LocalDateTime datumOdrzavanja) { this.datumOdrzavanja = datumOdrzavanja; }
+
+    public LocalDateTime getPrijavaDo() { return prijavaDo; }
+    public void setPrijavaDo(LocalDateTime prijavaDo) { this.prijavaDo = prijavaDo; }
 
     public String getSala() { return sala; }
     public void setSala(String sala) { this.sala = sala; }

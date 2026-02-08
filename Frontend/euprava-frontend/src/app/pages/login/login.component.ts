@@ -1,4 +1,3 @@
-// src/app/pages/login/login.component.ts
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -18,22 +17,54 @@ export class LoginComponent {
   lozinka: string = '';
   errorMsg: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-  login() {
+  login(): void {
+    this.errorMsg = '';
+
     this.authService.login(this.korisnickoIme, this.lozinka).subscribe({
       next: (res) => {
-        this.authService.saveToken(res.token, Array.from(res.uloge));
-        this.router.navigate(['/home-sluzba']);
+
+        const roles: string[] = res.uloge ?? [];
+
+        // čuvamo token i role JEDNOM
+        this.authService.saveToken(res.token, roles);
+
+        // FAKULTET
+        if (roles.includes('ROLE_PROFESOR')) {
+          this.router.navigate(['/app/profesor/ocene']);
+          return;
+        }
+
+        if (roles.includes('ROLE_STUDENT')) {
+          this.router.navigate(['/app/prijava-ispita']);
+          return;
+        }
+
+        // SLUŽBA
+        if (
+          roles.includes('ROLE_ADMIN') ||
+          roles.includes('ROLE_POSLODAVAC') ||
+          roles.includes('ROLE_GRADJANIN')
+        ) {
+          this.router.navigate(['/home-sluzba']);
+          return;
+        }
+
+        // fallback (ako nema role — ne bi smelo)
+        this.router.navigate(['/login']);
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
         this.errorMsg = 'Neuspešna prijava. Proveri korisničko ime i lozinku.';
       }
     });
   }
-  navigateToRegister() {
-    this.router.navigate(['registracija']);
+
+
+  navigateToRegister(): void {
+    this.router.navigate(['/registracija']);
   }
 }
-

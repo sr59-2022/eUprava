@@ -1,0 +1,62 @@
+<div class="page">
+  <div class="header">
+    <h2>Provera uslova za diplomiranje</h2>
+
+    <button class="btn" (click)="ucitaj()" [disabled]="loading">
+      Osveži
+    </button>
+  </div>
+
+  <div class="status" *ngIf="loading">Učitavanje...</div>
+  <div class="error" *ngIf="error">{{ error }}</div>
+
+
+  <div class="diplomirao-banner" *ngIf="!loading && !error && diplomirao">
+    🎓 Status: <b>Diplomirani student</b>
+    <span *ngIf="student?.datumDiplomiranja"> ({{ student?.datumDiplomiranja }})</span>
+  </div>
+
+  <div class="card" *ngIf="!loading && !error && data">
+    <div class="grid">
+      <div class="row">
+        <div class="label">Status</div>
+        <div class="value">
+          <span class="badge" [class.ok]="ispunjava" [class.bad]="!ispunjava">
+            {{ data.status }}
+          </span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="label">Ukupno ESPB</div>
+        <div class="value">
+          <span class="badge" [class.ok]="espbOk" [class.bad]="!espbOk">
+            {{ data.ukupnoEspb }}
+          </span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="label">Potrebno ESPB</div>
+        <div class="value">{{ data.potrebnoEspb }}</div>
+      </div>
+
+      <div class="row">
+        <div class="label">Završni rad odbranjen</div>
+        <div class="value">
+          <span class="badge" [class.ok]="data.zavrsniRadOdbranjen" [class.bad]="!data.zavrsniRadOdbranjen">
+            {{ data.zavrsniRadOdbranjen ? 'DA' : 'NE' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hint" *ngIf="!ispunjava">
+      Da bi status bio <b>ISPUNJAVA</b>, potrebno je:
+      <ul>
+        <li>Ukupno ESPB ≥ <b>{{ data.potrebnoEspb }}</b></li>
+        <li>Završni rad odbranjen = <b>DA</b></li>
+      </ul>
+    </div>
+  </div>
+</div>

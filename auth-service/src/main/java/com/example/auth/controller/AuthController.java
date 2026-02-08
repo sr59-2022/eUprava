@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -33,6 +32,4 @@ public class AuthController {
         response.put("message", "Registracija uspesna");
         return ResponseEntity.ok(response);
     }
-
-
 }

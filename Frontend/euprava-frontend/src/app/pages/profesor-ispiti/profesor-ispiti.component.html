@@ -1,0 +1,91 @@
+<div class="page">
+  <h2>Profesor – rokovi i ispiti</h2>
+
+  <div *ngIf="msg" class="status" [class.error]="isError">
+    {{ msg }}
+  </div>
+
+  <div class="grid">
+
+
+    <div class="card">
+      <h3>Kreiraj ispitni rok</h3>
+
+      <label>Naziv</label>
+      <input
+        type="text"
+        placeholder="npr. Februarski 2026"
+        [(ngModel)]="rokForm.naziv"
+      />
+
+      <label>Početak</label>
+      <input type="date" [(ngModel)]="rokForm.pocetak" />
+
+      <label>Kraj</label>
+      <input type="date" [(ngModel)]="rokForm.kraj" />
+
+      <button
+        type="button"
+        (click)="kreirajRok()"
+        [disabled]="!rokForm.naziv || !rokForm.pocetak || !rokForm.kraj"
+      >
+        Kreiraj rok
+      </button>
+    </div>
+
+
+    <div class="card">
+      <h3>Kreiraj ispit</h3>
+
+      <label>Predmet</label>
+      <select [(ngModel)]="ispitForm.predmetId">
+        <option [ngValue]="0">-- izaberi predmet --</option>
+        <option *ngFor="let p of predmeti" [ngValue]="p.id">
+          {{ p.sifra }} — {{ p.naziv }}
+        </option>
+      </select>
+
+      <label>Ispitni rok</label>
+      <select [(ngModel)]="ispitForm.rokId">
+        <option [ngValue]="0">-- izaberi rok --</option>
+        <option *ngFor="let r of rokovi" [ngValue]="r.id">
+          {{ r.naziv }} ({{ r.pocetak }} – {{ r.kraj }})
+        </option>
+      </select>
+
+      <label>Datum održavanja</label>
+      <input type="datetime-local" [(ngModel)]="ispitForm.datumOdrzavanja" />
+
+      <label>Prijava do</label>
+      <input type="datetime-local" [(ngModel)]="ispitForm.prijavaDo" />
+
+      <label>Sala</label>
+      <input type="text" placeholder="npr. A1" [(ngModel)]="ispitForm.sala" />
+
+      <button
+        type="button"
+        (click)="kreirajIspit()"
+        [disabled]="!ispitForm.predmetId || !ispitForm.rokId || !ispitForm.datumOdrzavanja || !ispitForm.prijavaDo || !ispitForm.sala"
+      >
+        Kreiraj ispit
+      </button>
+    </div>
+
+  </div>
+
+
+  <div class="card section list">
+    <h3>Postojeći rokovi</h3>
+
+    <ul *ngIf="rokovi.length > 0">
+      <li *ngFor="let r of rokovi">
+        <strong>{{ r.naziv }}</strong>
+        — {{ r.pocetak }} do {{ r.kraj }}
+      </li>
+    </ul>
+
+    <div class="empty" *ngIf="rokovi.length === 0">
+      Nema kreiranih ispitnih rokova.
+    </div>
+  </div>
+</div>

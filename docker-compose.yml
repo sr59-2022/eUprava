@@ -56,10 +56,14 @@ services:
       - SPRING_DATASOURCE_USERNAME=app
       - SPRING_DATASOURCE_PASSWORD=apppass
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - FAKULTET_SERVICE_BASE_URL=http://fakultet-service:8081
+      - SERVICE_TOKEN=TAJNA123
     networks:
       - euprava-net
     depends_on:
       - mysql-auth
+      - fakultet-service
+
 
   fakultet-service:
     build:

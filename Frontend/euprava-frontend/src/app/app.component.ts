@@ -33,5 +33,11 @@ export class AppComponent {
     this.router.navigate(['/login']);
   }
 
+  isSluzbaUser(): boolean {
+    return this.authService.isGradjanin()
+      || this.authService.isPoslodavac()
+      || this.authService.isAdmin();
+  }
+
 
 }

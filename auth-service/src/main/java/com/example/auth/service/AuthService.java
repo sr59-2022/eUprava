@@ -7,8 +7,13 @@ import com.example.auth.model.Korisnik;
 import com.example.auth.model.Uloga;
 import com.example.auth.repository.KorisnikRepository;
 import com.example.auth.security.JwtService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,6 +22,12 @@ public class AuthService {
 
     private final KorisnikRepository korisnikRepository;
     private final JwtService jwtService;
+
+    @Value("${fakultet.service.base-url}")
+    private String fakultetBaseUrl;
+
+    @Value("${service.token}")
+    private String serviceToken;
 
     public AuthService(KorisnikRepository korisnikRepository, JwtService jwtService) {
         this.korisnikRepository = korisnikRepository;
@@ -27,7 +38,6 @@ public class AuthService {
         Korisnik k = korisnikRepository.findByKorisnickoIme(request.getKorisnickoIme())
                 .orElseThrow(() -> new RuntimeException("Pogrešno korisničko ime ili lozinka"));
 
-        // direktno poređenje (plain text)
         if (!k.getLozinka().equals(request.getLozinka())) {
             throw new RuntimeException("Pogrešno korisničko ime ili lozinka");
         }
@@ -40,8 +50,6 @@ public class AuthService {
                 .collect(Collectors.toSet());
 
         return new LoginResponse(token, roles);
-
-
     }
 
     public void registracija(RegistracijaRequest request) {
@@ -63,13 +71,36 @@ public class AuthService {
         korisnik.setPrezime(request.getPrezime());
         korisnik.setKorisnickoIme(request.getKorisnickoIme());
         korisnik.setEmail(request.getEmail());
-
-        // plain text
         korisnik.setLozinka(request.getLozinka());
-
         korisnik.setUloge(Set.of(request.getUloga()));
 
-        korisnikRepository.save(korisnik);
-    }
+        Korisnik saved = korisnikRepository.save(korisnik);
 
+
+        if (request.getUloga() != Uloga.ROLE_STUDENT) {
+            return;
+        }
+
+        RestTemplate rt = new RestTemplate();
+        String url = fakultetBaseUrl + "/api/fakultet/internal/studenti";
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("authUid", saved.getId());
+        body.put("ime", saved.getIme());
+        body.put("prezime", saved.getPrezime());
+        body.put("brojIndeksa", "SR" + saved.getId() + "/2026");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("X-SERVICE-TOKEN", serviceToken);
+
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+
+        try {
+            rt.exchange(url, HttpMethod.POST, entity, Void.class);
+        } catch (Exception e) {
+            korisnikRepository.deleteById(saved.getId());
+            throw new RuntimeException("Registracija nije kompletna: upis u fakultet nije uspeo (auth korisnik obrisan)", e);
+        }
+    }
 }
