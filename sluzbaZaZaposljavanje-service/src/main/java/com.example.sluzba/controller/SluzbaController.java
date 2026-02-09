@@ -1,29 +1,38 @@
 package com.example.sluzba.controller;
 
 import com.example.sluzba.client.FakultetClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.sluzba.dto.DiplomiraniStudentDto;
+import com.example.sluzba.service.DiplomiraniStudentService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/sluzba")
 public class SluzbaController {
 
-    private final FakultetClient fakultetClient;
+    private final DiplomiraniStudentService diplomiraniStudentService;
 
-    public SluzbaController(FakultetClient fakultetClient) {
-        this.fakultetClient = fakultetClient;
+    public SluzbaController(DiplomiraniStudentService diplomiraniStudentService) {
+        this.diplomiraniStudentService = diplomiraniStudentService;
     }
 
-    @GetMapping("/status")
-    public String status() {
-        return "Sluzba za zapošljavanje servis radi";
+    @PostMapping("/diplomirani")
+    public String primiDiplomirane(@RequestBody List<DiplomiraniStudentDto> studenti) {
+        diplomiraniStudentService.sacuvajDiplomirane(studenti);
+        return "Primljeno " + studenti.size() + " diplomiranih studenata.";
     }
 
-
-    @GetMapping("/info")
-    public String info() {
-        String fakultetInfo = fakultetClient.getInfo();
-        return "Sluzba OK, pozvao fakultet: " + fakultetInfo;
+    @GetMapping("/diplomirani")
+    public List<DiplomiraniStudentDto> dobaviSveDiplomirane() {
+        return diplomiraniStudentService.sviDiplomirani()
+                .stream()
+                .map(ds -> new DiplomiraniStudentDto(
+                        ds.getAuthUid(),
+                        ds.getIme(),
+                        ds.getPrezime(),
+                        ds.getBrojIndeksa()
+                ))
+                .toList();
     }
 }

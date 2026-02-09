@@ -56,6 +56,10 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/obavestenja/poslodavac").hasRole("POSLODAVAC")
                         .requestMatchers(HttpMethod.POST, "/api/obavestenja/**").hasRole("POSLODAVAC")
                         .requestMatchers(HttpMethod.GET, "/api/obavestenja/neprocitana").hasRole("POSLODAVAC")
+                        .requestMatchers(HttpMethod.POST, "/api/sluzba/diplomirani").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/sluzba/diplomirani").hasRole("POSLODAVAC")
+
+
 
                         .anyRequest().authenticated()
                 )

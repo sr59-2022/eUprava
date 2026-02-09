@@ -175,4 +175,19 @@ public class StudentService {
                         st.isZavrsniRadOdbranjen()
                 ));
     }
+
+    public List<StudentRowDto> getSviDiplomiraniDto() {
+        return studentRepository.findByStatusStudenta(StatusStudenta.DIPLOMIRAO)
+                .stream()
+                .map(s -> new StudentRowDto(
+                        s.getId(),
+                        s.getBrojIndeksa(),
+                        s.getIme(),
+                        s.getPrezime(),
+                        s.getStatusStudenta().name(),
+                        s.isZavrsniRadOdbranjen()
+                ))
+                .toList();
+    }
+
 }

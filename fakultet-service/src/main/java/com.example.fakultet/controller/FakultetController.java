@@ -1,6 +1,7 @@
 package com.example.fakultet.controller;
 
 import com.example.fakultet.client.SluzbaClient;
+import com.example.fakultet.service.StudentService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,21 +11,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class FakultetController {
 
     private final SluzbaClient sluzbaClient;
+    private final StudentService studentService;
 
-    public FakultetController(SluzbaClient sluzbaClient) {
+    public FakultetController(SluzbaClient sluzbaClient,
+                              StudentService studentService) {
         this.sluzbaClient = sluzbaClient;
+        this.studentService = studentService;
     }
 
-    @GetMapping("/provera-sluzbe")
-    public String proveriSluzbu() {
-        String odgovor = sluzbaClient.getInfo();
-        return "Odgovor iz službe: " + odgovor;
+    @GetMapping("/posalji-diplomirane")
+    public String posaljiDiplomiraneSluzbi() {
+
+        var diplomirani = studentService.getSviDiplomiraniDto();
+
+        sluzbaClient.primiDiplomiraneStudente(diplomirani);
+
+        return "Poslato " + diplomirani.size() + " diplomiranih studenata službi";
     }
 
-    @GetMapping("/info")
-    public String info() {
-        return "Fakultet OK";
-    }
 
 }
 
