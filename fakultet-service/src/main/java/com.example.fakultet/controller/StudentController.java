@@ -2,6 +2,7 @@ package com.example.fakultet.controller;
 
 import com.example.fakultet.dto.DiplomiranjeStatusDto;
 import com.example.fakultet.dto.DiplomiraniPoGodiniDto;
+import com.example.fakultet.dto.OglasDTO;
 import com.example.fakultet.dto.StudentRowDto;
 import com.example.fakultet.dto.StudentStatusRequest;
 import com.example.fakultet.dto.ZavrsniRadStatusRequest;
@@ -77,6 +78,31 @@ public class StudentController {
         return studentService.proveraDiplomiranja(uid);
     }
 
+    /**
+     * ✅ NOVO: samo DIPLOMIRANI student može da vidi oglase.
+     * Fakultet proveri status, pa pozove Sluzbu i vrati oglase.
+     */
+    @PreAuthorize("hasRole('STUDENT')")
+    @GetMapping("/oglasi-za-diplomirane")
+    public List<OglasDTO> oglasiZaDiplomirane(
+            JwtAuthenticationToken auth,
+            @RequestHeader(value = "Authorization", required = false) String authorizationHeader
+    ) {
+        Jwt jwt = auth.getToken();
+
+        Object raw = jwt.getClaims().get("uid");
+        if (raw == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token nema claim 'uid'");
+
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Nedostaje Authorization header");
+        }
+
+        Long uid = (raw instanceof Number n) ? n.longValue() : Long.parseLong(raw.toString());
+
+        // StudentService proverava diplomiranje + poziva Sluzbu
+        return studentService.oglasiZaDiplomirane(uid, authorizationHeader);
+    }
+
     @PreAuthorize("hasRole('PROFESOR')")
     @PostMapping("/me/diplomiraj")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -114,7 +140,6 @@ public class StudentController {
     ) {
         return studentService.listajStudente(q, page, size);
     }
-
 
     @PreAuthorize("hasRole('PROFESOR')")
     @PatchMapping("/studenti/{studentId}/status")

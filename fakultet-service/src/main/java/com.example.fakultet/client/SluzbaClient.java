@@ -1,11 +1,11 @@
 package com.example.fakultet.client;
 
+import com.example.fakultet.dto.OglasDTO;
 import com.example.fakultet.dto.StudentRowDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
-
 
 @Service
 public class SluzbaClient {
@@ -18,6 +18,7 @@ public class SluzbaClient {
                 .build();
     }
 
+
     public void primiDiplomiraneStudente(List<StudentRowDto> studenti) {
         webClient.post()
                 .uri("/api/sluzba/diplomirani")
@@ -26,6 +27,15 @@ public class SluzbaClient {
                 .bodyToMono(Void.class)
                 .block();
     }
+
+
+    public List<OglasDTO> getOglasi(String authorizationHeader) {
+        return webClient.get()
+                .uri("/api/oglasi")
+                .header("Authorization", authorizationHeader) // "Bearer <token>"
+                .retrieve()
+                .bodyToFlux(OglasDTO.class)
+                .collectList()
+                .block();
+    }
 }
-
-

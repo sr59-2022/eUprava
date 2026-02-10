@@ -25,12 +25,22 @@ export class LoginComponent {
   login(): void {
     this.errorMsg = '';
 
-    this.authService.login(this.korisnickoIme, this.lozinka).subscribe({
-      next: (res) => {
+    const body = {
+      korisnickoIme: (this.korisnickoIme ?? '').trim(),
+      lozinka: (this.lozinka ?? '').trim()
+    };
 
+
+    if (!body.korisnickoIme || !body.lozinka) {
+      this.errorMsg = 'Unesi korisničko ime i lozinku.';
+      return;
+    }
+
+
+    this.authService.login(body.korisnickoIme, body.lozinka).subscribe({
+      next: (res) => {
         const roles: string[] = res.uloge ?? [];
 
-        // čuvamo token i role JEDNOM
         this.authService.saveToken(res.token, roles);
 
         // FAKULTET
@@ -54,7 +64,7 @@ export class LoginComponent {
           return;
         }
 
-        // fallback (ako nema role — ne bi smelo)
+
         this.router.navigate(['/login']);
       },
       error: () => {
@@ -62,7 +72,6 @@ export class LoginComponent {
       }
     });
   }
-
 
   navigateToRegister(): void {
     this.router.navigate(['/registracija']);

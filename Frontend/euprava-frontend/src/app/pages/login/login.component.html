@@ -1,21 +1,36 @@
-
 <div class="login-container">
   <h2>Prijava</h2>
 
-  <form (ngSubmit)="login()">
+  <form (ngSubmit)="login()" #f="ngForm">
     <div class="form-group">
       <label>Korisničko ime</label>
-      <input type="text" [(ngModel)]="korisnickoIme" name="korisnickoIme" required>
+      <input
+        type="text"
+        [(ngModel)]="korisnickoIme"
+        name="korisnickoIme"
+        required
+        autocomplete="username"
+      >
     </div>
 
     <div class="form-group">
       <label>Lozinka</label>
-      <input type="password" [(ngModel)]="lozinka" name="lozinka" required>
+      <input
+        type="password"
+        [(ngModel)]="lozinka"
+        name="lozinka"
+        required
+        autocomplete="current-password"
+      >
     </div>
 
-    <button type="submit">Prijavi se</button>
-    <p>Nemas nalog?
-      <a (click)="navigateToRegister()" class="fw-bold text-white" style="cursor: pointer;">REGISTRUJ SE</a>.
+    <button type="submit" [disabled]="f.invalid">Prijavi se</button>
+
+    <p>
+      Nemas nalog?
+      <a (click)="navigateToRegister()" class="fw-bold text-white" style="cursor: pointer;">
+        REGISTRUJ SE
+      </a>.
     </p>
 
     <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>

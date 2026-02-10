@@ -37,20 +37,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> {})
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-
+                        // internal upis studenata iz auth-service
                         .requestMatchers(HttpMethod.POST, "/api/fakultet/internal/**").permitAll()
 
                         .requestMatchers("/api/fakultet/info").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/fakultet/provera-sluzbe").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/fakultet/posalji-diplomirane").permitAll()
+
+
+                        .requestMatchers(HttpMethod.GET, "/api/fakultet/oglasi-za-diplomirane").hasRole("STUDENT")
 
                         .anyRequest().authenticated()
                 )
@@ -68,13 +71,9 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-
         config.setAllowedOrigins(List.of("http://localhost:4200"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-
-
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-SERVICE-TOKEN"));
-
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

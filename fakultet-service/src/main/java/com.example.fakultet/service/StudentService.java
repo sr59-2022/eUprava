@@ -1,7 +1,9 @@
 package com.example.fakultet.service;
 
+import com.example.fakultet.client.SluzbaClient;
 import com.example.fakultet.dto.DiplomiranjeStatusDto;
 import com.example.fakultet.dto.DiplomiraniPoGodiniDto;
+import com.example.fakultet.dto.OglasDTO;
 import com.example.fakultet.dto.StudentRowDto;
 import com.example.fakultet.model.StatusStudenta;
 import com.example.fakultet.model.Student;
@@ -25,11 +27,14 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final OcenaRepository ocenaRepository;
+    private final SluzbaClient sluzbaClient;
 
     public StudentService(StudentRepository studentRepository,
-                          OcenaRepository ocenaRepository) {
+                          OcenaRepository ocenaRepository,
+                          SluzbaClient sluzbaClient) {
         this.studentRepository = studentRepository;
         this.ocenaRepository = ocenaRepository;
+        this.sluzbaClient = sluzbaClient;
     }
 
     @Transactional
@@ -66,7 +71,6 @@ public class StudentService {
                 .sum();
     }
 
-
     public DiplomiranjeStatusDto proveraDiplomiranja(Long authUid) {
         Student s = getByAuthUid(authUid);
         int ukupnoEspb = izracunajUkupnoEspb(s.getId());
@@ -81,7 +85,6 @@ public class StudentService {
                 zavrsniRadOdbranjen
         );
     }
-
 
     @Transactional
     public void diplomirajAkoIspunjava(Long authUid) {
@@ -98,7 +101,6 @@ public class StudentService {
             studentRepository.save(s);
         }
     }
-
 
     @Transactional
     public void profesorPostaviStatus(Long studentId, StatusStudenta noviStatus) {
@@ -130,7 +132,6 @@ public class StudentService {
             return;
         }
 
-
         s.setStatusStudenta(noviStatus);
 
         if (noviStatus != StatusStudenta.DIPLOMIRAO) {
@@ -154,7 +155,6 @@ public class StudentService {
 
         s.setZavrsniRadOdbranjen(odbranjen);
 
-
         if (!odbranjen && s.getStatusStudenta() == StatusStudenta.DIPLOMIRAO) {
             s.setStatusStudenta(StatusStudenta.AKTIVAN);
             s.setDatumDiplomiranja(null);
@@ -164,7 +164,8 @@ public class StudentService {
     }
 
     public Page<StudentRowDto> listajStudente(String q, int page, int size) {
-        var pageable = PageRequest.of(page, size, Sort.by("prezime").ascending().and(Sort.by("ime").ascending()));
+        var pageable = PageRequest.of(page, size,
+                Sort.by("prezime").ascending().and(Sort.by("ime").ascending()));
         return studentRepository.search(q, pageable)
                 .map(st -> new StudentRowDto(
                         st.getId(),
@@ -190,4 +191,21 @@ public class StudentService {
                 .toList();
     }
 
+
+    public List<OglasDTO> oglasiZaDiplomirane(Long authUid, String authorizationHeader) {
+        Student s = getByAuthUid(authUid);
+
+        if (s.getStatusStudenta() != StatusStudenta.DIPLOMIRAO) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Samo diplomirani studenti mogu videti oglase."
+            );
+        }
+
+        return sluzbaClient.getOglasi(authorizationHeader);
+    }
+
+    public boolean jeDiplomirao(Student student) {
+        return student != null && student.getStatusStudenta() == StatusStudenta.DIPLOMIRAO;
+    }
 }
