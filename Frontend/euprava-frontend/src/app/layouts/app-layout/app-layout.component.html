@@ -19,7 +19,13 @@
     </a>
   </div>
 
+  <div class="app-navbar__right">
+    <button *ngIf="isProfesor" class="app-navbar__btn" (click)="posaljiDiplomirane()">
+      Pošalji diplomirane
+    </button>
+
   <button class="app-navbar__btn" (click)="logout()">Logout</button>
+  </div>
 </nav>
 
 <div class="app-content">

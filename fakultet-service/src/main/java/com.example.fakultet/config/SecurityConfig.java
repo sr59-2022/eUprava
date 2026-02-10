@@ -50,6 +50,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/fakultet/info").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/fakultet/provera-sluzbe").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/fakultet/posalji-diplomirane").permitAll()
 
                         .anyRequest().authenticated()
                 )

@@ -14,7 +14,7 @@ public class SluzbaClient {
 
     public SluzbaClient(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
-                .baseUrl("http://localhost:8082")
+                .baseUrl("http://sluzba-service:8082")
                 .build();
     }
 

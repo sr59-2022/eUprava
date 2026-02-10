@@ -10,9 +10,10 @@
     </li>
     <li class="nav-item" *ngIf="authService.isPoslodavac()">
       <a routerLink="/prijave/poslodavac">Pregled prijava</a>
-
     </li>
-
+    <li class="nav-item" *ngIf="authService.isPoslodavac()">
+      <a routerLink="/sluzba/diplomirani">Diplomirani studenti</a>
+    </li>
     <li class="nav-item">
       <a (click)="logout()">Logout</a>
     </li>

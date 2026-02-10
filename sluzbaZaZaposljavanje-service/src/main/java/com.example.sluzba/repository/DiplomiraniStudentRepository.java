@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface DiplomiraniStudentRepository
         extends JpaRepository<DiplomiraniStudent, Long> {
 
-    Optional<DiplomiraniStudent> findByAuthUid(Long authUid);
+    Optional<DiplomiraniStudent> findByBrojIndeksa(String brojIndeksa);
 }

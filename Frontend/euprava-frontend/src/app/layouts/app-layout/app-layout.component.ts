@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import {FakultetService} from '../../services/fakultet.service';
 
 @Component({
   selector: 'app-layout',
@@ -12,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 export class AppLayoutComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
+  private fakultetService = inject(FakultetService);
 
   get isAdmin(): boolean {
     return this.auth.isAdmin();
@@ -28,5 +30,13 @@ export class AppLayoutComponent {
   logout() {
     this.auth.logout();
     this.router.navigate(['/login']);
+  }
+
+  posaljiDiplomirane() {
+    this.fakultetService.posaljiDiplomirane()
+      .subscribe({
+        next: res => alert(res),
+        error: err => alert('Greška pri slanju diplomiranih studenata!')
+      });
   }
 }

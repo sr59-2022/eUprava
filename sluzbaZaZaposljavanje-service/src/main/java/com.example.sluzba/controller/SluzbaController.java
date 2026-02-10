@@ -28,10 +28,10 @@ public class SluzbaController {
         return diplomiraniStudentService.sviDiplomirani()
                 .stream()
                 .map(ds -> new DiplomiraniStudentDto(
-                        ds.getAuthUid(),
                         ds.getIme(),
                         ds.getPrezime(),
-                        ds.getBrojIndeksa()
+                        ds.getBrojIndeksa(),
+                        ds.isDostupanZaZaposljavanje()
                 ))
                 .toList();
     }

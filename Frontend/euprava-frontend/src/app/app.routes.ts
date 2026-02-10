@@ -51,6 +51,14 @@ export const routes: Routes = [
       .then(m => m.ObavestenjaComponent)
   },
 
+  {
+    path: 'sluzba/diplomirani',
+    loadComponent: () => import('./pages/sluzba-diplomirani/sluzba-diplomirani.component')
+        .then(m => m.SluzbaDiplomiraniComponent)
+  },
+
+
+
 
   {
     path: 'app',

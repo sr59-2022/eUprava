@@ -148,6 +148,7 @@ export class FakultetService {
       : {};
   }
 
+
   dostupniIspiti(): Observable<IspitOpcijaDto[]> {
     return this.http.get<IspitOpcijaDto[]>(
       `${this.baseUrl}/api/ispiti/dostupni`,
@@ -338,5 +339,13 @@ export class FakultetService {
       { status },
       this.authHeaders()
     );
+  }
+
+  posaljiDiplomirane(): Observable<string> {
+    const url = `${this.baseUrl}/api/fakultet/posalji-diplomirane`;
+    return this.http.get(url, {
+      ...this.authHeaders(),
+      responseType: 'text'
+    });
   }
 }

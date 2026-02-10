@@ -23,16 +23,14 @@ public class DiplomiraniStudentService {
 
         for (DiplomiraniStudentDto dto : studenti) {
 
-            repo.findByAuthUid(dto.getAuthUid())
+            repo.findByBrojIndeksa(dto.getBrojIndeksa())
                     .orElseGet(() -> {
                         DiplomiraniStudent ds = new DiplomiraniStudent();
-                        ds.setAuthUid(dto.getAuthUid());
                         ds.setIme(dto.getIme());
                         ds.setPrezime(dto.getPrezime());
                         ds.setBrojIndeksa(dto.getBrojIndeksa());
                         ds.setDatumDiplomiranja(LocalDate.now());
                         ds.setDostupanZaZaposljavanje(true);
-
                         return repo.save(ds);
                     });
         }

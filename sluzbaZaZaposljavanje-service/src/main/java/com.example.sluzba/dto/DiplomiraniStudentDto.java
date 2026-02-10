@@ -5,23 +5,22 @@ import java.time.LocalDate;
 
 public class DiplomiraniStudentDto {
 
-    private Long authUid;
     private String ime;
     private String prezime;
     private String brojIndeksa;
+    private boolean dostupanZaZaposljavanje;
 
 
     public DiplomiraniStudentDto() {}
 
-    public DiplomiraniStudentDto(Long authUid, String ime, String prezime, String brojIndeksa) {
-        this.authUid = authUid;
+    public DiplomiraniStudentDto(String ime, String prezime, String brojIndeksa, boolean dostupanZaZaposljavanje) {
         this.ime = ime;
         this.prezime = prezime;
         this.brojIndeksa = brojIndeksa;
+        this.dostupanZaZaposljavanje= dostupanZaZaposljavanje;
+
     }
 
-    public Long getAuthUid() { return authUid; }
-    public void setAuthUid(Long authUid) { this.authUid = authUid; }
 
     public String getIme() { return ime; }
     public void setIme(String ime) { this.ime = ime; }
@@ -32,4 +31,11 @@ public class DiplomiraniStudentDto {
     public String getBrojIndeksa() { return brojIndeksa; }
     public void setBrojIndeksa(String brojIndeksa) { this.brojIndeksa = brojIndeksa; }
 
+    public boolean isDostupanZaZaposljavanje() {
+        return dostupanZaZaposljavanje;
+    }
+
+    public void setDostupanZaZaposljavanje(boolean dostupanZaZaposljavanje) {
+        this.dostupanZaZaposljavanje = dostupanZaZaposljavanje;
+    }
 }

@@ -12,8 +12,6 @@ public class DiplomiraniStudent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private Long authUid;
 
     @Column(nullable = false)
     private String ime;
@@ -21,7 +19,7 @@ public class DiplomiraniStudent {
     @Column(nullable = false)
     private String prezime;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String brojIndeksa;
 
     @Column(name = "datum_diplomiranja")
@@ -33,9 +31,8 @@ public class DiplomiraniStudent {
     public DiplomiraniStudent() {
     }
 
-    public DiplomiraniStudent(Long authUid, String ime, String prezime, String brojIndeksa,
+    public DiplomiraniStudent(String ime, String prezime, String brojIndeksa,
                               LocalDate datumDiplomiranja, boolean dostupanZaZaposljavanje) {
-        this.authUid = authUid;
         this.ime = ime;
         this.prezime = prezime;
         this.brojIndeksa = brojIndeksa;
@@ -51,14 +48,6 @@ public class DiplomiraniStudent {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getAuthUid() {
-        return authUid;
-    }
-
-    public void setAuthUid(Long authUid) {
-        this.authUid = authUid;
     }
 
     public String getIme() {
