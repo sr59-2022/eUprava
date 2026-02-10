@@ -1,0 +1,10 @@
+.oglasi {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.error {
+  padding: 10px;
+  border-radius: 8px;
+}

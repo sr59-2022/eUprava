@@ -137,6 +137,15 @@ export const routes: Routes = [
           import('./pages/profesor-studenti/profesor-studenti.component')
             .then(m => m.ProfesorStudentiComponent),
       },
+
+      {
+        path: 'oglasi',
+        canActivate: [roleGuard],
+        data: { roles: ['ROLE_STUDENT'] },
+        loadComponent: () =>
+          import('./pages/diplomirani-oglasi/diplomirani-oglasi.component')
+            .then(m => m.DiplomiraniOglasiComponent),
+      },
     ],
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },

@@ -10,6 +10,15 @@
       <a class="app-navbar__link" routerLink="/app/uverenja">Uverenja</a>
     </ng-container>
 
+
+    <a
+      *ngIf="isDiplomirani()"
+      class="app-navbar__link"
+      routerLink="/app/oglasi"
+    >
+      Oglasi
+    </a>
+
     <a
       *ngIf="isAdmin"
       class="app-navbar__link app-navbar__link--admin"

@@ -1,0 +1,15 @@
+<h2>Oglasi za praksu i posao</h2>
+
+<div *ngIf="loading">Učitavanje...</div>
+
+<div *ngIf="!loading && errorMsg" class="error">
+  {{ errorMsg }}
+</div>
+
+<div *ngIf="!loading && !errorMsg && oglasi.length === 0">
+  Trenutno nema dostupnih oglasa.
+</div>
+
+<div class="oglasi" *ngIf="!loading && !errorMsg && oglasi.length > 0">
+  <app-oglas *ngFor="let o of oglasi" [oglas]="o"></app-oglas>
+</div>

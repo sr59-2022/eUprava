@@ -48,4 +48,9 @@ export class OglasService {
     });
   }
 
+  getOglasiZaDiplomirane(): Observable<Oglas[]> {
+
+    return this.http.get<Oglas[]>('http://localhost:8081/api/fakultet/oglasi');
+  }
+
 }

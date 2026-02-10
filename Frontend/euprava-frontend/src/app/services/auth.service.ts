@@ -57,6 +57,7 @@ export class AuthService {
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
+    this.loggedIn.next(false);
   }
 
   isLoggedIn(): boolean {
