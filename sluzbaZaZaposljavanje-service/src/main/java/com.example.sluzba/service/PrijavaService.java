@@ -1,11 +1,14 @@
 package com.example.sluzba.service;
 
+import com.example.sluzba.dto.KreirajPrijavuDiplomiraniDTO;
 import com.example.sluzba.dto.PrikazPrijaveDTO;
 import com.example.sluzba.dto.PrikazPrijavePoslodavacDTO;
 import com.example.sluzba.model.*;
 import com.example.sluzba.repository.*;
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,17 +23,20 @@ public class PrijavaService {
     private final OglasRepository oglasRepository;
     private final PoslodavacRepository poslodavacRepository;
     private final ObavestenjeRepository obavestenjeRepository;
+    private final DiplomiraniStudentRepository diplomiraniStudentRepository;
 
     public PrijavaService(PrijavaRepository prijavaRepository,
                           GradjaninRepository gradjaninRepository,
                           OglasRepository oglasRepository,
                           PoslodavacRepository poslodavacRepository,
-                          ObavestenjeRepository obavestenjeRepository) {
+                          ObavestenjeRepository obavestenjeRepository,
+                          DiplomiraniStudentRepository diplomiraniStudentRepository) {
         this.prijavaRepository = prijavaRepository;
         this.gradjaninRepository = gradjaninRepository;
         this.oglasRepository = oglasRepository;
         this.poslodavacRepository = poslodavacRepository;
         this.obavestenjeRepository = obavestenjeRepository;
+        this.diplomiraniStudentRepository = diplomiraniStudentRepository;
     }
 
     @Transactional
@@ -141,8 +147,34 @@ public class PrijavaService {
     }
 
     private PrikazPrijavePoslodavacDTO mapToPoslodavacDTO(Prijava p) {
-        Gradjanin g = p.getGradjanin();
+
         Oglas o = p.getOglas();
+
+        String imeGradjanina = null;
+        String prezimeGradjanina = null;
+        String oblastGradjanina = null;
+        String radniStatusGradjanina = null;
+
+        String imeDiplStudenta = null;
+        String prezimeDiplStudenta = null;
+        String brojIndeksa = null;
+        Boolean dostupan = null;
+
+        if (p.getGradjanin() != null) {
+            Gradjanin g = p.getGradjanin();
+            imeGradjanina = g.getIme();
+            prezimeGradjanina = g.getPrezime();
+            oblastGradjanina = g.getOblastZainteresovanosti();
+            radniStatusGradjanina = g.getRadniStatus() != null ? g.getRadniStatus().name() : null;
+        }
+
+        if (p.getDiplomiraniStudent() != null) {
+            DiplomiraniStudent s = p.getDiplomiraniStudent();
+            imeDiplStudenta = s.getIme();
+            prezimeDiplStudenta = s.getPrezime();
+            brojIndeksa = s.getBrojIndeksa();
+            dostupan = s.isDostupanZaZaposljavanje();
+        }
 
         return new PrikazPrijavePoslodavacDTO(
                 p.getIdPrijave(),
@@ -152,13 +184,61 @@ public class PrijavaService {
                 p.getDatumPrijave(),
                 p.getStatus(),
                 p.getRazlogOdbijanja(),
-                g.getIme(),
-                g.getPrezime(),
-                g.getOblastZainteresovanosti(),
-                g.getRadniStatus() != null ? g.getRadniStatus().name() : null
+
+                imeGradjanina,
+                prezimeGradjanina,
+                oblastGradjanina,
+                radniStatusGradjanina,
+
+                imeDiplStudenta,
+                prezimeDiplStudenta,
+                brojIndeksa,
+                dostupan
         );
     }
 
+
+    @Transactional
+    public Prijava prijaviSeDiplomirani(KreirajPrijavuDiplomiraniDTO dto) {
+
+        if (dto == null || dto.oglasId == null || dto.brojIndeksa == null) {
+            throw new RuntimeException("Nedostaju podaci za prijavu.");
+        }
+
+        Oglas o = oglasRepository.findById(dto.oglasId)
+                .orElseThrow(() -> new RuntimeException("Oglas ne postoji"));
+
+        DiplomiraniStudent s = diplomiraniStudentRepository.findByBrojIndeksa(dto.brojIndeksa)
+                .orElseGet(() -> {
+                    DiplomiraniStudent ns = new DiplomiraniStudent();
+                    ns.setIme(dto.ime);
+                    ns.setPrezime(dto.prezime);
+                    ns.setBrojIndeksa(dto.brojIndeksa);
+                    ns.setDostupanZaZaposljavanje(true);
+                    return diplomiraniStudentRepository.save(ns);
+                });
+
+
+        if (prijavaRepository.existsByDiplomiraniStudent_IdAndOglas_IdOglasa(s.getId(), dto.oglasId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Već ste se prijavili na ovaj oglas.");
+        }
+
+        Prijava p = new Prijava();
+        p.setDiplomiraniStudent(s);
+        p.setGradjanin(null);
+        p.setOglas(o);
+        p.setDatumPrijave(LocalDate.now());
+        p.setStatus(StatusPrijave.PODNETA);
+
+        Obavestenje obavestenje = new Obavestenje();
+        obavestenje.setPoruka("Novi diplomirani student (" + s.getBrojIndeksa() + ") se prijavio na oglas: " + o.getNazivPozicije());
+        obavestenje.setDatum(LocalDateTime.now());
+        obavestenje.setProcitano(false);
+        obavestenje.setPoslodavac(o.getPoslodavac());
+        obavestenjeRepository.save(obavestenje);
+
+        return prijavaRepository.save(p);
+    }
 
 }
 

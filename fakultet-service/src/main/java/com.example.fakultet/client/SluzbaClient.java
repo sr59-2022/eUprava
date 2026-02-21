@@ -1,9 +1,11 @@
 package com.example.fakultet.client;
 
+import com.example.fakultet.dto.KreirajPrijavuDiplomiraniDto;
 import com.example.fakultet.dto.OglasDTO;
 import com.example.fakultet.dto.StudentRowDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+
 
 import java.util.List;
 
@@ -36,6 +38,16 @@ public class SluzbaClient {
                 .retrieve()
                 .bodyToFlux(OglasDTO.class)
                 .collectList()
+                .block();
+    }
+
+    public void posaljiPrijavuDiplomiranog(KreirajPrijavuDiplomiraniDto dto, String authorizationHeader) {
+        webClient.post()
+                .uri("/api/sluzba/prijave/diplomirani")
+                .header("Authorization", authorizationHeader)
+                .bodyValue(dto)
+                .retrieve()
+                .bodyToMono(Void.class)
                 .block();
     }
 }

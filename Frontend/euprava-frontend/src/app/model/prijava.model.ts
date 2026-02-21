@@ -18,10 +18,15 @@ export interface PrikazPrijavePoslodavacDTO {
   status: 'PODNETA' | 'PRIHVACENA' | 'ODBIJENA';
   razlogOdbijanja?: string;
 
-  imeGradjanina: string;
-  prezimeGradjanina: string;
+  imeGradjanina?: string;
+  prezimeGradjanina?: string;
   oblastGradjanina?: string;
   radniStatusGradjanina?: string;
+
+  imeDiplStudenta?: string;
+  prezimeDiplStudenta?: string;
+  brojIndeksa?: string;
+  dostupanZaZaposljavanje?: boolean;
 }
 
 

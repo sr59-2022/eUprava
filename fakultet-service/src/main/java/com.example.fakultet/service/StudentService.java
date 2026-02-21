@@ -1,10 +1,7 @@
 package com.example.fakultet.service;
 
 import com.example.fakultet.client.SluzbaClient;
-import com.example.fakultet.dto.DiplomiranjeStatusDto;
-import com.example.fakultet.dto.DiplomiraniPoGodiniDto;
-import com.example.fakultet.dto.OglasDTO;
-import com.example.fakultet.dto.StudentRowDto;
+import com.example.fakultet.dto.*;
 import com.example.fakultet.model.StatusStudenta;
 import com.example.fakultet.model.Student;
 import com.example.fakultet.repository.OcenaRepository;
@@ -16,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
 
 import java.time.LocalDate;
 import java.util.List;
@@ -203,6 +201,27 @@ public class StudentService {
         }
 
         return sluzbaClient.getOglasi(authorizationHeader);
+    }
+
+
+    @Transactional
+    public void prijaviDiplomiraniNaOglas(Long authUid, Long oglasId, String authorizationHeader) {
+        Student s = getByAuthUid(authUid);
+
+        if (s.getStatusStudenta() != StatusStudenta.DIPLOMIRAO) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Samo diplomirani studenti mogu da se prijave na oglase."
+            );
+        }
+
+        KreirajPrijavuDiplomiraniDto dto = new KreirajPrijavuDiplomiraniDto();
+        dto.oglasId = oglasId;
+        dto.ime = s.getIme();
+        dto.prezime = s.getPrezime();
+        dto.brojIndeksa = s.getBrojIndeksa();
+
+        sluzbaClient.posaljiPrijavuDiplomiranog(dto, authorizationHeader);
     }
 
     public boolean jeDiplomirao(Student student) {

@@ -53,4 +53,12 @@ export class OglasService {
     return this.http.get<Oglas[]>('http://localhost:8081/api/fakultet/oglasi');
   }
 
+  prijaviNaOglas(oglasId: number) {
+    const token = localStorage.getItem('token');
+    return this.http.post(
+      `http://localhost:8081/api/fakultet/oglasi/${oglasId}/prijavi`,
+      {},
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+  }
 }

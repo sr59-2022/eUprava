@@ -9,4 +9,5 @@ public interface DiplomiraniStudentRepository
         extends JpaRepository<DiplomiraniStudent, Long> {
 
     Optional<DiplomiraniStudent> findByBrojIndeksa(String brojIndeksa);
+
 }

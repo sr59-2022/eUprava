@@ -15,9 +15,9 @@
   </thead>
   <tbody>
   <tr *ngFor="let p of prijave">
-    <td>{{p.imeGradjanina}} {{p.prezimeGradjanina}}</td>
-    <td>{{p.oblastGradjanina}}</td>
-    <td>{{p.radniStatusGradjanina}}</td>
+    <td>{{p.imeGradjanina || p.imeDiplStudenta}} {{p.prezimeGradjanina || p.prezimeDiplStudenta}}</td>
+    <td>{{p.oblastGradjanina || '-'}}</td>
+    <td>{{p.radniStatusGradjanina || 'DIPLOMIRANI STUDENT'}}</td>
     <td>{{p.nazivPozicije}} ({{p.nazivKompanije}})</td>
     <td>{{p.datumPrijave | date}}</td>
     <td>{{p.status}}</td>

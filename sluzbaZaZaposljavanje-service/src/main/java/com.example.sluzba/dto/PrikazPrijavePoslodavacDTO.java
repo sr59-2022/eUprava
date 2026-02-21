@@ -19,12 +19,32 @@ public class PrikazPrijavePoslodavacDTO {
     public String oblastGradjanina;
     public String radniStatusGradjanina;
 
+    public String imeDiplStudenta;
+    public String prezimeDiplStudenta;
+    public String brojIndeksa;
+    public Boolean dostupanZaZaposljavanje;
+
     public PrikazPrijavePoslodavacDTO() {}
 
-    public PrikazPrijavePoslodavacDTO(Long idPrijave, Long idOglasa, String nazivPozicije, String nazivKompanije,
-                                      LocalDate datumPrijave, StatusPrijave status, String razlogOdbijanja,
-                                      String imeGradjanina, String prezimeGradjanina,
-                                      String oblastGradjanina, String radniStatusGradjanina) {
+    public PrikazPrijavePoslodavacDTO(
+            Long idPrijave,
+            Long idOglasa,
+            String nazivPozicije,
+            String nazivKompanije,
+            LocalDate datumPrijave,
+            StatusPrijave status,
+            String razlogOdbijanja,
+
+            String imeGradjanina,
+            String prezimeGradjanina,
+            String oblastGradjanina,
+            String radniStatusGradjanina,
+
+            String imeDiplStudenta,
+            String prezimeDiplStudenta,
+            String brojIndeksa,
+            Boolean dostupanZaZaposljavanje
+    ) {
         this.idPrijave = idPrijave;
         this.idOglasa = idOglasa;
         this.nazivPozicije = nazivPozicije;
@@ -32,10 +52,17 @@ public class PrikazPrijavePoslodavacDTO {
         this.datumPrijave = datumPrijave;
         this.status = status;
         this.razlogOdbijanja = razlogOdbijanja;
+
         this.imeGradjanina = imeGradjanina;
         this.prezimeGradjanina = prezimeGradjanina;
         this.oblastGradjanina = oblastGradjanina;
         this.radniStatusGradjanina = radniStatusGradjanina;
-    }
 
+        this.imeDiplStudenta = imeDiplStudenta;
+        this.prezimeDiplStudenta = prezimeDiplStudenta;
+        this.brojIndeksa = brojIndeksa;
+        this.dostupanZaZaposljavanje = dostupanZaZaposljavanje;
+    }
 }
+
+

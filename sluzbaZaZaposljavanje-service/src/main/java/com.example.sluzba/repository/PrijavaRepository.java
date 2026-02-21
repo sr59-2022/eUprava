@@ -15,5 +15,7 @@ public interface PrijavaRepository extends JpaRepository<Prijava, Long> {
     List<Prijava> findByGradjaninId(Long gradjaninId);
     List<Prijava> findByOglas_Poslodavac_Id(Long poslodavacId);
     boolean existsByGradjaninIdAndOglas_IdOglasa(Long gradjaninId, Long oglasId);
+    boolean existsByDiplomiraniStudent_IdAndOglas_IdOglasa(Long studentId, Long oglasId);
+    List<Prijava> findByDiplomiraniStudent_Id(Long studentId);
 }
 

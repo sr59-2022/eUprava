@@ -23,9 +23,13 @@ public class Prijava {
 
 
     @ManyToOne
-    @JoinColumn(name = "gradjanin_id", nullable = false)
+    @JoinColumn(name = "gradjanin_id", nullable = true)
     @JsonBackReference
     private Gradjanin gradjanin;
+
+    @ManyToOne
+    @JoinColumn(name = "diplomirani_student_id", nullable = true)
+    private DiplomiraniStudent diplomiraniStudent;
 
     @ManyToOne
     @JoinColumn(name = "oglas_id", nullable = false)
@@ -65,5 +69,13 @@ public class Prijava {
 
     public void setRazlogOdbijanja(String razlogOdbijanja) {
         this.razlogOdbijanja = razlogOdbijanja;
+    }
+
+    public DiplomiraniStudent getDiplomiraniStudent() {
+        return diplomiraniStudent;
+    }
+
+    public void setDiplomiraniStudent(DiplomiraniStudent diplomiraniStudent) {
+        this.diplomiraniStudent = diplomiraniStudent;
     }
 }

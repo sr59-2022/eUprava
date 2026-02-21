@@ -9,4 +9,19 @@
     <span class="datum">Objavljeno: {{ oglas.datumObjave | date:'dd.MM.yyyy' }}</span>
     <span class="rok">Rok prijave: {{ oglas.rokPrijave | date:'dd.MM.yyyy' }}</span>
   </div>
+
+  <div class="oglas-actions">
+    <button class="btn-prijava" (click)="prijaviSe()">
+      Prijavi se
+    </button>
+
+
+  <div *ngIf="successMsg" class="success">
+    {{ successMsg }}
+  </div>
+
+  <div *ngIf="errorMsg" class="error">
+    {{ errorMsg }}
+  </div>
+</div>
 </div>

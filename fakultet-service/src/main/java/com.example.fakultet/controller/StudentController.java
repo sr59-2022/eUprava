@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -78,10 +79,7 @@ public class StudentController {
         return studentService.proveraDiplomiranja(uid);
     }
 
-    /**
-     * ✅ NOVO: samo DIPLOMIRANI student može da vidi oglase.
-     * Fakultet proveri status, pa pozove Sluzbu i vrati oglase.
-     */
+
     @PreAuthorize("hasRole('STUDENT')")
     @GetMapping("/oglasi-za-diplomirane")
     public List<OglasDTO> oglasiZaDiplomirane(
@@ -150,5 +148,14 @@ public class StudentController {
     ) {
         StatusStudenta status = req.getStatus();
         studentService.profesorPostaviStatus(studentId, status);
+    }
+
+    @PostMapping("/oglasi/{oglasId}/prijavi")
+    public void prijaviSe(@AuthenticationPrincipal Jwt jwt,
+                          @PathVariable Long oglasId,
+                          @RequestHeader("Authorization") String authorizationHeader) {
+
+        Long authUid = ((Number) jwt.getClaims().get("uid")).longValue();
+        studentService.prijaviDiplomiraniNaOglas(authUid, oglasId, authorizationHeader);
     }
 }
