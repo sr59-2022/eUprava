@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { forkJoin } from 'rxjs';
+import {forkJoin, of} from 'rxjs';
+
+import { catchError } from 'rxjs/operators';
 import { FakultetService, DiplomiranjeStatusDto, StudentMeDto } from '../../services/fakultet.service';
 
 @Component({
@@ -28,18 +30,22 @@ export class DiplomiranjeComponent implements OnInit {
     this.error = null;
 
     forkJoin({
-      status: this.fakultetService.getDiplomiranjeStatus(),
-      me: this.fakultetService.me()
-    }).subscribe({
-      next: ({ status, me }) => {
-        this.data = status;
-        this.student = me;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = err?.error?.message || 'Greška pri učitavanju statusa diplomiranja.';
-        this.loading = false;
+      status: this.fakultetService.getDiplomiranjeStatus().pipe(
+        catchError(() => of(null))
+      ),
+      me: this.fakultetService.me().pipe(
+        catchError(() => of(null))
+      )
+    }).subscribe(({ status, me }) => {
+      this.data = status;
+      this.student = me;
+
+
+      if (!status && !me) {
+        this.error = 'Greška pri učitavanju statusa diplomiranja.';
       }
+
+      this.loading = false;
     });
   }
 
