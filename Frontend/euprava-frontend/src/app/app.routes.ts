@@ -130,7 +130,7 @@ export const routes: Routes = [
       {
         path: 'sluzba',
         canActivate: [roleGuard],
-        data: { roles: ['ROLE_ADMIN', 'ROLE_SLUZBA'] },
+        data: { roles: ['ROLE_ADMIN', 'ROLE_SLUZBA', 'ROLE_PROFESOR'] },
         loadComponent: () =>
           import('./pages/sluzba/sluzba.component')
             .then(m => m.SluzbaComponent),
