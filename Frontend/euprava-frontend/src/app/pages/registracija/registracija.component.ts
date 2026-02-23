@@ -26,9 +26,21 @@ export class RegistracijaComponent {
       korisnickoIme: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       lozinka: ['', Validators.required],
-      uloga: ['ROLE_STUDENT'] // default
+      uloge: this.fb.control<string[]>([], Validators.required)
     });
 
+  }
+
+  onRoleChange(event: any) {
+    const roles = this.registracijaForm.get('uloge')?.value as string[];
+
+    if (event.target.checked) {
+      this.registracijaForm.get('uloge')?.setValue([...roles, event.target.value]);
+    } else {
+      this.registracijaForm.get('uloge')?.setValue(
+        roles.filter(r => r !== event.target.value)
+      );
+    }
   }
 
   submit() {

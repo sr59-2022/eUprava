@@ -33,6 +33,13 @@
       Pošalji diplomirane
     </button>
 
+    <button
+      *ngIf="canSwitchSystem()"
+      class="app-navbar__btn"
+      (click)="router.navigate(['/izbor-sistema'])">
+      Promeni sistem
+    </button>
+
   <button class="app-navbar__btn" (click)="logout()">Logout</button>
   </div>
 </nav>

@@ -39,5 +39,29 @@ export class AppComponent {
       || this.authService.isAdmin();
   }
 
+  isOnSluzbaRoute(): boolean {
+    const url = this.router.url;
 
+    return (
+      url.startsWith('/home-sluzba') ||
+      url.startsWith('/sluzba') ||
+      url.startsWith('/admin') ||
+      url.startsWith('/prijave') ||
+      url.startsWith('/profil')
+    );
+  }
+
+  canSwitchSystem(): boolean {
+    const roles = this.authService.getRoles();
+
+    const hasFakultetRole =
+      roles.includes('ROLE_PROFESOR') || roles.includes('ROLE_STUDENT');
+
+    const hasSluzbaRole =
+      roles.includes('ROLE_ADMIN') ||
+      roles.includes('ROLE_POSLODAVAC') ||
+      roles.includes('ROLE_GRADJANIN');
+
+    return hasFakultetRole && hasSluzbaRole;
+  }
 }

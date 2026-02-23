@@ -54,7 +54,11 @@ public class AuthService {
 
     public void registracija(RegistracijaRequest request) {
 
-        if (request.getUloga() == Uloga.ROLE_ADMIN) {
+        if (request.getUloge() == null || request.getUloge().isEmpty()) {
+            throw new RuntimeException("Moraš izabrati bar jednu ulogu");
+        }
+
+        if (request.getUloge().contains(Uloga.ROLE_ADMIN)) {
             throw new RuntimeException("ADMIN se ne može registrovati");
         }
 
@@ -72,12 +76,12 @@ public class AuthService {
         korisnik.setKorisnickoIme(request.getKorisnickoIme());
         korisnik.setEmail(request.getEmail());
         korisnik.setLozinka(request.getLozinka());
-        korisnik.setUloge(Set.of(request.getUloga()));
+        korisnik.setUloge(request.getUloge());
 
         Korisnik saved = korisnikRepository.save(korisnik);
 
 
-        if (request.getUloga() != Uloga.ROLE_STUDENT) {
+        if (!saved.getUloge().contains(Uloga.ROLE_STUDENT)) {
             return;
         }
 

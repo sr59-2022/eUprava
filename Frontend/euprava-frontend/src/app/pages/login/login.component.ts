@@ -43,6 +43,19 @@ export class LoginComponent {
 
         this.authService.saveToken(res.token, roles);
 
+        const hasFakultetRole =
+          roles.includes('ROLE_PROFESOR') || roles.includes('ROLE_STUDENT');
+
+        const hasSluzbaRole =
+          roles.includes('ROLE_ADMIN') ||
+          roles.includes('ROLE_POSLODAVAC') ||
+          roles.includes('ROLE_GRADJANIN');
+
+        if (hasFakultetRole && hasSluzbaRole) {
+          this.router.navigate(['/izbor-sistema']);
+          return;
+        }
+
         // FAKULTET
         if (roles.includes('ROLE_PROFESOR')) {
           this.router.navigate(['/app/profesor/ocene']);
@@ -55,15 +68,10 @@ export class LoginComponent {
         }
 
         // SLUŽBA
-        if (
-          roles.includes('ROLE_ADMIN') ||
-          roles.includes('ROLE_POSLODAVAC') ||
-          roles.includes('ROLE_GRADJANIN')
-        ) {
+        if (hasSluzbaRole) {
           this.router.navigate(['/home-sluzba']);
           return;
         }
-
 
         this.router.navigate(['/login']);
       },

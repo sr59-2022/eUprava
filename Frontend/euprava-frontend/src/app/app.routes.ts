@@ -17,6 +17,13 @@ export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
 
   {
+    path: 'izbor-sistema',
+    loadComponent: () =>
+      import('./pages/izbor-sistema/izbor-sistema.component')
+        .then(m => m.IzborSistemaComponent),
+  },
+
+  {
     path: 'home-sluzba',
     loadComponent: () => import('./pages/home-sluzba/home-sluzba.component')
       .then(m => m.HomeSluzbaComponent)

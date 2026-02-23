@@ -12,7 +12,7 @@ import { FakultetService } from '../../services/fakultet.service';
 })
 export class AppLayoutComponent {
   private auth = inject(AuthService);
-  private router = inject(Router);
+  public router = inject(Router);
   private fakultetService = inject(FakultetService);
 
   get isAdmin(): boolean {
@@ -42,5 +42,19 @@ export class AppLayoutComponent {
       next: (res) => alert(res),
       error: () => alert('Greška pri slanju diplomiranih studenata!')
     });
+  }
+
+  canSwitchSystem(): boolean {
+    const roles = this.auth.getRoles();
+
+    const hasFakultetRole =
+      roles.includes('ROLE_PROFESOR') || roles.includes('ROLE_STUDENT');
+
+    const hasSluzbaRole =
+      roles.includes('ROLE_ADMIN') ||
+      roles.includes('ROLE_POSLODAVAC') ||
+      roles.includes('ROLE_GRADJANIN');
+
+    return hasFakultetRole && hasSluzbaRole;
   }
 }

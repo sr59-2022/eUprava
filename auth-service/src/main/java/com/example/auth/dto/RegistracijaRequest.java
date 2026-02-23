@@ -2,13 +2,18 @@ package com.example.auth.dto;
 
 import com.example.auth.model.Uloga;
 
+import java.util.Set;
+
 public class RegistracijaRequest {
     private String ime;
     private String prezime;
     private String korisnickoIme;
     private String email;
     private String lozinka;
-    private Uloga uloga;
+    private Set<Uloga> uloge;
+
+    public Set<Uloga> getUloge() { return uloge; }
+    public void setUloge(Set<Uloga> uloge) { this.uloge = uloge; }
 
     public String getKorisnickoIme() {
         return korisnickoIme;
@@ -32,14 +37,6 @@ public class RegistracijaRequest {
 
     public void setLozinka(String lozinka) {
         this.lozinka = lozinka;
-    }
-
-    public Uloga getUloga() {
-        return uloga;
-    }
-
-    public void setUloga(Uloga uloga) {
-        this.uloga = uloga;
     }
 
     public String getPrezime() {

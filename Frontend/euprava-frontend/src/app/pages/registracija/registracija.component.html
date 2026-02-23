@@ -26,12 +26,28 @@
   </div>
 
   <div class="form-control">
-    <label for="uloga">Uloga</label>
-    <select id="uloga" formControlName="uloga">
-      <option value="ROLE_STUDENT">Student</option>
-      <option value="ROLE_GRADJANIN">Građanin</option>
-      <option value="ROLE_POSLODAVAC">Poslodavac</option>
-    </select>
+    <label>Uloge</label>
+
+    <div>
+      <input type="checkbox"
+             (change)="onRoleChange($event)"
+             value="ROLE_STUDENT">
+      Student
+    </div>
+
+    <div>
+      <input type="checkbox"
+             (change)="onRoleChange($event)"
+             value="ROLE_GRADJANIN">
+      Građanin
+    </div>
+
+    <div>
+      <input type="checkbox"
+             (change)="onRoleChange($event)"
+             value="ROLE_POSLODAVAC">
+      Poslodavac
+    </div>
   </div>
 
   <button type="submit">Registruj se</button>
